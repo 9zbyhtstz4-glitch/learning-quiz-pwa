@@ -113,10 +113,12 @@ function render(focus = true) {
   if (current.choiceIndex !== null) {
     if (q.revealAnswer) {
       const result = document.createElement('p');
+      if (q.type === 'term') result.className = `result result-${current.choiceIndex === q.answerIndex ? 'success' : 'danger'}`;
       result.textContent = `${current.choiceIndex === q.answerIndex ? '正解です。' : '正解を確認しましょう。'} 正解：${q.choices[q.answerIndex]}`;
       $('feedback').append(result);
     }
     const explanation = document.createElement('p');
+    explanation.className = 'explanation';
     explanation.textContent = q.explanation;
     $('feedback').append(explanation);
   }

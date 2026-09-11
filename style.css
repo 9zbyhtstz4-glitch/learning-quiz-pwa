@@ -1,16 +1,71 @@
-:root { font-family: system-ui, sans-serif; color: #182d2a; background: #f3f6f5; line-height: 1.7; }
+:root {
+  /* Surface */
+  --surface-page: #F4F1EA;
+  --surface-card: #FFFFFF;
+  --surface-card-hover: #FBFAF7;
+
+  /* Text */
+  --text-primary: #2C2C2A;
+  --text-secondary: #5F5E5A;
+  --text-muted: #888780;
+
+  /* Border */
+  --border: rgba(44, 44, 42, 0.12);
+  --border-strong: rgba(44, 44, 42, 0.22);
+
+  /* Accent(ユーザー操作) */
+  --fill-accent: #378ADD;
+  --fill-accent-hover: #185FA5;
+  --text-accent: #185FA5;
+  --border-accent: #85B7EB;
+  --bg-accent: #E6F1FB;
+  --on-accent: #FFFFFF;
+
+  /* Brand(アプリが生成するコンテンツ: 解説・用語定義) */
+  --fill-brand: #D97757;
+  --text-brand: #993C1D;
+  --bg-brand: #FAECE7;
+  --border-brand: #F0997B;
+
+  /* Success(用語問題の正解のみ) */
+  --text-success: #3B6D11;
+  --bg-success: #EAF3DE;
+  --border-success: #97C459;
+
+  /* Danger(用語問題の不正解のみ) */
+  --text-danger: #A32D2D;
+  --bg-danger: #FCEBEB;
+  --border-danger: #F09595;
+
+  /* Radius */
+  --radius-control: 8px;
+  --radius-card: 12px;
+}
+
+:root { font-family: -apple-system, BlinkMacSystemFont, "Hiragino Sans", sans-serif; color: var(--text-primary); background: var(--surface-page); font-size: 16px; line-height: 1.7; }
 * { box-sizing: border-box; }
 body { margin: 0 auto; max-width: 42rem; padding: max(20px, env(safe-area-inset-top)) 18px max(28px, env(safe-area-inset-bottom)); }
 h1 { font-size: 1.5rem; margin-bottom: 0; } header p { margin-top: 0; }
-section { background: white; border: 1px solid #d5dfdc; border-radius: 12px; padding: 20px; }
-h2 { font-size: 1.2rem; } button { font: inherit; min-height: 44px; padding: 10px 14px; cursor: pointer; border: 1px solid #829a94; border-radius: 8px; background: white; color: #174c43; }
-button:disabled { cursor: default; color: #52605d; } button:focus-visible, a:focus-visible { outline: 3px solid #b36b00; outline-offset: 3px; }
-#choices { display: grid; gap: 12px; } #choices button { text-align: left; }
-#choices button[aria-pressed="true"] { border: 2px solid #235c55; background: #edf6f2; }
-.term { text-decoration: underline; text-underline-offset: 4px; padding: 3px 6px; }
+section { background: var(--surface-card); border: 0.5px solid var(--border); border-radius: var(--radius-card); padding: 20px; }
+h2 { font-size: 1rem; }
+button { font: inherit; min-height: 44px; padding: 10px 14px; cursor: pointer; border: 1px solid var(--border-strong); border-radius: var(--radius-control); background: var(--surface-card); color: var(--text-accent); }
+button:disabled { cursor: default; }
+button:focus-visible, a:focus-visible { outline: 3px solid var(--border-accent); outline-offset: 3px; }
+button:not(:disabled):hover { background: var(--bg-accent); border-color: var(--border-accent); }
+a { color: var(--text-accent); }
+#choices { display: grid; gap: 12px; } #choices button { text-align: left; color: var(--text-primary); }
+#choices button[aria-pressed="true"] { border: 2px solid var(--border-accent); background: var(--bg-accent); }
+.term { color: var(--text-accent); text-decoration: underline dashed; text-underline-offset: 4px; padding: 3px 6px; }
 .actions { display: flex; flex-wrap: wrap; gap: 12px; margin: 22px 0; }
-#next { background: #235c55; color: white; } #next:disabled { opacity: .55; }
-#waiting, #definition { background: #fff2d5; padding: 14px; border-radius: 8px; }
-#error { color: #8b1822; } #meta, #cache-status { font-size: .9rem; }
+#next { background: var(--fill-accent); color: var(--on-accent); }
+#next:not(:disabled):hover { background: var(--fill-accent-hover); }
+#next:disabled { opacity: .55; }
+.explanation, #definition { background: var(--bg-brand); color: var(--text-brand); font-family: Georgia, "Hiragino Mincho ProN", serif; padding: 14px; border-radius: var(--radius-control); }
+.result { padding: 14px; border-radius: var(--radius-control); }
+.result-success { background: var(--bg-success); color: var(--text-success); }
+.result-danger { background: var(--bg-danger); color: var(--text-danger); }
+#waiting { color: var(--text-muted); padding: 14px; }
+#error { color: var(--text-primary); border: 1px solid var(--border-strong); padding: 14px; }
+#meta, #cache-status, header p { font-size: 13px; color: var(--text-secondary); }
 #terms { display: flex; flex-wrap: wrap; gap: 8px; } details { margin-top: 18px; } summary { cursor: pointer; min-height: 44px; }
 [hidden] { display: none !important; }
