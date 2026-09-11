@@ -1,0 +1,259 @@
+{
+  "articles": [
+    {
+      "id": "a-api",
+      "title": "APIの参考資料",
+      "url": "https://developer.mozilla.org/ja/docs/Glossary/API",
+      "source": "mdn",
+      "fieldId": "web"
+    },
+    {
+      "id": "a-http",
+      "title": "HTTPの参考資料",
+      "url": "https://developer.mozilla.org/ja/docs/Web/HTTP",
+      "source": "mdn",
+      "fieldId": "web"
+    },
+    {
+      "id": "a-cache",
+      "title": "キャッシュの参考資料",
+      "url": "https://developer.mozilla.org/ja/docs/Web/API/Cache",
+      "source": "mdn",
+      "fieldId": "web"
+    },
+    {
+      "id": "a-indexeddb",
+      "title": "IndexedDBの参考資料",
+      "url": "https://developer.mozilla.org/ja/docs/Web/API/IndexedDB_API",
+      "source": "mdn",
+      "fieldId": "web"
+    },
+    {
+      "id": "a-pwa",
+      "title": "PWAの参考資料",
+      "url": "https://developer.mozilla.org/ja/docs/Web/Progressive_web_apps",
+      "source": "mdn",
+      "fieldId": "web"
+    }
+  ],
+  "terms": [
+    {
+      "id": "api",
+      "label": "API",
+      "shortDefinition": "ソフトウェアの機能を利用するための窓口。",
+      "fieldId": "web",
+      "relatedTermIds": [
+        "http"
+      ],
+      "questionIds": [
+        "q-api"
+      ],
+      "referenceArticleIds": [
+        "a-api"
+      ]
+    },
+    {
+      "id": "http",
+      "label": "HTTP",
+      "shortDefinition": "要求と応答をやり取りする通信の決まり。",
+      "fieldId": "web",
+      "relatedTermIds": [
+        "cache"
+      ],
+      "questionIds": [
+        "q-http"
+      ],
+      "referenceArticleIds": [
+        "a-http"
+      ]
+    },
+    {
+      "id": "cache",
+      "label": "キャッシュ",
+      "shortDefinition": "再利用するために保存したデータ。",
+      "fieldId": "web",
+      "relatedTermIds": [
+        "indexeddb"
+      ],
+      "questionIds": [
+        "q-cache"
+      ],
+      "referenceArticleIds": [
+        "a-cache"
+      ]
+    },
+    {
+      "id": "indexeddb",
+      "label": "IndexedDB",
+      "shortDefinition": "ブラウザー内で構造化データを保存する仕組み。",
+      "fieldId": "web",
+      "relatedTermIds": [
+        "pwa"
+      ],
+      "questionIds": [
+        "q-indexeddb"
+      ],
+      "referenceArticleIds": [
+        "a-indexeddb"
+      ]
+    },
+    {
+      "id": "pwa",
+      "label": "PWA",
+      "shortDefinition": "Web技術で作られ、端末へ追加できるアプリ。",
+      "fieldId": "web",
+      "relatedTermIds": [
+        "api"
+      ],
+      "questionIds": [
+        "q-pwa"
+      ],
+      "referenceArticleIds": [
+        "a-pwa"
+      ]
+    }
+  ],
+  "questions": [
+    {
+      "id": "q-relationship",
+      "type": "relationship",
+      "fieldId": "web",
+      "patternType": "relationship",
+      "body": "{{term:pwa}}で{{term:cache}}と{{term:indexeddb}}を使う目的の組み合わせとして適切なのはどれですか。",
+      "choices": [
+        "キャッシュに画面の資源、IndexedDBに学習進捗を保存する。",
+        "両方とも画面の明るさを変更する。",
+        "両方とも通信速度を必ず上げる。"
+      ],
+      "answerIndex": 0,
+      "revealAnswer": false,
+      "explanation": "画面を構成するファイルと、利用者が学習するたびに変わる記録では、保存・更新の方法を分けて考えます。",
+      "termIds": [
+        "pwa",
+        "cache",
+        "indexeddb"
+      ],
+      "sourceArticleIds": [
+        "a-pwa",
+        "a-cache",
+        "a-indexeddb"
+      ],
+      "generatedBy": "manual"
+    },
+    {
+      "id": "q-api",
+      "type": "term",
+      "fieldId": "web",
+      "patternType": "select-correct",
+      "body": "{{term:api}}を説明する文として適切なのはどれですか。関連する{{term:http}}も確認できます。",
+      "choices": [
+        "ソフトウェアの機能を利用するための窓口。",
+        "画面の明るさを変更する操作。",
+        "端末の重さを測る単位。"
+      ],
+      "answerIndex": 0,
+      "revealAnswer": true,
+      "explanation": "ソフトウェアの機能を利用するための窓口。",
+      "termIds": [
+        "api",
+        "http"
+      ],
+      "sourceArticleIds": [
+        "a-api"
+      ],
+      "generatedBy": "manual"
+    },
+    {
+      "id": "q-http",
+      "type": "term",
+      "fieldId": "web",
+      "patternType": "select-correct",
+      "body": "{{term:http}}を説明する文として適切なのはどれですか。関連する{{term:cache}}も確認できます。",
+      "choices": [
+        "要求と応答をやり取りする通信の決まり。",
+        "画面の明るさを変更する操作。",
+        "端末の重さを測る単位。"
+      ],
+      "answerIndex": 0,
+      "revealAnswer": true,
+      "explanation": "要求と応答をやり取りする通信の決まり。",
+      "termIds": [
+        "http",
+        "cache"
+      ],
+      "sourceArticleIds": [
+        "a-http"
+      ],
+      "generatedBy": "manual"
+    },
+    {
+      "id": "q-cache",
+      "type": "term",
+      "fieldId": "web",
+      "patternType": "select-correct",
+      "body": "{{term:cache}}を説明する文として適切なのはどれですか。関連する{{term:indexeddb}}も確認できます。",
+      "choices": [
+        "再利用するために保存したデータ。",
+        "画面の明るさを変更する操作。",
+        "端末の重さを測る単位。"
+      ],
+      "answerIndex": 0,
+      "revealAnswer": true,
+      "explanation": "再利用するために保存したデータ。",
+      "termIds": [
+        "cache",
+        "indexeddb"
+      ],
+      "sourceArticleIds": [
+        "a-cache"
+      ],
+      "generatedBy": "manual"
+    },
+    {
+      "id": "q-indexeddb",
+      "type": "term",
+      "fieldId": "web",
+      "patternType": "select-correct",
+      "body": "{{term:indexeddb}}を説明する文として適切なのはどれですか。関連する{{term:pwa}}も確認できます。",
+      "choices": [
+        "ブラウザー内で構造化データを保存する仕組み。",
+        "画面の明るさを変更する操作。",
+        "端末の重さを測る単位。"
+      ],
+      "answerIndex": 0,
+      "revealAnswer": true,
+      "explanation": "ブラウザー内で構造化データを保存する仕組み。",
+      "termIds": [
+        "indexeddb",
+        "pwa"
+      ],
+      "sourceArticleIds": [
+        "a-indexeddb"
+      ],
+      "generatedBy": "manual"
+    },
+    {
+      "id": "q-pwa",
+      "type": "term",
+      "fieldId": "web",
+      "patternType": "select-correct",
+      "body": "{{term:pwa}}を説明する文として適切なのはどれですか。関連する{{term:api}}も確認できます。",
+      "choices": [
+        "Web技術で作られ、端末へ追加できるアプリ。",
+        "画面の明るさを変更する操作。",
+        "端末の重さを測る単位。"
+      ],
+      "answerIndex": 0,
+      "revealAnswer": true,
+      "explanation": "Web技術で作られ、端末へ追加できるアプリ。",
+      "termIds": [
+        "pwa",
+        "api"
+      ],
+      "sourceArticleIds": [
+        "a-pwa"
+      ],
+      "generatedBy": "manual"
+    }
+  ]
+}

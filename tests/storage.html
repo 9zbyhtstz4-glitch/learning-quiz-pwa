@@ -1,0 +1,36 @@
+<!doctype html><html lang="ja"><meta charset="utf-8"><title>IndexedDB検証</title>
+<h1>IndexedDB検証</h1><pre id="result">検証中…</pre>
+<h2>アプリの保存済み進捗（読み取りのみ）</h2><pre id="progress"></pre>
+<script type="module">
+import {openDatabase, updateProgress} from '../db.js';
+import {recordPresentation, recordAnswer} from '../progress.js';
+const output = document.getElementById('result');
+const name = 'quiz-test-' + crypto.randomUUID();
+const questions = [{id:'test',answerIndex:2}];
+const config = {coolingQuestionCount:30,coolingHours:24,restingDays:7};
+let db;
+try {
+  db = await openDatabase(name);
+  await updateProgress(db, questions, ps => {
+    recordPresentation(ps,'test',100,config);
+    recordAnswer(ps,questions[0],2,101,config);
+  });
+  db.close(); db = await openDatabase(name);
+  const restored = await updateProgress(db,questions,ps=>ps[0]);
+  if (restored.state!=='cooling' || restored.answerHistory[0].choiceIndex!==2 || restored.lastSeenAt!==100)
+    throw new Error('再接続時のデータ不一致');
+  const jobs = [1,2].map(() => updateProgress(db,questions,ps => {ps[0].seenSinceCount++;}));
+  await Promise.all(jobs);
+  const count = await updateProgress(db,questions,ps=>ps[0].seenSinceCount);
+  if (count!==2) throw new Error('並行更新が失われました');
+  try { await updateProgress(db,questions,ps=> {ps[0].correctStreak=99;throw new Error('intentional');}); } catch {}
+  const streak = await updateProgress(db,questions,ps=>ps[0].correctStreak);
+  if (streak!==1) throw new Error('ロールバックに失敗');
+  output.textContent = 'PASS 3/3: 再接続後の永続化 / 並行更新 / 失敗時のロールバック';
+  const appDb = await openDatabase();
+  const tx = appDb.transaction('progress','readonly');
+  const request = tx.objectStore('progress').getAll();
+  request.onsuccess = () => {document.getElementById('progress').textContent = JSON.stringify(request.result,null,2);appDb.close();};
+} catch(error) {output.textContent = 'FAIL: '+error.message;}
+finally {if(db)db.close(); indexedDB.deleteDatabase(name);}
+</script></html>
