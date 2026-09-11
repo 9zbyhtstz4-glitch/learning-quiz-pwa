@@ -25,7 +25,17 @@
 ## 未検証
 
 - iPhone Safari実機のホーム画面追加、ホーム画面からの起動、Wi-Fiオフ／機内モード。
-- GitHub Pages本番URLへの公開と実機アクセス。
+- iPhone実機でのGitHub Pages公開URLへのアクセス。
 - 24時間／7日の実時間待機。境界値は時刻を指定する自動テストで確認。
 
 ブラウザーのサーバー停止テストは配信元に接続できない条件での検証であり、iPhone実機のオフライン受入試験とは区別する。
+
+## GitHub Pages公開後の確認
+
+- Publicリポジトリ `9zbyhtstz4-glitch/learning-quiz-pwa` を作成しpush。
+- mainブランチのルート（/）から公開。HTTPS強制有効。独自のビルド／Actions設定は不要。
+- https://9zbyhtstz4-glitch.github.io/learning-quiz-pwa/ で起動・用語遷移・回答・復帰を確認。
+- `/tests/pwa.html` の検証成功。Service Workerが公開サブパスでactive、必要資源12/12件がキャッシュ済み。
+- manifestのstandalone、scope、start_url、192/512 PNGアイコンを確認。Apple touch iconもキャッシュ済み。
+- 公開URLでネットワークを切断して再起動する試験は未実施（使用ブラウザーに切断操作がない）。ローカル配信元停止テストの成功と区別する。
+- iPhone実機は利用できず、Safariのホーム画面追加操作は未検証。READMEの機内モード・Wi-Fiオフでの確認手順を使用する。
