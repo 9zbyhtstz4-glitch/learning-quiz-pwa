@@ -53,12 +53,14 @@ async function nextQuestion() {
 
 async function openTerm(id) {
   const term = termById.get(id);
-  if (interruptStack.stack.length >= interruptStack.maxDepth) {
+  const target = term.questionIds.find(id => questionById.get(id)?.type === 'term');
+  if (target === current.questionId ||
+      interruptStack.stack.some(entry => entry.questionId === target) ||
+      interruptStack.stack.length >= interruptStack.maxDepth) {
     $('definition').textContent = term.shortDefinition;
     $('definition').hidden = false;
     return;
   }
-  const target = term.questionIds.find(id => questionById.get(id)?.type === 'term');
   await updateProgress(db, data.questions, records => {
     recordPresentation(records, target, Date.now(), config);
   });
