@@ -1,0 +1,30 @@
+<!doctype html><html lang="ja"><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>PWA公開確認</title><h1>PWA公開確認</h1><pre id="result">確認中…</pre>
+<p>この検証は登録・キャッシュ・manifestの確認です。ネットワーク切断やiPhoneのホーム画面追加は別途確認してください。</p>
+<script type="module">
+const result = document.getElementById('result');
+const base = new URL('../', location.href);
+try {
+  await navigator.serviceWorker.register(new URL('sw.js', base), { scope: base.href });
+  const registration = await navigator.serviceWorker.ready;
+  if (!registration.active || registration.scope !== base.href) throw new Error('Service Worker scope mismatch');
+  const keys = await caches.keys();
+  const key = keys.find(key => key.startsWith(`learning-quiz:${base.href}:`));
+  if (!key) throw new Error('Cache missing');
+  const cache = await caches.open(key);
+  const assets = ['', 'index.html','style.css','app.js','config.js','progress.js','db.js',
+    'data.json','manifest.json','icons/icon-192.png','icons/icon-512.png','icons/apple-touch-icon.png'];
+  for (const asset of assets) {
+    const response = await cache.match(new URL(asset, base));
+    if (!response?.ok) throw new Error('Missing cache asset: '+asset);
+  }
+  const manifest = await (await cache.match(new URL('manifest.json', base))).json();
+  if (manifest.display !== 'standalone' || new URL(manifest.scope, base).href !== base.href ||
+      new URL(manifest.start_url, base).href !== base.href) throw new Error('Manifest scope or start URL invalid');
+  for (const size of ['192x192','512x512']) {
+    const icon = manifest.icons.find(icon => icon.sizes === size && icon.type === 'image/png');
+    if (!icon || !(await cache.match(new URL(icon.src, base)))?.ok) throw new Error('Manifest icon missing: '+size);
+  }
+  result.textContent = `PASS\nService Worker active: ${registration.active.scriptURL}\nScope: ${registration.scope}\nCache: ${key}\nCached resources: ${assets.length}/${assets.length}\nManifest: standalone, scope/start_url OK, 192/512 PNG icons OK\nApple touch icon: cached`;
+} catch (error) { result.textContent = 'FAIL: '+error.message; }
+</script></html>

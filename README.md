@@ -19,7 +19,9 @@ Node.jsは開発用の静的サーバーとテスト実行にだけ使用し、�
 
 配信対象はルートのHTML/CSS/JS/JSON、icons/、.nojekyllです。tests/とtools/はアプリ実行には不要です。
 GitHub Pagesの公開対象ディレクトリに配置してください。URLはすべて相対指定のため、リポジトリ名を含むサブパスでも動作します。
-今回、GitHubへのコミット・push・公開設定は行っていません。
+公開URL: https://9zbyhtstz4-glitch.github.io/learning-quiz-pwa/
+Publicリポジトリ: https://github.com/9zbyhtstz4-glitch/learning-quiz-pwa
+GitHub Pagesはmainブランチのルート（/）を配信します。.nojekyllでJekyll処理を省略し、独自のActionsビルド設定は使用しません。
 
 1. 初回だけオンラインでHTTPSの公開URLをSafariで開く。
 2. 「オフライン準備完了」を確認する。
@@ -87,6 +89,7 @@ node --test tests/progress.test.mjs
 
 ## スコープ外
 
-円グラフ、本番300問、Gemini/Claude連携、patternTypeによる表示分岐、見た目の作り込みは今回の指定により未実装です。iPhone実機検証とGitHub Pages上での公開検証はこの環境では実施していません。
+円グラフ、本番300問、Gemini/Claude連携、patternTypeによる表示分岐、見た目の作り込みは今回の指定により未実装です。iPhone実機検証は未実施です。
+公開先のtests/pwa.htmlではService Worker・必要資源のキャッシュ・manifestを確認できます。ホーム画面追加とネットワーク切断の実機確認とは別の検証です。
 
 
