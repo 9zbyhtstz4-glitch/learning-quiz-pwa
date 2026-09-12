@@ -41,8 +41,8 @@ GitHub Pagesはmainブランチのルート（/）を配信します。.nojekyll
 
 ## 進捗ルールと設定
 
-config.jsの初期値は6問・24時間・7日・maxDepth: 2です。
-coolingQuestionCountは収録問題数より小さい値にしてください。収録数以上にすると、間に挟む問題が尽きてcoolingがdueに戻らず、全問回答後に待機中のまま復習が再開しません。
+config.jsの初期値は30問・24時間・7日・maxDepth: 2です(schema-definition.md 6.1節の本来値)。
+coolingQuestionCountは収録問題数より小さい必要があります。収録数以上にすると、間に挟む問題が尽きてcoolingがdueに戻らず、全問回答後に待機中のまま復習が再開しません。`node tools/audit-data.cjs`がこの不整合を警告します。
 短時間で挙動を確認する場合だけ、次のように変更します。
 
 ```js
@@ -74,6 +74,16 @@ InterruptStack.stackには{questionId}だけを保存し、選択肢順・回答
 revealAnswer:falseでは、正誤メッセージ・正解位置・正誤色を表示せず、選んだ選択肢とexplanationのみを表示します。正誤は進捗の内部記録に使用します。
 
 ## 確認方法
+
+データを追加・変更したら、投入前に点検します。
+
+```powershell
+node tools/audit-data.cjs
+```
+
+必須制約(用語ごとのterm型問題、{{term:id}}とtermIdsの整合、choices3件、answerIndex 0〜2、記事参照の実在、id重複)と、
+schema-definition.md 7.3節の自己参照マーカー禁止を検査し、違反をidつきで一覧表示します。
+あわせてanswerIndex・patternType・typeの分布を出力します。エラーがあれば終了コード1で失敗します。
 
 ```powershell
 node --test tests/progress.test.mjs
