@@ -66,6 +66,6 @@ a { color: var(--text-primary); }
 .result-danger { background: var(--bg-danger); color: var(--text-danger); }
 #waiting { color: var(--text-muted); padding: 14px; }
 #error { color: var(--text-primary); border: 1px solid var(--border-strong); padding: 14px; }
-#meta, #cache-status, header p { font-size: 13px; color: var(--text-secondary); }
+#meta, #cache-status, header p { font-size: 13px; font-weight: 400; color: var(--text-muted); }
 #terms { display: flex; flex-wrap: wrap; gap: 8px; } details { margin-top: 18px; } summary { cursor: pointer; min-height: 44px; }
 [hidden] { display: none !important; }
