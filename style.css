@@ -57,6 +57,8 @@ a { color: var(--text-primary); }
 #choices { display: grid; gap: 12px; } #choices button { text-align: left; color: var(--text-primary); border: 1px solid var(--border); border-radius: 10px; font-weight: 400; }
 #choices button[aria-pressed="true"], #choices button:not(:disabled):hover { border-color: var(--border-accent); background: var(--bg-accent); }
 .term { color: var(--text-accent); text-decoration: underline dashed; text-underline-offset: 4px; padding: 3px 6px; }
+#body .term { border: 0; padding: 4px 7px; background: none; text-decoration-color: var(--border-accent); }
+#body .term:not(:disabled):hover { background: none; }
 .actions { display: flex; flex-wrap: wrap; gap: 12px; margin: 22px 0; }
 #next, #back { color: var(--text-primary); }
 #next:disabled { opacity: .55; }
