@@ -34,6 +34,41 @@
       "url": "https://arxiv.org/abs/2204.05862",
       "source": "arxiv",
       "fieldId": "llm"
+    },
+    {
+      "id": "a-tool-use",
+      "title": "Claudeでのツール使用",
+      "url": "https://platform.claude.com/docs/ja/agents-and-tools/tool-use/overview",
+      "source": "claude-docs",
+      "fieldId": "llm"
+    },
+    {
+      "id": "a-server-tools",
+      "title": "サーバーツール",
+      "url": "https://platform.claude.com/docs/ja/agents-and-tools/tool-use/server-tools",
+      "source": "claude-docs",
+      "fieldId": "llm"
+    },
+    {
+      "id": "a-define-tools",
+      "title": "ツールの定義（強制的なツール使用）",
+      "url": "https://platform.claude.com/docs/ja/agents-and-tools/tool-use/define-tools",
+      "source": "claude-docs",
+      "fieldId": "llm"
+    },
+    {
+      "id": "a-tool-search-tool",
+      "title": "ツール検索ツール",
+      "url": "https://platform.claude.com/docs/ja/agents-and-tools/tool-use/tool-search-tool",
+      "source": "claude-docs",
+      "fieldId": "llm"
+    },
+    {
+      "id": "a-prompt-engineering",
+      "title": "プロンプトエンジニアリングの概要",
+      "url": "https://platform.claude.com/docs/ja/build-with-claude/prompt-engineering/overview",
+      "source": "claude-docs",
+      "fieldId": "llm"
     }
   ],
   "terms": [
@@ -110,6 +145,68 @@
       ],
       "referenceArticleIds": [
         "a-glossary"
+      ]
+    },
+    {
+      "id": "tool-use",
+      "label": "ツール使用",
+      "shortDefinition": "ツールを呼び出すかクロードが判断し、構造化された呼び出しを返す仕組みである。",
+      "fieldId": "llm",
+      "relatedTermIds": [
+        "tool-choice",
+        "tool-search-tool"
+      ],
+      "questionIds": [
+        "q-tool-use"
+      ],
+      "referenceArticleIds": [
+        "a-tool-use"
+      ]
+    },
+    {
+      "id": "prompt-engineering",
+      "label": "プロンプトエンジニアリング",
+      "shortDefinition": "着手する前に、ユースケースにおける成功基準の明確な定義やテスト方法を確立しておくことが推奨される。",
+      "fieldId": "llm",
+      "relatedTermIds": [
+        "context-window"
+      ],
+      "questionIds": [
+        "q-prompt-engineering"
+      ],
+      "referenceArticleIds": [
+        "a-prompt-engineering"
+      ]
+    },
+    {
+      "id": "tool-choice",
+      "label": "tool_choice",
+      "shortDefinition": "ツール呼び出しを確実に必須化したい場合は、プロンプトでの指示に頼らずパラメータ側で直接設定を行う。",
+      "fieldId": "llm",
+      "relatedTermIds": [
+        "tool-use"
+      ],
+      "questionIds": [
+        "q-tool-choice"
+      ],
+      "referenceArticleIds": [
+        "a-define-tools"
+      ]
+    },
+    {
+      "id": "tool-search-tool",
+      "label": "ツール検索ツール",
+      "shortDefinition": "対象ツールの読み込みを遅延させることで、コンテキストウィンドウの消費を抑えながら多数のツールを扱える。",
+      "fieldId": "llm",
+      "relatedTermIds": [
+        "tool-use",
+        "context-window"
+      ],
+      "questionIds": [
+        "q-tool-search-tool"
+      ],
+      "referenceArticleIds": [
+        "a-tool-search-tool"
       ]
     }
   ],
@@ -265,6 +362,139 @@
       ],
       "sourceArticleIds": [
         "a-glossary"
+      ],
+      "generatedBy": "manual"
+    },
+    {
+      "id": "q-tool-use",
+      "type": "term",
+      "fieldId": "llm",
+      "patternType": "select-correct",
+      "body": "「ツール使用（function calling）」に関する説明として、正しいものはどれか？",
+      "choices": [
+        "ユーザー定義の関数などをクロード自身が直接実行し、その結果を返す仕組みである。",
+        "ツールを呼び出すかクロードが判断し、構造化された呼び出しを返す仕組みである。",
+        "クライアント側で実行されるツールをアンスロピックのサーバーへ送る仕組みである。"
+      ],
+      "answerIndex": 1,
+      "revealAnswer": true,
+      "explanation": "ツール使用は、Claude自身がツールを実行するのではなく、ユーザーの要求とツールの説明をもとに呼び出すべきかを判断し、構造化された呼び出しを返す仕組みです。呼び出しを実際に実行するのは、アプリケーション側やAnthropic側になります。",
+      "termIds": [
+        "tool-use"
+      ],
+      "sourceArticleIds": [
+        "a-tool-use"
+      ],
+      "generatedBy": "manual"
+    },
+    {
+      "id": "q-client-vs-server-tools",
+      "type": "relationship",
+      "fieldId": "llm",
+      "patternType": "relationship",
+      "body": "「クライアントツール」と「サーバーツール」の違いに関する説明として、誤っているものはどれか？",
+      "choices": [
+        "クライアントツールはユーザーのアプリケーション内で実行されるため、ハンドラーコードが必要である。",
+        "サーバーツールはアンスロピックのインフラ上で実行されるため、トークン以外の追加料金が発生しうる。",
+        "サーバーツールはユーザーのアプリケーション内で実行されるため、ラウンドトリップの処理が必須になる。"
+      ],
+      "answerIndex": 2,
+      "revealAnswer": true,
+      "explanation": "サーバーツールはAnthropicのインフラストラクチャ上で実行されるツールであり、ユーザーのアプリケーション内にハンドラーコードを用意する必要はありません。対してクライアントツールはユーザーのアプリケーション内で実行されるため、コードの実行やラウンドトリップ（往復）が必要になります。",
+      "termIds": [
+        "tool-use"
+      ],
+      "sourceArticleIds": [
+        "a-tool-use",
+        "a-server-tools"
+      ],
+      "generatedBy": "manual"
+    },
+    {
+      "id": "q-prompt-engineering",
+      "type": "term",
+      "fieldId": "llm",
+      "patternType": "select-correct",
+      "body": "「プロンプトエンジニアリング」に関する説明として、最も適切なものはどれか？",
+      "choices": [
+        "着手する前に、ユースケースにおける成功基準の明確な定義やテスト方法を確立しておくことが推奨される。",
+        "応答速度の低下や運用コストの増加といった課題は、別のモデルを選ぶよりもプロンプトの調整で解決できる。",
+        "最初のプロンプトを作成する前に、複雑なシステムプロンプトの構造を完全に定義しきることが推奨される。"
+      ],
+      "answerIndex": 0,
+      "revealAnswer": true,
+      "explanation": "プロンプトエンジニアリングを始める前には、成功基準の明確な定義やテスト方法を確立することが推奨されています。また、レイテンシ（応答速度）やコストなどの課題は、すべてのケースにおいてプロンプトで解決できるわけではなく、別のモデルを選択する方が簡単に改善できる場合があります。",
+      "termIds": [
+        "prompt-engineering"
+      ],
+      "sourceArticleIds": [
+        "a-prompt-engineering"
+      ],
+      "generatedBy": "manual"
+    },
+    {
+      "id": "q-tool-choice",
+      "type": "term",
+      "fieldId": "llm",
+      "patternType": "select-correct",
+      "body": "Claudeにツール呼び出しを必須化させる方法として、正しいものはどれか？",
+      "choices": [
+        "ツール呼び出しを確実に必須化したい場合は、パラメータではなくシステムプロンプトによる強い指示を用いる。",
+        "ツール呼び出しを確実に必須化したい場合は、プロンプトでの指示に頼らずパラメータ側で直接設定を行う。",
+        "ツール呼び出しを確実に必須化したい場合は、各ツール定義のパラメータで読み込みを遅延させる指定を行う。"
+      ],
+      "answerIndex": 1,
+      "revealAnswer": true,
+      "explanation": "Claudeのツール呼び出しはシステムプロンプトでも調整可能ですが、確実に必須化したい場合はプロンプトに頼るのではなく、`tool_choice`パラメータを使用して制御することが推奨されています。",
+      "termIds": [
+        "tool-choice"
+      ],
+      "sourceArticleIds": [
+        "a-define-tools"
+      ],
+      "generatedBy": "manual"
+    },
+    {
+      "id": "q-tools-system-prompt",
+      "type": "relationship",
+      "fieldId": "llm",
+      "patternType": "relationship",
+      "body": "システムプロンプトとツールの関係性について、誤っているものはどれか？",
+      "choices": [
+        "ツール使用を有効化するパラメータを設定した場合、自動的なプロンプト付加は省略されてトークン消費が減る。",
+        "ツール使用を有効化するパラメータを設定した場合、特別なプロンプトが自動で付加されてトークン消費が増える。",
+        "ツール使用を有効化するパラメータを設定した場合、ツール検索専用の機能が追加されて消費量は完全に一定になる。"
+      ],
+      "answerIndex": 0,
+      "revealAnswer": true,
+      "explanation": "`tools`パラメータを使用してツール使用を有効にすると、APIがツール使用のための特別なシステムプロンプトを自動的に付加するため、トークン消費量が増加します。",
+      "termIds": [
+        "tool-use"
+      ],
+      "sourceArticleIds": [
+        "a-tool-use"
+      ],
+      "generatedBy": "manual"
+    },
+    {
+      "id": "q-tool-search-tool",
+      "type": "term",
+      "fieldId": "llm",
+      "patternType": "select-correct",
+      "body": "「ツール検索ツール（tool search tool）」の役割として、正しいものはどれか？",
+      "choices": [
+        "対象ツールの読み込みを遅延させることで、コンテキストウィンドウの消費を抑えながら多数のツールを扱える。",
+        "対象ツールの読み込みを前倒しにすることで、コンテキストウィンドウの消費を抑えながら応答速度を向上させる。",
+        "対象ツールをローカル環境に直接保存することで、コンテキストウィンドウの消費を抑えながら完全な一致を保証する。"
+      ],
+      "answerIndex": 0,
+      "revealAnswer": true,
+      "explanation": "ツール検索ツールは、対象のツール定義の読み込みを遅延（`defer_loading: true`を指定）させ、必要になった時点でオンデマンドに検索・読み込みを行うサーバーツールです。これにより、コンテキストウィンドウの消費を抑えながら数千規模のツールを扱うことが可能になります。",
+      "termIds": [
+        "tool-search-tool"
+      ],
+      "sourceArticleIds": [
+        "a-tool-search-tool"
       ],
       "generatedBy": "manual"
     }
