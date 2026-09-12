@@ -69,6 +69,20 @@
       "url": "https://platform.claude.com/docs/ja/build-with-claude/prompt-engineering/overview",
       "source": "claude-docs",
       "fieldId": "llm"
+    },
+    {
+      "id": "a-streaming",
+      "title": "メッセージのストリーミング",
+      "url": "https://platform.claude.com/docs/ja/build-with-claude/streaming",
+      "source": "claude-docs",
+      "fieldId": "llm"
+    },
+    {
+      "id": "a-batch-processing",
+      "title": "バッチ処理",
+      "url": "https://platform.claude.com/docs/ja/build-with-claude/batch-processing",
+      "source": "claude-docs",
+      "fieldId": "llm"
     }
   ],
   "terms": [
@@ -154,7 +168,8 @@
       "fieldId": "llm",
       "relatedTermIds": [
         "tool-choice",
-        "tool-search-tool"
+        "tool-search-tool",
+        "input-json-delta"
       ],
       "questionIds": [
         "q-tool-use"
@@ -207,6 +222,232 @@
       ],
       "referenceArticleIds": [
         "a-tool-search-tool"
+      ]
+    },
+    {
+      "id": "streaming",
+      "label": "ストリーミング",
+      "shortDefinition": "server-sent events(SSE)でレスポンスを段階的に受け取る方式。大きなmax_tokensのリクエストでは、HTTPタイムアウトを避けるためSDK側がこれを必要とする場合がある。",
+      "fieldId": "llm",
+      "relatedTermIds": [
+        "sse-event-flow",
+        "delta",
+        "message-accumulation"
+      ],
+      "questionIds": [
+        "q-streaming"
+      ],
+      "referenceArticleIds": [
+        "a-streaming"
+      ]
+    },
+    {
+      "id": "sse-event-flow",
+      "label": "イベントフロー",
+      "shortDefinition": "message_startに始まり、コンテンツブロックごとのstart・delta・stopを経て、message_deltaとmessage_stopで終わるイベントの並び。message_deltaのusageは累積値で示される。",
+      "fieldId": "llm",
+      "relatedTermIds": [
+        "streaming",
+        "delta",
+        "ping-event"
+      ],
+      "questionIds": [
+        "q-sse-event-flow"
+      ],
+      "referenceArticleIds": [
+        "a-streaming"
+      ]
+    },
+    {
+      "id": "delta",
+      "label": "デルタ",
+      "shortDefinition": "データ全体を毎回送り直さず、変化した部分だけを送る差分の仕組み。テキストや思考の断片がcontent_block_deltaとして段階的に届く。",
+      "fieldId": "llm",
+      "relatedTermIds": [
+        "input-json-delta",
+        "signature-delta",
+        "sse-event-flow"
+      ],
+      "questionIds": [
+        "q-delta"
+      ],
+      "referenceArticleIds": [
+        "a-streaming"
+      ]
+    },
+    {
+      "id": "input-json-delta",
+      "label": "入力JSONデルタ",
+      "shortDefinition": "tool_useブロックのinput更新を運ぶデルタ。最大限の粒度のため部分的なJSON文字列として届き、content_block_stopまで蓄積してから解析する。",
+      "fieldId": "llm",
+      "relatedTermIds": [
+        "delta",
+        "tool-use"
+      ],
+      "questionIds": [
+        "q-input-json-delta"
+      ],
+      "referenceArticleIds": [
+        "a-streaming"
+      ]
+    },
+    {
+      "id": "ping-event",
+      "label": "pingイベント",
+      "shortDefinition": "実質的な内容を持たないイベント。送信回数や位置は定められておらず、レスポンス全体に散在しうるため無視して構わない。",
+      "fieldId": "llm",
+      "relatedTermIds": [
+        "sse-event-flow"
+      ],
+      "questionIds": [
+        "q-ping-event"
+      ],
+      "referenceArticleIds": [
+        "a-streaming"
+      ]
+    },
+    {
+      "id": "overloaded-error",
+      "label": "過負荷エラー",
+      "shortDefinition": "使用量が多い期間に返る過負荷の通知。非ストリーミングのHTTP 529に相当し、ストリーミングではevent: errorとしてストリーム内部で届く。",
+      "fieldId": "llm",
+      "relatedTermIds": [
+        "streaming",
+        "sse-event-flow"
+      ],
+      "questionIds": [
+        "q-overloaded-error"
+      ],
+      "referenceArticleIds": [
+        "a-streaming"
+      ]
+    },
+    {
+      "id": "stream-error-recovery",
+      "label": "ストリームのエラー回復",
+      "shortDefinition": "中断したストリーミングを、受信済みの部分を起点に途中から再開する手順。ツール使用ブロックと拡張思考ブロックは部分的には回復できない。",
+      "fieldId": "llm",
+      "relatedTermIds": [
+        "streaming",
+        "message-accumulation"
+      ],
+      "questionIds": [
+        "q-stream-error-recovery"
+      ],
+      "referenceArticleIds": [
+        "a-streaming"
+      ]
+    },
+    {
+      "id": "message-accumulation",
+      "label": "メッセージの蓄積",
+      "shortDefinition": "内部ではストリーミングで接続を保ちながら全イベントを蓄積し、.create()と同一の完全なMessageオブジェクトを返すSDKの機能。",
+      "fieldId": "llm",
+      "relatedTermIds": [
+        "streaming",
+        "stream-error-recovery"
+      ],
+      "questionIds": [
+        "q-message-accumulation"
+      ],
+      "referenceArticleIds": [
+        "a-streaming"
+      ]
+    },
+    {
+      "id": "signature-delta",
+      "label": "署名デルタ",
+      "shortDefinition": "思考コンテンツのcontent_block_stop直前に送られるデルタ。思考ブロックの整合性を検証するために使用される。",
+      "fieldId": "llm",
+      "relatedTermIds": [
+        "delta"
+      ],
+      "questionIds": [
+        "q-signature-delta"
+      ],
+      "referenceArticleIds": [
+        "a-streaming"
+      ]
+    },
+    {
+      "id": "batch-processing",
+      "label": "バッチ処理",
+      "shortDefinition": "複数のリクエストをまとめて非同期に処理する方式。即時の応答は得られないが、すべての使用量が標準API価格の50%で課金される。",
+      "fieldId": "llm",
+      "relatedTermIds": [
+        "custom-id",
+        "polling",
+        "batch-result-types",
+        "streaming"
+      ],
+      "questionIds": [
+        "q-batch-processing"
+      ],
+      "referenceArticleIds": [
+        "a-batch-processing"
+      ]
+    },
+    {
+      "id": "custom-id",
+      "label": "custom_id",
+      "shortDefinition": "バッチの各リクエストに付ける一意の識別子。結果は任意の順序で返るため、結果と元のリクエストを突き合わせるために使う。",
+      "fieldId": "llm",
+      "relatedTermIds": [
+        "batch-processing",
+        "batch-result-types"
+      ],
+      "questionIds": [
+        "q-custom-id"
+      ],
+      "referenceArticleIds": [
+        "a-batch-processing"
+      ]
+    },
+    {
+      "id": "polling",
+      "label": "ポーリング",
+      "shortDefinition": "処理が終わるまでクライアント側から定期的にステータスを確認し続ける方式。キャンセルの確定を待つ際にも使う。",
+      "fieldId": "llm",
+      "relatedTermIds": [
+        "batch-processing"
+      ],
+      "questionIds": [
+        "q-polling"
+      ],
+      "referenceArticleIds": [
+        "a-batch-processing"
+      ]
+    },
+    {
+      "id": "batch-result-types",
+      "label": "バッチ結果",
+      "shortDefinition": "succeeded・errored・canceled・expiredの4種類。課金対象はsucceededのみで、残る3つは課金されない。",
+      "fieldId": "llm",
+      "relatedTermIds": [
+        "batch-processing",
+        "custom-id"
+      ],
+      "questionIds": [
+        "q-batch-result-types"
+      ],
+      "referenceArticleIds": [
+        "a-batch-processing"
+      ]
+    },
+    {
+      "id": "jsonl",
+      "label": "JSONL形式",
+      "shortDefinition": "各行が1件の結果を表す有効なJSONオブジェクトになっている形式。ダウンロードの完了を待たず1行ずつストリーミング処理できる。",
+      "fieldId": "llm",
+      "relatedTermIds": [
+        "batch-processing",
+        "batch-result-types"
+      ],
+      "questionIds": [
+        "q-jsonl"
+      ],
+      "referenceArticleIds": [
+        "a-batch-processing"
       ]
     }
   ],
@@ -495,6 +736,337 @@
       ],
       "sourceArticleIds": [
         "a-tool-search-tool"
+      ],
+      "generatedBy": "manual"
+    },
+    {
+      "id": "q-streaming",
+      "type": "term",
+      "fieldId": "llm",
+      "patternType": "select-correct",
+      "body": "「ストリーミング」を利用する目的や性質として、正しいものはどれか？",
+      "choices": [
+        "大規模なトークン要求時にHTTPタイムアウトを防ぐため、SDK側で必須となる場合がある仕組みである。",
+        "大規模なトークン要求時にデータ圧縮効率を高めるため、プロトコル側で必須となる場合がある仕組みである。",
+        "大規模なトークン要求時に複数サーバーへ分散させるため、インフラ側で必須となる場合がある仕組みである。"
+      ],
+      "answerIndex": 0,
+      "revealAnswer": true,
+      "explanation": "ストリーミング（SSE）はレスポンスを段階的に受け取る仕組みであり、大きなmax_tokensのリクエストにおいてHTTPタイムアウトを回避するためにSDKがストリーミングを必要とする場合があります。",
+      "termIds": [
+        "streaming"
+      ],
+      "sourceArticleIds": [
+        "a-streaming"
+      ],
+      "generatedBy": "manual"
+    },
+    {
+      "id": "q-sse-event-flow",
+      "type": "term",
+      "fieldId": "llm",
+      "patternType": "select-incorrect",
+      "body": "イベントの順序や構成を定義する「イベントフロー」の仕様として、誤っているものはどれか？",
+      "choices": [
+        "開始時のイベントには、コンテンツ部分が空の状態に設定されたオブジェクトが必ず含まれる。",
+        "途中経過で通知されるトークン使用量の数値は、過去の累積値ではなく前回からの差分値で示される。",
+        "新しいイベントタイプが将来追加される可能性があるため、未知のデータにも対応するよう推奨される。"
+      ],
+      "answerIndex": 1,
+      "revealAnswer": true,
+      "explanation": "イベントストリームの途中（message_deltaイベントなど）で通知されるトークンの使用量は、差分ではなく「累積値」として示されます。したがって「前回からの差分値で示される」という記述が誤りです。開始時に空のオブジェクトが含まれる点や、未知のイベントに対処すべき点は正しい仕様です。",
+      "termIds": [
+        "sse-event-flow"
+      ],
+      "sourceArticleIds": [
+        "a-streaming"
+      ],
+      "generatedBy": "manual"
+    },
+    {
+      "id": "q-delta",
+      "type": "term",
+      "fieldId": "llm",
+      "patternType": "select-best",
+      "body": "通信内でやり取りされる「デルタ（差分）」の基本的な考え方として、最も適切なものはどれか？",
+      "choices": [
+        "データ全体を一定のサイズごとに分割し、複数回に分けて順番に送信することで転送効率を高める手法。",
+        "データの重要度をリアルタイムで判定し、優先順位の高い情報から先に送信することで転送効率を高める手法。",
+        "データ全体を毎回送り直すことはせず、変化が発生した部分のみを抽出して送信することで転送効率を高める手法。"
+      ],
+      "answerIndex": 2,
+      "revealAnswer": true,
+      "explanation": "デルタは、全体を送り直すのではなく「変化した部分だけを送る」という最適化の手法です。テキストや思考ブロックの断片が、更新差分として段階的に届けられます。",
+      "termIds": [
+        "delta"
+      ],
+      "sourceArticleIds": [
+        "a-streaming"
+      ],
+      "generatedBy": "manual"
+    },
+    {
+      "id": "q-input-json-delta",
+      "type": "term",
+      "fieldId": "llm",
+      "patternType": "select-correct",
+      "body": "ツール使用時などに送られる「入力JSONデルタ」の扱い方として、正しいものはどれか？",
+      "choices": [
+        "受信時点では解析不能な文字列として届くため、終了の合図を待ってからデータ構造へと変換する性質を持つ。",
+        "受信時点で常に解析可能な構造体として届くため、到着した情報を即座にアプリケーションへ反映する性質を持つ。",
+        "受信時点では特殊な暗号化データとして届くため、専用の鍵を用いて復号してからデータの解析へ回す性質を持つ。"
+      ],
+      "answerIndex": 0,
+      "revealAnswer": true,
+      "explanation": "入力JSONデルタは最大限の粒度をサポートするため「部分的なJSON文字列」として届きます。そのままではJSONとして解析できないため、文字列を蓄積してブロック終了時に解析するか、専用のヘルパーを利用する必要があります。",
+      "termIds": [
+        "input-json-delta"
+      ],
+      "sourceArticleIds": [
+        "a-streaming"
+      ],
+      "generatedBy": "manual"
+    },
+    {
+      "id": "q-ping-event",
+      "type": "term",
+      "fieldId": "llm",
+      "patternType": "select-incorrect",
+      "body": "通信内に含まれる「pingイベント」の仕様として、誤っているものはどれか？",
+      "choices": [
+        "実質的なデータを含まないイベントであるため、アプリケーション側の処理では単純に無視して構わないという特徴を持つ。",
+        "接続の安定状態を確認するイベントであるため、常にストリームの先頭と末尾の決められた位置に配置されるという特徴を持つ。",
+        "決まった送信回数や順序が定められていないため、ストリーム全体の処理中に任意のタイミングで散在しうるという特徴を持つ。"
+      ],
+      "answerIndex": 1,
+      "revealAnswer": true,
+      "explanation": "pingイベントは決まった位置や回数で送信されるわけではなく、レスポンス全体に散在しうるため、「ストリームの先頭と末尾の決められた位置に配置される」という記述が誤りです。実質的な内容を持たないため無視して構いませんが、いつ来てもよいように存在を想定しておく必要があります。",
+      "termIds": [
+        "ping-event"
+      ],
+      "sourceArticleIds": [
+        "a-streaming"
+      ],
+      "generatedBy": "manual"
+    },
+    {
+      "id": "q-overloaded-error",
+      "type": "term",
+      "fieldId": "llm",
+      "patternType": "select-best",
+      "body": "使用量が多い期間などに発生する「過負荷エラー」の挙動として、最も適切なものはどれか？",
+      "choices": [
+        "HTTPのステータスコードを用いた通信エラーとして通知されるため、ストリームの外部で事前に処理を停止させる仕組みである。",
+        "サーバーとの接続確立前に専用のハンドシェイク処理で通知されるため、ストリームの開始前に素早く再試行を行える仕組みである。",
+        "HTTPステータスコードではなくストリーム内のイベントとして通知されるため、データ受信の途中でもエラーを受け取る仕組みである。"
+      ],
+      "answerIndex": 2,
+      "revealAnswer": true,
+      "explanation": "非ストリーミングでのHTTP 529エラーに相当する状態ですが、ストリーミングの場合はHTTPステータスコードではなく、ストリーム内部のイベント（event: error）として届くのが特徴です。",
+      "termIds": [
+        "overloaded-error"
+      ],
+      "sourceArticleIds": [
+        "a-streaming"
+      ],
+      "generatedBy": "manual"
+    },
+    {
+      "id": "q-stream-error-recovery",
+      "type": "term",
+      "fieldId": "llm",
+      "patternType": "select-incorrect",
+      "body": "通信が途切れた際に行う「ストリームのエラー回復」の仕様として、誤っているものはどれか？",
+      "choices": [
+        "ツール使用ブロックや拡張思考ブロックの処理中に中断した場合であっても、テキストと同様に途中からの回復処理を実行できる仕様になっている。",
+        "新しい世代のモデルでは、エラー前に受信した部分的な情報に対して続きを促す指示をユーザー側のメッセージとして追加する仕様になっている。",
+        "ネットワーク問題で通信が中断された場合でも、レスポンス全体を最初から再処理することなく中断箇所からストリーミングを再開できる仕様になっている。"
+      ],
+      "answerIndex": 0,
+      "revealAnswer": true,
+      "explanation": "基本的には中断箇所から再開できますが、「ツール使用ブロック」と「拡張思考ブロック」は部分的には回復できないという重要な例外があります。したがって「テキストと同様に途中からの回復処理を実行できる」という記述が誤りです。",
+      "termIds": [
+        "stream-error-recovery"
+      ],
+      "sourceArticleIds": [
+        "a-streaming"
+      ],
+      "generatedBy": "manual"
+    },
+    {
+      "id": "q-message-accumulation",
+      "type": "term",
+      "fieldId": "llm",
+      "patternType": "select-best",
+      "body": "SDKが提供している「メッセージの蓄積」機能の目的として、最も適切なものはどれか？",
+      "choices": [
+        "複数のメッセージを結合して1つのファイルに出力し、後から専用の解析ツールを使って内容を順次読み込んでいくためのデータ処理機能。",
+        "内部的に接続を維持しながら到着したデータを蓄積し、最終的に非ストリーミング時と同じ完全なオブジェクトとして結果を返すための機能。",
+        "応答の一部をメモリ上に一時保存することで、次回以降の同一リクエストに対して瞬時にキャッシュされたテキストを返却するための機能。"
+      ],
+      "answerIndex": 1,
+      "revealAnswer": true,
+      "explanation": "メッセージの蓄積は、HTTPタイムアウトを避けるために内部ではストリーミングを使いつつ、逐次表示が不要なケースに向けて、蓄積した完全なMessageオブジェクトを返す機能です。",
+      "termIds": [
+        "message-accumulation"
+      ],
+      "sourceArticleIds": [
+        "a-streaming"
+      ],
+      "generatedBy": "manual"
+    },
+    {
+      "id": "q-signature-delta",
+      "type": "term",
+      "fieldId": "llm",
+      "patternType": "select-correct",
+      "body": "特別なイベントとして送られる「署名デルタ」の役割について、正しいものはどれか？",
+      "choices": [
+        "リクエスト送信時にユーザーを認証するため、通信の開始時点で送信される独自の識別子であり、不正なアクセスをブロックする役割を果たす。",
+        "複数の処理結果をファイルとしてまとめてダウンロードする際、データ全体のハッシュ値として提供され、ファイルの欠損を検知する役割を果たす。",
+        "思考コンテンツを出力する際、対象となるブロックが終了する直前に送られるデータであり、出力内容の整合性をシステムが検証する役割を果たす。"
+      ],
+      "answerIndex": 2,
+      "revealAnswer": true,
+      "explanation": "署名デルタは、思考コンテンツのストリーミング時にブロック終了の直前に送られ、思考ブロックの整合性を検証するために使用されます。",
+      "termIds": [
+        "signature-delta"
+      ],
+      "sourceArticleIds": [
+        "a-streaming"
+      ],
+      "generatedBy": "manual"
+    },
+    {
+      "id": "q-batch-processing",
+      "type": "term",
+      "fieldId": "llm",
+      "patternType": "select-best",
+      "body": "「バッチ処理」を導入するメリットや特性として、最も適切なものはどれか？",
+      "choices": [
+        "複数の要求をまとめて送信し非同期で処理する方式であり、即時の応答は得られない代わりに標準価格よりもコスト効率が向上する仕組みである。",
+        "複数の要求をまとめて送信し完全同期で処理する方式であり、即時の応答が保証される代わりに標準価格よりも追加のコストが発生する仕組みである。",
+        "複数の要求を小分けに分割して逐次処理する方式であり、即時の応答を維持しつつ標準価格と同一のコストで大量のデータを処理する仕組みである。"
+      ],
+      "answerIndex": 0,
+      "revealAnswer": true,
+      "explanation": "バッチ処理は、複数のリクエストをまとめて非同期で処理する方式です。即時性は失われますが、すべての使用量が標準API価格の50%で課金されるためコスト効率が最適化されます。",
+      "termIds": [
+        "batch-processing"
+      ],
+      "sourceArticleIds": [
+        "a-batch-processing"
+      ],
+      "generatedBy": "manual"
+    },
+    {
+      "id": "q-custom-id",
+      "type": "term",
+      "fieldId": "llm",
+      "patternType": "select-correct",
+      "body": "個々のリクエストを識別する「custom_id」の役割として、正しいものはどれか？",
+      "choices": [
+        "処理結果は送信時と同じ順序で整列されて返却されるため、結果を受け取ったあとに特定のデータを強調表示する目的で補助的に割り当てる識別子。",
+        "処理結果は送信時とは異なる任意の順序で返却される可能性があるため、結果と元のリクエストを正確に突き合わせて対応させるために必要な識別子。",
+        "処理結果はランダムなファイル名で分割されて返却されるため、すべてのファイルを1つのフォルダに結合して解凍する際のパスワードとなる識別子。"
+      ],
+      "answerIndex": 1,
+      "revealAnswer": true,
+      "explanation": "バッチ結果は任意の順序で返される可能性があり、送信時の順序と一致するとは限らないため、元のリクエストと結果を正しく突き合わせる目的でcustom_idが必須となります。",
+      "termIds": [
+        "custom-id"
+      ],
+      "sourceArticleIds": [
+        "a-batch-processing"
+      ],
+      "generatedBy": "manual"
+    },
+    {
+      "id": "q-polling",
+      "type": "term",
+      "fieldId": "llm",
+      "patternType": "select-incorrect",
+      "body": "処理状況を確認する手法である「ポーリング」の特徴として、誤っているものはどれか？",
+      "choices": [
+        "処理の完了を待機している間、一定の間隔を空けてシステムのステータス取得を繰り返すループ処理を実装するという特徴を持っている。",
+        "バッチ処理のキャンセルをリクエストした際にも、そのキャンセル処理がシステム上で確定するまで待機するために利用される特徴を持っている。",
+        "処理が完了したタイミングでサーバー側から自動的に完了通知がプッシュ送信されるため、定期的な状況確認の実装を省略できるという特徴を持っている。"
+      ],
+      "answerIndex": 2,
+      "revealAnswer": true,
+      "explanation": "ポーリングはクライアント側から「定期的にステータスをチェックしに行く」方式であるため、サーバーからの自動プッシュ通知を待つわけではありません。したがって「サーバー側から自動的に完了通知がプッシュ送信される」という記述が誤りです。",
+      "termIds": [
+        "polling"
+      ],
+      "sourceArticleIds": [
+        "a-batch-processing"
+      ],
+      "generatedBy": "manual"
+    },
+    {
+      "id": "q-batch-result-types",
+      "type": "term",
+      "fieldId": "llm",
+      "patternType": "select-correct",
+      "body": "4つの状態に分類される「バッチ結果」と課金の関係について、正しいものはどれか？",
+      "choices": [
+        "エラーが発生した場合や期限切れになった場合は課金されず、成功してメッセージ結果が含まれるリクエストのみが利用料金の対象として計算される。",
+        "エラーが発生した場合や期限切れになった場合も含めて課金され、処理プロセスに到達したすべてのリクエストが利用料金の対象として均等に計算される。",
+        "エラーが発生した場合は通常価格の半額がペナルティとして課金され、成功したリクエストと合計して利用料金の対象としてシステム上で一括計算される。"
+      ],
+      "answerIndex": 0,
+      "revealAnswer": true,
+      "explanation": "バッチ処理において、errored（エラー）、canceled（キャンセル）、expired（期限切れ）の状態になったリクエストは課金されません。succeeded（成功）となったものだけが対象となります。",
+      "termIds": [
+        "batch-result-types"
+      ],
+      "sourceArticleIds": [
+        "a-batch-processing"
+      ],
+      "generatedBy": "manual"
+    },
+    {
+      "id": "q-jsonl",
+      "type": "term",
+      "fieldId": "llm",
+      "patternType": "select-incorrect",
+      "body": "バッチ処理の結果として返却される「JSONL形式」の特徴として、誤っているものはどれか？",
+      "choices": [
+        "データ全体のサイズが大きくなる可能性があるため、一度にすべてダウンロードせずストリーミングで取得することが推奨されているデータ形式である。",
+        "ファイル全体が1つの巨大な構造体として完結しているため、末尾まで完全にダウンロードを終えるまでは内容の解析を開始できないデータ形式である。",
+        "各行がそれぞれ単一のリクエスト結果を表す有効なオブジェクトになっており、1行ずつ順番に処理できるためメモリ効率に優れているデータ形式である。"
+      ],
+      "answerIndex": 1,
+      "revealAnswer": true,
+      "explanation": "JSONLは「各行が有効なJSONオブジェクト」であるため、ファイル全体のダウンロードを待たずに1行ずつストリーミング処理でき、メモリ効率よく扱えるのが特徴です。全体が1つの巨大な構造体として完結しているという記述が誤りです。",
+      "termIds": [
+        "jsonl"
+      ],
+      "sourceArticleIds": [
+        "a-batch-processing"
+      ],
+      "generatedBy": "manual"
+    },
+    {
+      "id": "q-batch-custom-id-ordering",
+      "type": "relationship",
+      "fieldId": "llm",
+      "patternType": "select-best",
+      "body": "{{term:batch-processing}}の仕様に対処するため、{{term:custom-id}}を付与する理由として、最も適切なものはどれか？",
+      "choices": [
+        "処理速度を最大化するため、受信したリクエストをアルファベット順に並べ替え、その並び順のインデックス番号を返却用データに直接埋め込んで対応づける手法。",
+        "データがファイルごとに自動で分割される性質を利用し、ファイル名に含まれるタイムスタンプの古い順にリクエストを処理することで順序の整合性を担保する手法。",
+        "複数のリクエストを並行して非同期に処理した結果、返却される順番が前後する事態に備え、呼び出し側が一意の識別子を付与して後から結果を突き合わせる手法。"
+      ],
+      "answerIndex": 2,
+      "revealAnswer": false,
+      "explanation": "非同期で大量のデータを処理する仕組みでは、各プロセスが独立して行われるため、送信したときの順番通りに結果が返ってくるとは限りません。そのため、あらかじめ呼び出し側でリクエストごとに固有の目印をつけておき、結果が出揃ったあとに元のデータと対応させるというアプローチが必須になります。",
+      "termIds": [
+        "custom-id",
+        "batch-processing"
+      ],
+      "sourceArticleIds": [
+        "a-batch-processing"
       ],
       "generatedBy": "manual"
     }
