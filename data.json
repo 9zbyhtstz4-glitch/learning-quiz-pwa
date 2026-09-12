@@ -1,257 +1,270 @@
 {
   "articles": [
     {
-      "id": "a-api",
-      "title": "APIの参考資料",
-      "url": "https://developer.mozilla.org/ja/docs/Glossary/API",
-      "source": "mdn",
-      "fieldId": "web"
+      "id": "a-glossary",
+      "title": "用語集（Claude公式ドキュメント）",
+      "url": "https://platform.claude.com/docs/ja/about-claude/glossary",
+      "source": "claude-docs",
+      "fieldId": "llm"
     },
     {
-      "id": "a-http",
-      "title": "HTTPの参考資料",
-      "url": "https://developer.mozilla.org/ja/docs/Web/HTTP",
-      "source": "mdn",
-      "fieldId": "web"
+      "id": "a-context-windows",
+      "title": "コンテキストウィンドウの理解",
+      "url": "https://platform.claude.com/docs/ja/build-with-claude/context-windows",
+      "source": "claude-docs",
+      "fieldId": "llm"
     },
     {
-      "id": "a-cache",
-      "title": "キャッシュの参考資料",
-      "url": "https://developer.mozilla.org/ja/docs/Web/API/Cache",
-      "source": "mdn",
-      "fieldId": "web"
+      "id": "a-mcp",
+      "title": "MCPドキュメント",
+      "url": "https://platform.claude.com/docs/ja/mcp",
+      "source": "claude-docs",
+      "fieldId": "llm"
     },
     {
-      "id": "a-indexeddb",
-      "title": "IndexedDBの参考資料",
-      "url": "https://developer.mozilla.org/ja/docs/Web/API/IndexedDB_API",
-      "source": "mdn",
-      "fieldId": "web"
+      "id": "a-mcp-connector",
+      "title": "MCPコネクタ",
+      "url": "https://platform.claude.com/docs/ja/agents-and-tools/mcp-connector",
+      "source": "claude-docs",
+      "fieldId": "llm"
     },
     {
-      "id": "a-pwa",
-      "title": "PWAの参考資料",
-      "url": "https://developer.mozilla.org/ja/docs/Web/Progressive_web_apps",
-      "source": "mdn",
-      "fieldId": "web"
+      "id": "a-rlhf-paper",
+      "title": "RLHFに関するAnthropicの論文",
+      "url": "https://arxiv.org/abs/2204.05862",
+      "source": "arxiv",
+      "fieldId": "llm"
     }
   ],
   "terms": [
     {
-      "id": "api",
-      "label": "API",
-      "shortDefinition": "ソフトウェアの機能を利用するための窓口。",
-      "fieldId": "web",
+      "id": "context-window",
+      "label": "コンテキストウィンドウ",
+      "shortDefinition": "言語モデルが新しいテキストを生成するときに、遡って参照できるテキストの量（作業メモリ）のことである。",
+      "fieldId": "llm",
       "relatedTermIds": [
-        "http"
+        "rag"
       ],
       "questionIds": [
-        "q-api"
+        "q-context-window"
       ],
       "referenceArticleIds": [
-        "a-api"
+        "a-glossary",
+        "a-context-windows"
       ]
     },
     {
-      "id": "http",
-      "label": "HTTP",
-      "shortDefinition": "要求と応答をやり取りする通信の決まり。",
-      "fieldId": "web",
+      "id": "hhh",
+      "label": "HHH",
+      "shortDefinition": "Helpful（有用）、Honest（正直）、Harmless（無害）",
+      "fieldId": "llm",
       "relatedTermIds": [
-        "cache"
+        "rlhf"
       ],
       "questionIds": [
-        "q-http"
+        "q-hhh"
       ],
       "referenceArticleIds": [
-        "a-http"
+        "a-glossary"
       ]
     },
     {
-      "id": "cache",
-      "label": "キャッシュ",
-      "shortDefinition": "再利用するために保存したデータ。",
-      "fieldId": "web",
-      "relatedTermIds": [
-        "indexeddb"
-      ],
+      "id": "temperature",
+      "label": "Temperature",
+      "shortDefinition": "最も確率の高い表現に忠実な保守的で決定論的な出力になるが、同一入力でもAPI呼び出しごとに異なる出力が生じうる。",
+      "fieldId": "llm",
+      "relatedTermIds": [],
       "questionIds": [
-        "q-cache"
+        "q-temperature"
       ],
       "referenceArticleIds": [
-        "a-cache"
+        "a-glossary"
       ]
     },
     {
-      "id": "indexeddb",
-      "label": "IndexedDB",
-      "shortDefinition": "ブラウザー内で構造化データを保存する仕組み。",
-      "fieldId": "web",
+      "id": "rlhf",
+      "label": "RLHF",
+      "shortDefinition": "2つ以上のサンプルテキストを人間がランク付けし、より高くランク付けされたものに似た出力を好ませるようにする。",
+      "fieldId": "llm",
       "relatedTermIds": [
-        "pwa"
+        "hhh"
       ],
       "questionIds": [
-        "q-indexeddb"
+        "q-rlhf"
       ],
       "referenceArticleIds": [
-        "a-indexeddb"
+        "a-glossary",
+        "a-rlhf-paper"
       ]
     },
     {
-      "id": "pwa",
-      "label": "PWA",
-      "shortDefinition": "Web技術で作られ、端末へ追加できるアプリ。",
-      "fieldId": "web",
+      "id": "rag",
+      "label": "RAG",
+      "shortDefinition": "RAGを用いれば外部の情報を利用できるが、その有効性は外部ナレッジベースの品質や、実行時に取得される知識の関連性に大きく依存する。",
+      "fieldId": "llm",
       "relatedTermIds": [
-        "api"
+        "context-window"
       ],
       "questionIds": [
-        "q-pwa"
+        "q-rag"
       ],
       "referenceArticleIds": [
-        "a-pwa"
+        "a-glossary"
       ]
     }
   ],
   "questions": [
     {
-      "id": "q-relationship",
+      "id": "q-context-window",
+      "type": "term",
+      "fieldId": "llm",
+      "patternType": "select-correct",
+      "body": "言語モデルの「コンテキストウィンドウ」に関する説明として、最も適切なものはどれか？",
+      "choices": [
+        "モデルを構築するために使用される、大規模な学習用データコーパスのことである。",
+        "言語モデルが新しいテキストを生成するときに、遡って参照できるテキストの量（作業メモリ）のことである。",
+        "モデルがプロンプトを受け取ってから最初の文字を出力するまでにかかる時間のことである。"
+      ],
+      "answerIndex": 1,
+      "revealAnswer": true,
+      "explanation": "コンテキストウィンドウは、モデルの「作業メモリ」にあたるものであり、新しいテキストを生成する際に遡って参照できるテキストの量を指します。訓練に使われた大規模なデータコーパスとは別物である点に注意が必要です。",
+      "termIds": [
+        "context-window"
+      ],
+      "sourceArticleIds": [
+        "a-glossary",
+        "a-context-windows"
+      ],
+      "generatedBy": "manual"
+    },
+    {
+      "id": "q-hhh",
+      "type": "term",
+      "fieldId": "llm",
+      "patternType": "select-correct",
+      "body": "Claudeの方向性を定める研究フレームワークである「HHH」が表す3つの言葉の組み合わせとして、正しいものはどれか？",
+      "choices": [
+        "Helpful（有用）、Honest（正直）、Harmless（無害）",
+        "Human-like（人間らしさ）、High-speed（高速）、Helpful（有用）",
+        "Harmless（無害）、Honest（正直）、Heuristic（発見的）"
+      ],
+      "answerIndex": 0,
+      "revealAnswer": true,
+      "explanation": "HHHは、helpful（有用）、honest（正直）、harmless（無害）の3語の頭文字をとったものです。Claudeが社会に有益であるように訓練される方向性を定めたフレームワークであり、製品タグラインとは明確に区別されます。",
+      "termIds": [
+        "hhh"
+      ],
+      "sourceArticleIds": [
+        "a-glossary"
+      ],
+      "generatedBy": "manual"
+    },
+    {
+      "id": "q-temperature",
+      "type": "term",
+      "fieldId": "llm",
+      "patternType": "select-correct",
+      "body": "テキスト生成のパラメータ「Temperature」を「0」に設定した場合のモデルの挙動として、正しい説明はどれか？",
+      "choices": [
+        "モデルの予測のランダム性が最大になり、最も創造的で多様な出力が得られる。",
+        "最も確率の高い表現に忠実な保守的で決定論的な出力になるが、同一入力でもAPI呼び出しごとに異なる出力が生じうる。",
+        "出力が完全に決定論的になり、同じ入力であればAPI呼び出しごとに必ず全く同じ結果が出力される。"
+      ],
+      "answerIndex": 1,
+      "revealAnswer": true,
+      "explanation": "Temperatureを低く設定すると保守的で決定論的な出力になりますが、値を0にしても結果は完全に決定論的にはなりません。同じ入力であっても、API呼び出しごとに異なる出力が生じる可能性があるという点に注意が必要です。",
+      "termIds": [
+        "temperature"
+      ],
+      "sourceArticleIds": [
+        "a-glossary"
+      ],
+      "generatedBy": "manual"
+    },
+    {
+      "id": "q-rlhf",
+      "type": "term",
+      "fieldId": "llm",
+      "patternType": "select-correct",
+      "body": "「RLHF（人間のフィードバックによる強化学習）」におけるフィードバックの具体的な仕組みとして、正しいものはどれか？",
+      "choices": [
+        "人間がモデルに代わって正しい回答文を最初から作成し、それを追加データとして学習させる。",
+        "2つ以上のサンプルテキストを人間がランク付けし、より高くランク付けされたものに似た出力を好ませるようにする。",
+        "プロンプトの中に外部のナレッジベースを含めることで、モデル自らが人間の好みを検索・判断できるようにする。"
+      ],
+      "answerIndex": 1,
+      "revealAnswer": true,
+      "explanation": "RLHFでは、人間が正解文を書くのではなく、2つ以上のサンプルテキストをランク付けする形でフィードバックを与えます。この強化学習プロセスにより、高くランク付けされたものに似た出力をモデルが好むようになります。",
+      "termIds": [
+        "rlhf"
+      ],
+      "sourceArticleIds": [
+        "a-glossary",
+        "a-rlhf-paper"
+      ],
+      "generatedBy": "manual"
+    },
+    {
+      "id": "q-mcp-connector",
       "type": "relationship",
-      "fieldId": "web",
+      "fieldId": "llm",
       "patternType": "relationship",
-      "body": "{{term:pwa}}で{{term:cache}}と{{term:indexeddb}}を使う目的の組み合わせとして適切なのはどれですか。",
+      "body": "「MCP」と「MCPコネクタ」の違いについて、最も適切な説明はどれか？",
       "choices": [
-        "キャッシュに画面の資源、IndexedDBに学習進捗を保存する。",
-        "両方とも画面の明るさを変更する。",
-        "両方とも通信速度を必ず上げる。"
+        "「MCP」は多様なデータソースに接続するための標準化されたオープンプロトコルであり、「MCPコネクタ」はユーザーが自前でクライアントを構築せずに直接MCPサーバーへ接続できるようにする機能である。",
+        "「MCP」はモデルを事前訓練するための学習環境であり、「MCPコネクタ」はその学習データをインターネットから自動収集するツールである。",
+        "「MCP」はモデルの応答速度（レイテンシ）を測定する指標であり、「MCPコネクタ」はそれを改善するためのハードウェア拡張機能である。"
       ],
       "answerIndex": 0,
-      "revealAnswer": false,
-      "explanation": "画面を構成するファイルと、利用者が学習するたびに変わる記録では、保存・更新の方法を分けて考えます。",
-      "termIds": [
-        "pwa",
-        "cache",
-        "indexeddb"
-      ],
+      "revealAnswer": true,
+      "explanation": "MCPは、アプリケーションがLLMにコンテキストを提供する方法を標準化するプロトコル（規格）です。一方、MCPコネクタは、APIユーザーが自前でクライアントを構築しなくても、Messages APIなどを通じて直接MCP互換のツールやサービスへ接続（統合）できるようにする機能です。",
+      "termIds": [],
       "sourceArticleIds": [
-        "a-pwa",
-        "a-cache",
-        "a-indexeddb"
+        "a-glossary",
+        "a-mcp",
+        "a-mcp-connector"
       ],
       "generatedBy": "manual"
     },
     {
-      "id": "q-api",
-      "type": "term",
-      "fieldId": "web",
-      "patternType": "select-correct",
-      "body": "{{term:api}}を説明する文として適切なのはどれですか。関連する{{term:http}}も確認できます。",
+      "id": "q-latency-ttft",
+      "type": "relationship",
+      "fieldId": "llm",
+      "patternType": "relationship",
+      "body": "モデルのパフォーマンスを測る「レイテンシ」と「TTFT」の違いとして、正しいものはどれか？",
       "choices": [
-        "ソフトウェアの機能を利用するための窓口。",
-        "画面の明るさを変更する操作。",
-        "端末の重さを測る単位。"
+        "「レイテンシ」はプロンプトの複雑さにのみ影響され、「TTFT」はハードウェア性能にのみ影響される。",
+        "「レイテンシ」は送信から出力受信までの全体的な遅延を指し、「TTFT」はプロンプトを受け取ってから最初のトークンが生成されるまでの時間を指す。",
+        "「レイテンシ」はコンテキストウィンドウの大きさを測る単位であり、「TTFT」は事前訓練にかかる全体の時間を測る指標である。"
       ],
-      "answerIndex": 0,
+      "answerIndex": 1,
       "revealAnswer": true,
-      "explanation": "ソフトウェアの機能を利用するための窓口。",
-      "termIds": [
-        "api",
-        "http"
-      ],
+      "explanation": "レイテンシは、送信から出力の受信までの全体にかかる遅延時間のことです。一方、TTFT（Time to First Token）は、プロンプトを受け取ってから最初のトークン生成までの時間を測るものであり、レイテンシの一部をより細かく測定する指標です。",
+      "termIds": [],
       "sourceArticleIds": [
-        "a-api"
+        "a-glossary"
       ],
       "generatedBy": "manual"
     },
     {
-      "id": "q-http",
+      "id": "q-rag",
       "type": "term",
-      "fieldId": "web",
+      "fieldId": "llm",
       "patternType": "select-correct",
-      "body": "{{term:http}}を説明する文として適切なのはどれですか。関連する{{term:cache}}も確認できます。",
+      "body": "情報検索と言語モデルを組み合わせる「RAG」の特性や限界について、適切な説明はどれか？",
       "choices": [
-        "要求と応答をやり取りする通信の決まり。",
-        "画面の明るさを変更する操作。",
-        "端末の重さを測る単位。"
+        "RAGを用いれば外部の情報を利用できるが、その有効性は外部ナレッジベースの品質や、実行時に取得される知識の関連性に大きく依存する。",
+        "RAGはモデル自身が自律的に情報を取得するため、外部の文書群をコンテキストウィンドウに渡す必要がなくなる。",
+        "RAGを使用するとモデルの記憶への依存が増加するため、事実の正確性を担保するためには頻繁なファインチューニングが必須となる。"
       ],
       "answerIndex": 0,
       "revealAnswer": true,
-      "explanation": "要求と応答をやり取りする通信の決まり。",
+      "explanation": "RAGは、訓練データを超えた情報にアクセスできるようにすることで記憶への依存を減らし、事実の正確性を向上させる手法です。しかし、モデル自体が必ずしも情報を取得するわけではなく、その有効性は外部ナレッジベースの品質や関連性に依存するという限界があります。",
       "termIds": [
-        "http",
-        "cache"
+        "rag"
       ],
       "sourceArticleIds": [
-        "a-http"
-      ],
-      "generatedBy": "manual"
-    },
-    {
-      "id": "q-cache",
-      "type": "term",
-      "fieldId": "web",
-      "patternType": "select-correct",
-      "body": "{{term:cache}}を説明する文として適切なのはどれですか。関連する{{term:indexeddb}}も確認できます。",
-      "choices": [
-        "再利用するために保存したデータ。",
-        "画面の明るさを変更する操作。",
-        "端末の重さを測る単位。"
-      ],
-      "answerIndex": 0,
-      "revealAnswer": true,
-      "explanation": "再利用するために保存したデータ。",
-      "termIds": [
-        "cache",
-        "indexeddb"
-      ],
-      "sourceArticleIds": [
-        "a-cache"
-      ],
-      "generatedBy": "manual"
-    },
-    {
-      "id": "q-indexeddb",
-      "type": "term",
-      "fieldId": "web",
-      "patternType": "select-correct",
-      "body": "{{term:indexeddb}}を説明する文として適切なのはどれですか。関連する{{term:pwa}}も確認できます。",
-      "choices": [
-        "ブラウザー内で構造化データを保存する仕組み。",
-        "画面の明るさを変更する操作。",
-        "端末の重さを測る単位。"
-      ],
-      "answerIndex": 0,
-      "revealAnswer": true,
-      "explanation": "ブラウザー内で構造化データを保存する仕組み。",
-      "termIds": [
-        "indexeddb",
-        "pwa"
-      ],
-      "sourceArticleIds": [
-        "a-indexeddb"
-      ],
-      "generatedBy": "manual"
-    },
-    {
-      "id": "q-pwa",
-      "type": "term",
-      "fieldId": "web",
-      "patternType": "select-correct",
-      "body": "{{term:pwa}}を説明する文として適切なのはどれですか。関連する{{term:api}}も確認できます。",
-      "choices": [
-        "Web技術で作られ、端末へ追加できるアプリ。",
-        "画面の明るさを変更する操作。",
-        "端末の重さを測る単位。"
-      ],
-      "answerIndex": 0,
-      "revealAnswer": true,
-      "explanation": "Web技術で作られ、端末へ追加できるアプリ。",
-      "termIds": [
-        "pwa",
-        "api"
-      ],
-      "sourceArticleIds": [
-        "a-pwa"
+        "a-glossary"
       ],
       "generatedBy": "manual"
     }
