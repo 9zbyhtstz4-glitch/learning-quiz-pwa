@@ -81,6 +81,20 @@ for (const t of data.terms) {
   }
 }
 
+// --- relationship問題の規約(5.1/5.3節)とpatternTypeの値 ---
+const PATTERN_TYPES = ['select-correct', 'select-incorrect', 'select-best'];
+for (const q of data.questions) {
+  const at = `Question ${q.id}`;
+  if (q.type === 'relationship') {
+    if (q.revealAnswer === true)
+      warn(at, 'relationshipのrevealAnswerがtrueです(5.3節はfalse)。正誤と正解位置が表示され、解説のみで導く方式になりません。');
+    if (Array.isArray(q.termIds) && q.termIds.length < 2)
+      warn(at, `relationshipのtermIdsが${q.termIds.length}件です(5.1節は2件以上を想定)。扱っている用語を追加してください。`);
+  }
+  if (!PATTERN_TYPES.includes(q.patternType))
+    warn(at, `patternTypeが${JSON.stringify(q.patternType)}です。選択肢の出題形式は${PATTERN_TYPES.join(' / ')}のいずれかにしてください。`);
+}
+
 // --- 出題ローテーション(config.jsとの整合) ---
 // 行コメントを落としてから読む。config.js冒頭の注釈にも同じキーが書かれているため。
 const configSource = fs.readFileSync(path.join(root, 'config.js'), 'utf8').replace(/\/\/.*$/gm, '');

@@ -84,6 +84,7 @@ node tools/audit-data.cjs
 
 必須制約(用語ごとのterm型問題、{{term:id}}とtermIdsの整合、choices3件、answerIndex 0〜2、記事参照の実在、id重複)と、
 schema-definition.md 7.3節の自己参照マーカー禁止を検査し、違反をidつきで一覧表示します。
+警告としては、5.3節に反するrelationshipのrevealAnswer: true、5.1節が想定する2件に満たないrelationshipのtermIds、select-correct / select-incorrect / select-best以外のpatternTypeも報告します。
 あわせてanswerIndex・patternType・typeの分布を出力します。エラーがあれば終了コード1で失敗します。
 
 ```powershell
