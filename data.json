@@ -83,6 +83,20 @@
       "url": "https://platform.claude.com/docs/ja/build-with-claude/batch-processing",
       "source": "claude-docs",
       "fieldId": "llm"
+    },
+    {
+      "id": "a-thinking",
+      "title": "思考",
+      "url": "https://platform.claude.com/docs/ja/build-with-claude/thinking",
+      "source": "claude-docs",
+      "fieldId": "llm-reasoning"
+    },
+    {
+      "id": "a-effort",
+      "title": "エフォート",
+      "url": "https://platform.claude.com/docs/ja/build-with-claude/effort",
+      "source": "claude-docs",
+      "fieldId": "llm-parameters"
     }
   ],
   "terms": [
@@ -92,7 +106,8 @@
       "shortDefinition": "言語モデルが新しいテキストを生成するときに、遡って参照できるテキストの量（作業メモリ）のことである。",
       "fieldId": "llm",
       "relatedTermIds": [
-        "rag"
+        "rag",
+        "context-window-exceeded"
       ],
       "questionIds": [
         "q-context-window"
@@ -122,7 +137,9 @@
       "label": "Temperature",
       "shortDefinition": "最も確率の高い表現に忠実な保守的で決定論的な出力になるが、同一入力でもAPI呼び出しごとに異なる出力が生じうる。",
       "fieldId": "llm",
-      "relatedTermIds": [],
+      "relatedTermIds": [
+        "thinking-sampling-limits"
+      ],
       "questionIds": [
         "q-temperature"
       ],
@@ -169,7 +186,8 @@
       "relatedTermIds": [
         "tool-choice",
         "tool-search-tool",
-        "input-json-delta"
+        "input-json-delta",
+        "interleaved-thinking"
       ],
       "questionIds": [
         "q-tool-use"
@@ -360,7 +378,8 @@
       "shortDefinition": "思考コンテンツのcontent_block_stop直前に送られるデルタ。思考ブロックの整合性を検証するために使用される。",
       "fieldId": "llm",
       "relatedTermIds": [
-        "delta"
+        "delta",
+        "thinking-signature"
       ],
       "questionIds": [
         "q-signature-delta"
@@ -448,6 +467,242 @@
       ],
       "referenceArticleIds": [
         "a-batch-processing"
+      ]
+    },
+    {
+      "id": "thinking",
+      "label": "思考",
+      "shortDefinition": "回答する前にClaude自身が問題に取り組み、アプローチを試して中間結果を確認する仕組み。その推論はthinkingコンテンツブロックとしてテキストより先に届く。",
+      "fieldId": "llm-reasoning",
+      "relatedTermIds": [
+        "adaptive-thinking",
+        "thinking-cost",
+        "thinking-display",
+        "summarized-thinking"
+      ],
+      "questionIds": [
+        "q-thinking"
+      ],
+      "referenceArticleIds": [
+        "a-thinking"
+      ]
+    },
+    {
+      "id": "thinking-cost",
+      "label": "思考のコスト",
+      "shortDefinition": "推論に費やしたトークンは、思考テキストが返されない場合でも出力トークンとして課金され、レスポンステキストとともにmax_tokensにカウントされる。",
+      "fieldId": "llm-reasoning",
+      "relatedTermIds": [
+        "thinking",
+        "effort",
+        "summarized-thinking"
+      ],
+      "questionIds": [
+        "q-thinking-cost"
+      ],
+      "referenceArticleIds": [
+        "a-thinking"
+      ]
+    },
+    {
+      "id": "adaptive-thinking",
+      "label": "適応的思考",
+      "shortDefinition": "いつ・どの程度深く思考するかをリクエストに基づいてモデル自身が判断するモード。単純なリクエストに対しては思考をスキップすることがある。",
+      "fieldId": "llm-reasoning",
+      "relatedTermIds": [
+        "thinking",
+        "effort",
+        "interleaved-thinking"
+      ],
+      "questionIds": [
+        "q-adaptive-thinking"
+      ],
+      "referenceArticleIds": [
+        "a-thinking"
+      ]
+    },
+    {
+      "id": "effort",
+      "label": "effort",
+      "shortDefinition": "応答全体にどれだけの労力を費やすかを制御するパラメータ。ソフトなガイダンスであり、支出に厳格な上限が必要な場合はmax_tokensを使う。",
+      "fieldId": "llm-parameters",
+      "relatedTermIds": [
+        "adaptive-thinking",
+        "thinking-cost"
+      ],
+      "questionIds": [
+        "q-effort"
+      ],
+      "referenceArticleIds": [
+        "a-effort",
+        "a-thinking"
+      ]
+    },
+    {
+      "id": "summarized-thinking",
+      "label": "要約された思考",
+      "shortDefinition": "返ってくる思考テキストは生の思考の連鎖ではなくClaudeの推論の要約。悪用を防ぎつつ知能面の利点を保ち、課金は元の完全な思考トークンに対して行われる。",
+      "fieldId": "ai-safety",
+      "relatedTermIds": [
+        "thinking",
+        "thinking-display",
+        "thinking-cost"
+      ],
+      "questionIds": [
+        "q-summarized-thinking"
+      ],
+      "referenceArticleIds": [
+        "a-thinking"
+      ]
+    },
+    {
+      "id": "thinking-display",
+      "label": "思考の表示制御",
+      "shortDefinition": "display設定で思考コンテンツの返し方を決める。omittedは思考トークンのストリーミングを省いて署名のみ配信するため、最初のテキストトークンまでの時間が短くなるがコストは減らない。",
+      "fieldId": "llm-parameters",
+      "relatedTermIds": [
+        "summarized-thinking",
+        "thinking",
+        "progress-update"
+      ],
+      "questionIds": [
+        "q-thinking-display"
+      ],
+      "referenceArticleIds": [
+        "a-thinking"
+      ]
+    },
+    {
+      "id": "thinking-signature",
+      "label": "署名",
+      "shortDefinition": "各思考ブロックに付く暗号化された不透明なデータ。渡し返された思考ブロックがClaudeによって生成されたものかをAPIが検証する。改ざんされた署名は拒否される。",
+      "fieldId": "security",
+      "relatedTermIds": [
+        "preserving-thinking",
+        "redacted-thinking",
+        "signature-delta"
+      ],
+      "questionIds": [
+        "q-thinking-signature"
+      ],
+      "referenceArticleIds": [
+        "a-thinking"
+      ]
+    },
+    {
+      "id": "preserving-thinking",
+      "label": "思考ブロックの保持",
+      "shortDefinition": "ツール使用ターンでは思考ブロックを完全かつ変更せずに渡し返す。ツール呼び出しと結果は1つの連続した推論フローの一部であり、推論の継続性を保つ必要があるため。",
+      "fieldId": "llm-reasoning",
+      "relatedTermIds": [
+        "thinking-signature",
+        "assistant-turn",
+        "redacted-thinking"
+      ],
+      "questionIds": [
+        "q-preserving-thinking"
+      ],
+      "referenceArticleIds": [
+        "a-thinking"
+      ]
+    },
+    {
+      "id": "assistant-turn",
+      "label": "アシスタントターン",
+      "shortDefinition": "Claudeが完全なレスポンスを終えるまでが1ターン。複数のツール呼び出しと結果を含んでも全体で1つであり、ターン全体は単一の思考モードで実行される。",
+      "fieldId": "llm-reasoning",
+      "relatedTermIds": [
+        "preserving-thinking",
+        "interleaved-thinking",
+        "thinking"
+      ],
+      "questionIds": [
+        "q-assistant-turn"
+      ],
+      "referenceArticleIds": [
+        "a-thinking"
+      ]
+    },
+    {
+      "id": "interleaved-thinking",
+      "label": "インターリーブ思考",
+      "shortDefinition": "ツール呼び出しの間に思考し、各ツール結果について推論してから次に行動できる仕組み。ツール呼び出しを連鎖させること自体には必須ではない。",
+      "fieldId": "llm-reasoning",
+      "relatedTermIds": [
+        "assistant-turn",
+        "tool-use",
+        "progress-update"
+      ],
+      "questionIds": [
+        "q-interleaved-thinking"
+      ],
+      "referenceArticleIds": [
+        "a-thinking"
+      ]
+    },
+    {
+      "id": "progress-update",
+      "label": "進捗更新",
+      "shortDefinition": "推論としてではなく、エージェントの動作を見ている人のために書かれる1〜2文。独自のsignatureを持つ別のthinkingブロックとして返り、各ツール呼び出しの前に最大1つ置かれる。",
+      "fieldId": "llm-reasoning",
+      "relatedTermIds": [
+        "interleaved-thinking",
+        "thinking-display"
+      ],
+      "questionIds": [
+        "q-progress-update"
+      ],
+      "referenceArticleIds": [
+        "a-thinking"
+      ]
+    },
+    {
+      "id": "redacted-thinking",
+      "label": "編集済み思考ブロック",
+      "shortDefinition": "安全上の理由で推論が編集された場合に返るブロック。dataフィールドは暗号化されており読み取り可能なテキストはないが、会話を続ける際は変更せず渡し返す。",
+      "fieldId": "ai-safety",
+      "relatedTermIds": [
+        "thinking-signature",
+        "preserving-thinking"
+      ],
+      "questionIds": [
+        "q-redacted-thinking"
+      ],
+      "referenceArticleIds": [
+        "a-thinking"
+      ]
+    },
+    {
+      "id": "thinking-sampling-limits",
+      "label": "サンプリングパラメータの制限",
+      "shortDefinition": "思考が有効な間はtemperatureやtop_kにデフォルト以外の値を使えず、アシスタントのレスポンスをプリフィルすることもできない。",
+      "fieldId": "llm-parameters",
+      "relatedTermIds": [
+        "thinking",
+        "temperature"
+      ],
+      "questionIds": [
+        "q-thinking-sampling-limits"
+      ],
+      "referenceArticleIds": [
+        "a-thinking"
+      ]
+    },
+    {
+      "id": "context-window-exceeded",
+      "label": "コンテキストウィンドウ超過",
+      "shortDefinition": "入力トークンとmax_tokensの合計がウィンドウを超えてもAPIはリクエストを受け入れ、生成が上限に達した時点でstop_reason: model_context_window_exceededで停止する。",
+      "fieldId": "llm-basics",
+      "relatedTermIds": [
+        "context-window",
+        "thinking-cost"
+      ],
+      "questionIds": [
+        "q-context-window-exceeded"
+      ],
+      "referenceArticleIds": [
+        "a-thinking",
+        "a-context-windows"
       ]
     }
   ],
@@ -1067,6 +1322,340 @@
       ],
       "sourceArticleIds": [
         "a-batch-processing"
+      ],
+      "generatedBy": "manual"
+    },
+    {
+      "id": "q-thinking",
+      "type": "term",
+      "fieldId": "llm-reasoning",
+      "patternType": "select-correct",
+      "body": "モデルが回答前に推論を行う機能の性質として、正しいものはどれか？",
+      "choices": [
+        "回答の生成前に試行錯誤や確認を行えるため、複雑なタスクにおける最終的な出力の品質が向上する。",
+        "回答の生成後に内容を自己評価する機能であるため、誤りを発見した場合は直ちに新しい回答を再生成する。",
+        "回答の生成と同時に推論の過程を出力する機能であり、数学やコーディングのような単純なタスクで利用される。"
+      ],
+      "answerIndex": 0,
+      "revealAnswer": true,
+      "explanation": "思考（thinking）機能は、回答する前にモデル自身が問題に取り組み、アプローチを試す仕組みです。一発勝負で回答する制約を取り除くため、数学や分析などの中間作業に依存する複雑なタスクにおいて回答の質が向上します。",
+      "termIds": [
+        "thinking"
+      ],
+      "sourceArticleIds": [
+        "a-thinking"
+      ],
+      "generatedBy": "manual"
+    },
+    {
+      "id": "q-thinking-cost",
+      "type": "term",
+      "fieldId": "llm-reasoning",
+      "patternType": "select-incorrect",
+      "body": "思考機能を利用した際に発生するコストや制限の説明として、誤っているものはどれか？",
+      "choices": [
+        "思考ブロックの生成には追加の処理時間がかかるため、レスポンス時間が通常よりも長くなることを想定する。",
+        "推論に費やされたトークンは内部処理として扱われるため、テキストが返されない限り出力として課金されない。",
+        "推論に費やされたトークンはレスポンステキストと共にカウントされるため、上限値を高めに設定する必要がある。"
+      ],
+      "answerIndex": 1,
+      "revealAnswer": true,
+      "explanation": "Claudeが推論に費やすトークンは、思考テキストが返されない場合であっても出力トークンとして課金されます。したがって「テキストが返されない限り出力として課金されない」という記述が誤りです。思考ブロックの生成に伴う時間の増加や、トークン上限の確保などは正しい仕様です。",
+      "termIds": [
+        "thinking-cost"
+      ],
+      "sourceArticleIds": [
+        "a-thinking"
+      ],
+      "generatedBy": "manual"
+    },
+    {
+      "id": "q-adaptive-thinking",
+      "type": "term",
+      "fieldId": "llm-reasoning",
+      "patternType": "select-best",
+      "body": "思考モードの一つである「適応的思考」の仕様として、最も適切なものはどれか？",
+      "choices": [
+        "複雑なリクエストに対して必ず最大限の深さで思考を行い、推論にかけるトークン予算を人間が直接指定する方式。",
+        "単純なリクエストに対しては思考プロセスを完全に省略し、推論にかけるトークン予算を人間が直接指定する方式。",
+        "要求内容に基づいていつどの程度深く思考するかをモデル自身が判断し、単純な内容であれば思考を省略する方式。"
+      ],
+      "answerIndex": 2,
+      "revealAnswer": true,
+      "explanation": "適応的思考（adaptive thinking）は、リクエストに基づいて、いつ・どの程度深く思考するかをモデル自身が自動で判断するモードです。単純なリクエストに対しては思考をスキップすることがあります。トークン予算を人間が直接指定するのは手動モードに該当します。",
+      "termIds": [
+        "adaptive-thinking"
+      ],
+      "sourceArticleIds": [
+        "a-thinking"
+      ],
+      "generatedBy": "manual"
+    },
+    {
+      "id": "q-effort",
+      "type": "term",
+      "fieldId": "llm-parameters",
+      "patternType": "select-incorrect",
+      "body": "応答全体の労力を制御する「effort」パラメータの説明として、誤っているものはどれか？",
+      "choices": [
+        "支出に対して厳格な上限を設けるためのパラメータであり、設定値を超えた場合は直ちにレスポンスの生成を停止する。",
+        "応答全体に対してどれだけの労力を費やすかを示すソフトなガイダンスであり、適応モードの思考の深さも左右する。",
+        "コストやレイテンシを下げたい場合はこの値を下げ、逆に思考が浅すぎると感じた場合はこの値を上げることで調整する。"
+      ],
+      "answerIndex": 0,
+      "revealAnswer": true,
+      "explanation": "effortは「ソフトなガイダンス」であり、支出に対して厳格な上限を設けるものではありません。したがって「厳格な上限を設けるためのパラメータ」という記述が誤りです。支出に厳格な制限が必要な場合は、max_tokensを使用する必要があります。",
+      "termIds": [
+        "effort"
+      ],
+      "sourceArticleIds": [
+        "a-effort",
+        "a-thinking"
+      ],
+      "generatedBy": "manual"
+    },
+    {
+      "id": "q-summarized-thinking",
+      "type": "term",
+      "fieldId": "ai-safety",
+      "patternType": "select-best",
+      "body": "APIから返却される「要約された思考」の仕様として、最も適切なものはどれか？",
+      "choices": [
+        "課金の対象は要約された短いテキストのトークン数であり、元の推論で生成された完全なトークンは課金対象から除外される仕組みである。",
+        "悪用を防ぎつつ知能面の利点を提供するために要約が返されるが、課金対象は元の推論で生成された完全なトークンとなる仕組みである。",
+        "安全性を確保するためにモデル自身が推論を見直して要約を作成し、その要約されたトークンのみがユーザーへの課金対象となる仕組みである。"
+      ],
+      "answerIndex": 1,
+      "revealAnswer": true,
+      "explanation": "受け取る思考テキストは完全な思考プロセスの要約ですが、課金されるのは「元のリクエストで生成された完全な思考トークン」です。また、生の思考の連鎖をそのまま返す設定は存在しません。",
+      "termIds": [
+        "summarized-thinking"
+      ],
+      "sourceArticleIds": [
+        "a-thinking"
+      ],
+      "generatedBy": "manual"
+    },
+    {
+      "id": "q-thinking-display",
+      "type": "term",
+      "fieldId": "llm-parameters",
+      "patternType": "select-correct",
+      "body": "思考コンテンツの表示を制御する設定の説明として、正しいものはどれか？",
+      "choices": [
+        "表示を省略する設定にすると、思考ブロックのストリーミングが完全にスキップされるため、レイテンシと処理コストの両方を削減できる。",
+        "表示を省略する設定にすると、思考ブロックのストリーミングが完全にスキップされるため、最初のテキストトークンまでの時間が延長される。",
+        "表示を省略する設定にすると、思考ブロックのストリーミングが完全にスキップされるため、最初のテキストトークンまでの時間を短縮できる。"
+      ],
+      "answerIndex": 2,
+      "revealAnswer": true,
+      "explanation": "思考の表示を省略する（omitted）設定を利用すると、サーバーが思考トークンのストリーミングをスキップして署名のみを配信するため、最初のテキストトークンまでの時間が短縮されます。ただし、コストは削減されません。",
+      "termIds": [
+        "thinking-display"
+      ],
+      "sourceArticleIds": [
+        "a-thinking"
+      ],
+      "generatedBy": "manual"
+    },
+    {
+      "id": "q-thinking-signature",
+      "type": "term",
+      "fieldId": "security",
+      "patternType": "select-best",
+      "body": "各思考ブロックに付与される「署名」の目的や性質として、最も適切なものはどれか？",
+      "choices": [
+        "APIが思考ブロックを受け取った際に、それが本当にモデルによって生成されたものであるかを検証し、改ざんを防ぐための暗号化データである。",
+        "APIが思考ブロックを受け取った際に、その内容をアプリケーション側で解析し、推論の論理的な正しさを確認するためのプレーンテキストである。",
+        "APIが思考ブロックを受け取った際に、プラットフォーム間で互換性を持たせずに、特定のサーバー環境でのみ実行させるための暗号化データである。"
+      ],
+      "answerIndex": 0,
+      "revealAnswer": true,
+      "explanation": "署名（signature）は暗号化された不透明なデータであり、渡し返された思考ブロックが本当にClaudeによって生成されたものかをAPIが検証するために使用されます。改ざんされた署名は拒否されます。",
+      "termIds": [
+        "thinking-signature"
+      ],
+      "sourceArticleIds": [
+        "a-thinking"
+      ],
+      "generatedBy": "manual"
+    },
+    {
+      "id": "q-preserving-thinking",
+      "type": "term",
+      "fieldId": "llm-reasoning",
+      "patternType": "select-correct",
+      "body": "ツール使用時などに思考ブロックを「変更せずに保持する」理由として、正しいものはどれか？",
+      "choices": [
+        "推論の過程をユーザー画面に表示する目的があるため、見栄えを整えるための並べ替えや一部の削除であればAPI側で自動的に許容されるため。",
+        "ツール呼び出しと結果の処理は１つの連続した推論フローの一部であり、モデルが以前の推論を継続するために完全な状態の記録が必要となるため。",
+        "ツール結果を外部のデータベースへ永続的に保存する必要があるため、変更された思考ブロックが含まれていると記録のインデックスが破損するため。"
+      ],
+      "answerIndex": 1,
+      "revealAnswer": true,
+      "explanation": "Claudeがツールを呼び出したあとの処理は、見かけ上は別々のメッセージに分かれていても、実際には1つの連続した推論フローの一部です。推論の継続性とコンテキストを維持するため、思考ブロックは完全かつ変更せずに保持する必要があります。",
+      "termIds": [
+        "preserving-thinking"
+      ],
+      "sourceArticleIds": [
+        "a-thinking"
+      ],
+      "generatedBy": "manual"
+    },
+    {
+      "id": "q-assistant-turn",
+      "type": "term",
+      "fieldId": "llm-reasoning",
+      "patternType": "select-incorrect",
+      "body": "ツール使用ループを含む「アシスタントターン」の仕様として、誤っているものはどれか？",
+      "choices": [
+        "ターン全体は単一の思考モードで実行されるため、各ターンの開始時に思考戦略を計画し、ターン間でのみモードを切り替えることが推奨されている。",
+        "アシスタントターンは完全なレスポンスを終えるまで完了しないため、複数のツール呼び出しとその結果が含まれる場合でも全体で１つのターンとなる。",
+        "ターンの途中で思考モードの切り替え要求があった場合、システムは直ちに処理を中断してバリデーションエラーを返し、安全に実行を停止させる。"
+      ],
+      "answerIndex": 2,
+      "revealAnswer": true,
+      "explanation": "ターンの途中で思考モードが切り替えられた場合、APIはエラーを返して処理を中断するのではなく、そのリクエストの思考を「暗黙的に無効にする」というグレースフルデグラデーションの挙動をとります。したがって「直ちに処理を中断してバリデーションエラーを返す」という記述が誤りです。",
+      "termIds": [
+        "assistant-turn"
+      ],
+      "sourceArticleIds": [
+        "a-thinking"
+      ],
+      "generatedBy": "manual"
+    },
+    {
+      "id": "q-interleaved-thinking",
+      "type": "term",
+      "fieldId": "llm-reasoning",
+      "patternType": "select-correct",
+      "body": "ツール呼び出しの間に実行される「インターリーブ思考」の仕様として、正しいものはどれか？",
+      "choices": [
+        "ツール結果に基づいて次の行動を推論できる仕組みであるが、連続したツール呼び出しを連鎖させること自体にこの機能が必須となるわけではない。",
+        "ツール結果に基づいて次の行動を推論できる仕組みであり、複数のツール呼び出しを連続して連鎖させるためにはこの機能の有効化が必須条件となる。",
+        "ツール結果に基づいて次の行動を推論できる仕組みであるが、この機能が作動すると複数のツール呼び出しを連鎖させる処理が強制的に無効化される。"
+      ],
+      "answerIndex": 0,
+      "revealAnswer": true,
+      "explanation": "インターリーブ思考は、各ツール結果に基づいて次に行動する前に推論を挟める仕組みです。しかし、連続したツール呼び出し自体はインターリーブ思考の有無にかかわらず実行可能であり、ツールの連鎖に必須な機能ではありません。",
+      "termIds": [
+        "interleaved-thinking"
+      ],
+      "sourceArticleIds": [
+        "a-thinking"
+      ],
+      "generatedBy": "manual"
+    },
+    {
+      "id": "q-progress-update",
+      "type": "term",
+      "fieldId": "llm-reasoning",
+      "patternType": "select-incorrect",
+      "body": "モデルが出力する「進捗更新」ブロックの性質として、誤っているものはどれか？",
+      "choices": [
+        "各ツール呼び出しの前に最大で１つ表示される短い文章であり、状況によってはモデル自身の判断で更新ブロックの出力をスキップすることがある。",
+        "推論ブロックの一部として機能するため、インターリーブ思考が有効化されている場合に限り出力され、モデル自身の論理的な意思決定に直接影響する。",
+        "エージェントの動作を見ている人間のために書かれる文章であり、独自の署名を持つため同じ位置にある推論ブロックとは別の要素として分類される。"
+      ],
+      "answerIndex": 1,
+      "revealAnswer": true,
+      "explanation": "進捗更新は、推論としてではなく「エージェントを見ている人のため」に書かれる1〜2文の短い文章であり、インターリーブ思考とは全くの別物です。したがって「インターリーブ思考が有効化されている場合に限り出力され、論理的な意思決定に直接影響する」という記述が誤りです。",
+      "termIds": [
+        "progress-update"
+      ],
+      "sourceArticleIds": [
+        "a-thinking"
+      ],
+      "generatedBy": "manual"
+    },
+    {
+      "id": "q-redacted-thinking",
+      "type": "term",
+      "fieldId": "ai-safety",
+      "patternType": "select-best",
+      "body": "安全上の理由で返される「編集済み思考ブロック」の仕様として、最も適切なものはどれか？",
+      "choices": [
+        "読み取り可能なテキストが含まれており、推論が編集された理由をユーザーへ明確に伝えるためのメッセージとして機能する独立したコンテンツである。",
+        "読み取り可能なテキストは含まれないが、会話を続ける際にこのブロックを削除して送信してもマルチターンの仕組みが壊れないように設計されている。",
+        "読み取り可能なテキストは含まれないが、通常の思考ブロックと同様にマルチターンの会話を続ける際は内容を変更せずに渡し返す必要があるコンテンツである。"
+      ],
+      "answerIndex": 2,
+      "revealAnswer": true,
+      "explanation": "編集済み思考ブロック（redacted_thinking）は暗号化されたコンテンツのみで構成され、読み取り可能なテキストはありません。しかし、マルチターンの会話を続ける際は通常の思考ブロックと同様に変更せずに渡し返す必要があります。",
+      "termIds": [
+        "redacted-thinking"
+      ],
+      "sourceArticleIds": [
+        "a-thinking"
+      ],
+      "generatedBy": "manual"
+    },
+    {
+      "id": "q-thinking-sampling-limits",
+      "type": "term",
+      "fieldId": "llm-parameters",
+      "patternType": "select-incorrect",
+      "body": "思考機能とサンプリングパラメータの非互換性について、誤っているものはどれか？",
+      "choices": [
+        "思考機能が有効な状態であっても、ランダム性を制御する特定のパラメータについては出力結果を微調整するためにデフォルト以外の値が適用される。",
+        "思考機能が有効な状態では、ランダム性を人為的に操作する設定と両立しにくいため、特定のサンプリングパラメータにデフォルト以外の値を使えない。",
+        "思考機能がオンになっている間は、アシスタントのレスポンスに対してあらかじめ書き出しを指定するプリフィル機能も利用できないという制限がある。"
+      ],
+      "answerIndex": 0,
+      "revealAnswer": true,
+      "explanation": "思考機能が有効な状態では、推論の過程を組み立てる性質上ランダム性の操作と両立しにくいため、temperatureやtop_kなどのサンプリングパラメータにおいてデフォルト以外の値を使うことはできません。新しい世代のモデルではエラーになります。",
+      "termIds": [
+        "thinking-sampling-limits"
+      ],
+      "sourceArticleIds": [
+        "a-thinking"
+      ],
+      "generatedBy": "manual"
+    },
+    {
+      "id": "q-context-window-exceeded",
+      "type": "term",
+      "fieldId": "llm-basics",
+      "patternType": "select-best",
+      "body": "コンテキストウィンドウの制限に関する新しい世代のモデルの挙動として、最も適切なものはどれか？",
+      "choices": [
+        "入力トークンと上限値の合計がウィンドウサイズを超える場合、処理を開始する前にバリデーションエラーを返して事前の修正を要求するよう設計されている。",
+        "入力トークンと上限値の合計がウィンドウサイズを超える場合でもリクエストを受け入れ、上限に達した時点で専用の理由を通知して停止するよう設計されている。",
+        "入力トークンと上限値の合計がウィンドウサイズを超える場合でもリクエストを受け入れ、上限に達した時点で古い思考を自動削除して処理を続行するよう設計されている。"
+      ],
+      "answerIndex": 1,
+      "revealAnswer": true,
+      "explanation": "新しい世代のモデルでは、入力トークンと上限値の合計がコンテキストウィンドウを超える状態でもAPIはリクエストを受け入れます。そして、実際に生成が上限に達した時点でエラーではなく専用の停止理由で停止する設計になっています。",
+      "termIds": [
+        "context-window-exceeded"
+      ],
+      "sourceArticleIds": [
+        "a-thinking",
+        "a-context-windows"
+      ],
+      "generatedBy": "manual"
+    },
+    {
+      "id": "q-effort-cost-control",
+      "type": "relationship",
+      "fieldId": "llm-parameters",
+      "patternType": "select-correct",
+      "body": "レスポンスの生成に費やす労力やコストを制御する{{term:effort}}と、{{term:thinking-cost}}の上限管理について、適切な関係性はどれか？",
+      "choices": [
+        "どちらの要素も、支出に対する厳格な制限として機能する仕組みであり、コストやレイテンシを確実に削減したい場合は双方の値を同時に最小化することが必須の運用となる。",
+        "どちらの要素も、応答に対するソフトなガイダンスとして機能する仕組みであり、予算の上限を確実に守るための制限としては利用できないため別途システム側での監視が必要となる。",
+        "一方は応答全体に対するソフトなガイダンスとして機能し、もう一方は支出に対する厳格な制限として機能するため、目的に応じて適用するパラメータの役割を使い分ける必要がある。"
+      ],
+      "answerIndex": 2,
+      "revealAnswer": false,
+      "explanation": "この問題は、応答全体に費やす労力の「目安」を示すパラメータと、トークン支出の「厳格な上限」を設定する仕組みの役割の違いを扱っています。コストやレイテンシを下げたい場合の緩やかな誘導と、予算を絶対に超えないための制限は、それぞれ異なる目的によって制御されます。",
+      "termIds": [
+        "effort",
+        "thinking-cost"
+      ],
+      "sourceArticleIds": [
+        "a-effort",
+        "a-thinking"
       ],
       "generatedBy": "manual"
     }
