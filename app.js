@@ -124,9 +124,12 @@ function render(focus = true) {
   }
   $('back').hidden = !interruptStack.stack.length;
   $('back').disabled = current.choiceIndex === null;
+  $('back').textContent = '←';
+  $('back').setAttribute('aria-label', '元の問題に戻る');
   $('next').hidden = !!interruptStack.stack.length;
   $('next').disabled = current.choiceIndex === null && !current.waiting;
-  $('next').textContent = current.waiting ? '出題条件を再確認' : '次の問題';
+  $('next').textContent = current.waiting ? '↻' : '→';
+  $('next').setAttribute('aria-label', current.waiting ? '出題条件を再確認' : '次の問題');
   $('sources').replaceChildren();
   for (const id of q.sourceArticleIds) {
     const article = data.articles.find(a => a.id === id);

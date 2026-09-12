@@ -13,19 +13,12 @@
   --border: rgba(44, 44, 42, 0.12);
   --border-strong: rgba(44, 44, 42, 0.22);
 
-  /* Accent(ユーザー操作) */
-  --fill-accent: #378ADD;
-  --fill-accent-hover: #185FA5;
-  --text-accent: #185FA5;
-  --border-accent: #85B7EB;
-  --bg-accent: #E6F1FB;
-  --on-accent: #FFFFFF;
-
-  /* Brand(アプリが生成するコンテンツ: 解説・用語定義) */
-  --fill-brand: #D97757;
-  --text-brand: #993C1D;
-  --bg-brand: #FAECE7;
-  --border-brand: #F0997B;
+  /* Accent(ユーザー操作。個人プロジェクトのためテラコッタ系を採用) */
+  --fill-accent: #D85A30;
+  --fill-accent-hover: #993C1D;
+  --on-accent: #4A1B0C;
+  --text-accent: #993C1D;
+  --border-accent: #D85A30;
 
   /* Success(用語問題の正解のみ) */
   --text-success: #3B6D11;
@@ -38,34 +31,88 @@
   --border-danger: #F09595;
 
   /* Radius */
-  --radius-control: 8px;
+  --radius-control: 10px;
   --radius-card: 12px;
+
+  /* Focus ring */
+  --focus-shadow: 0 0 0 1px var(--fill-accent), 0 0 6px 1px var(--border-accent);
 }
 
 :root { font-family: -apple-system, BlinkMacSystemFont, "Hiragino Sans", sans-serif; color: var(--text-primary); background: var(--surface-page); font-size: 16px; line-height: 1.7; }
 * { box-sizing: border-box; }
 body { margin: 0 auto; max-width: 42rem; padding: calc(12px + env(safe-area-inset-top)) max(14px, env(safe-area-inset-right)) calc(12px + env(safe-area-inset-bottom)) max(14px, env(safe-area-inset-left)); }
 .study-screen { min-height: calc(100dvh - 24px - env(safe-area-inset-top) - env(safe-area-inset-bottom)); }
-h1 { font-size: 1.25rem; line-height: 1.4; font-weight: 600; margin: 0 0 12px; }
+h1 { font-size: 1.25rem; line-height: 1.4; font-weight: 500; margin: 0 0 12px; }
 #app-version { font-size: 13px; font-weight: 400; color: var(--text-muted); white-space: nowrap; margin-left: 6px; }
 section { background: var(--surface-card); border: 0.5px solid var(--border); border-radius: var(--radius-card); padding: 14px; }
-h2 { font-size: 1rem; line-height: 1.6; font-weight: 400; margin: 8px 0 12px; }
+h2 { font-size: 1rem; line-height: 1.6; font-weight: 400; margin: 8px 0 20px; }
 #meta { margin: 0; }
 #body:focus { outline: none; }
-button { font: inherit; min-height: 44px; padding: 10px 14px; cursor: pointer; border: 1px solid var(--border-strong); border-radius: var(--radius-control); background: var(--surface-card); color: var(--text-accent); }
+button { font: inherit; min-height: 44px; padding: 10px 14px; cursor: pointer; border: 1px solid var(--border-strong); border-radius: var(--radius-control); background: var(--surface-card); color: var(--text-primary); }
 button:disabled { cursor: default; }
 button:focus-visible, a:focus-visible { outline: 2px solid var(--text-secondary); outline-offset: 3px; }
 button:not(:disabled):hover { background: var(--surface-card-hover); }
 a { color: var(--text-primary); }
-#choices { display: grid; gap: 8px; } #choices button { text-align: left; line-height: 1.6; padding: 8px 12px; color: var(--text-primary); border: 1px solid var(--border); border-radius: 10px; font-weight: 400; }
-#choices button[aria-pressed="true"], #choices button:not(:disabled):hover { border-color: var(--border-accent); background: var(--bg-accent); }
+
+/* 選択肢: 個別カードではなく、1本の枠+行区切りのリスト */
+#choices { display: block; border: 1px solid var(--border); border-radius: var(--radius-control); overflow: hidden; margin-bottom: 20px; }
+#choices button {
+  display: block; width: 100%; text-align: left;
+  padding: 10px 14px; line-height: 1.4; font-weight: 400;
+  color: var(--text-primary); background: var(--surface-card);
+  border: none; border-bottom: 1px solid var(--border); border-radius: 0;
+}
+#choices button:last-child { border-bottom: none; }
+#choices button[aria-pressed="true"] {
+  border-left: 4px solid var(--border-accent);
+  padding-left: 10px;
+  color: var(--text-accent);
+  font-weight: 500;
+}
+#choices button:not(:disabled):hover { background: var(--surface-card-hover); }
+#choices button:focus-visible { box-shadow: var(--focus-shadow); outline: none; }
+
+/* 問題文中の用語(タップ可能。枠なし、下線のみ) */
 .term { color: var(--text-accent); text-decoration: underline dashed; text-underline-offset: 4px; padding: 3px 6px; }
 #body .term { -webkit-appearance: none; appearance: none; border: 0; border-radius: 0; box-shadow: none; padding: 4px 7px; background: none; text-decoration-color: var(--border-accent); }
 #body .term:not(:disabled):hover { background: none; }
-.actions { display: flex; flex-wrap: wrap; gap: 8px; margin: 12px 0 0; }
-#next, #back { color: var(--text-primary); }
-#next:disabled { opacity: .55; }
-.explanation, #definition { background: var(--bg-brand); color: var(--text-brand); font-family: Georgia, "Hiragino Mincho ProN", serif; padding: 14px; border-radius: var(--radius-control); }
+
+/* 参考資料・用語一覧: ボタンではなく控えめな文字リンク */
+.supplement-actions { display: flex; gap: 18px; margin: 0 0 20px; }
+.supplement-actions button {
+  border: none; background: transparent; min-height: 44px; height: auto;
+  padding: 4px 2px; color: var(--text-secondary); font-size: 13px; font-weight: 400;
+  text-decoration: underline; text-underline-offset: 3px;
+}
+.supplement-actions button:not(:disabled):hover { color: var(--text-primary); background: transparent; }
+
+/* アクションボタン: 区切り線+余白で分離し、円形アイコンボタンにする */
+.actions {
+  display: flex; justify-content: flex-end; align-items: center; gap: 10px;
+  margin: 24px 0 0; padding-top: 16px; border-top: 1px solid var(--border);
+}
+#next, #back {
+  width: 50px; height: 50px; min-height: 50px; padding: 0;
+  border-radius: 50%;
+  display: inline-flex; align-items: center; justify-content: center;
+  font-size: 20px; line-height: 1;
+}
+#next { background: var(--fill-accent); color: var(--on-accent); border: none; }
+#next:not(:disabled):hover { background: var(--fill-accent-hover); }
+#next:disabled { opacity: .4; }
+#back { background: transparent; border: 1px solid var(--border-strong); color: var(--text-primary); }
+#back:disabled { opacity: .4; }
+
+/* 解説・shortDefinition: 色ではなくセリフ体のみで「アプリの声」を表す */
+.explanation, #definition {
+  background: var(--surface-card);
+  color: var(--text-primary);
+  font-family: Georgia, "Hiragino Mincho ProN", serif;
+  padding: 14px 0 0;
+  margin-top: 14px;
+  border-top: 1px solid var(--border);
+  border-radius: 0;
+}
 .result { padding: 14px; border-radius: var(--radius-control); }
 .result-success { background: var(--bg-success); color: var(--text-success); }
 .result-danger { background: var(--bg-danger); color: var(--text-danger); }
@@ -74,13 +121,12 @@ a { color: var(--text-primary); }
 #meta, #cache-status, header p { font-size: 13px; font-weight: 400; color: var(--text-muted); }
 #terms { display: flex; flex-wrap: wrap; gap: 8px; } details { margin-top: 18px; } summary { cursor: pointer; min-height: 44px; }
 [hidden] { display: none !important; }
-.supplement-actions { display: grid; grid-template-columns: 1fr 1fr; gap: 8px; margin-top: 8px; }
-.supplement-actions button { height: 44px; min-height: 44px; padding: 6px 10px; color: var(--text-primary); }
+
 body.sheet-open { position: fixed; width: 100%; left: 0; right: 0; overflow: hidden; }
 .sheet { color: var(--text-primary); background: var(--surface-card); border: 1px solid var(--border); border-radius: var(--radius-card) var(--radius-card) 0 0; width: min(100%, 42rem); max-width: 100%; max-height: calc(80dvh - env(safe-area-inset-top)); margin: auto auto 0; padding: 0; overflow: hidden; }
 .sheet[open] { display: flex; flex-direction: column; }
 .sheet::backdrop { background: var(--border-strong); }
 .sheet-header { display: flex; align-items: center; justify-content: space-between; gap: 12px; padding: 12px 16px; border-bottom: 1px solid var(--border); flex-shrink: 0; }
-.sheet-header h2 { font-weight: 600; margin: 0; }
+.sheet-header h2 { font-weight: 500; margin: 0; }
 .sheet-header button { color: var(--text-primary); }
 .sheet-content { min-height: 0; overflow-y: auto; overscroll-behavior: contain; padding: 16px 16px calc(16px + env(safe-area-inset-bottom)); overflow-wrap: anywhere; }
