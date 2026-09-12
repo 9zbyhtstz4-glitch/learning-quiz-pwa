@@ -92,7 +92,7 @@ function render(focus = true) {
   $('question').hidden = false;
   $('waiting').hidden = !current.waiting;
   $('definition').hidden = true;
-  $('meta').textContent = `${q.type === 'term' ? '用語問題' : '関係性問題'} · ${q.id} · 中断 ${interruptStack.stack.length} / ${interruptStack.maxDepth}`;
+  $('meta').textContent = `${q.type === 'term' ? '用語問題' : '関係性問題'} · 中断 ${interruptStack.stack.length} / ${interruptStack.maxDepth}`;
   $('body').replaceChildren();
   let end = 0;
   for (const match of q.body.matchAll(/\{\{term:([^}]+)\}\}/g)) {

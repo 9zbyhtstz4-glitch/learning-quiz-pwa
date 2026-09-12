@@ -45,20 +45,20 @@
 :root { font-family: -apple-system, BlinkMacSystemFont, "Hiragino Sans", sans-serif; color: var(--text-primary); background: var(--surface-page); font-size: 16px; line-height: 1.7; }
 * { box-sizing: border-box; }
 body { margin: 0 auto; max-width: 42rem; padding: max(20px, env(safe-area-inset-top)) 18px max(28px, env(safe-area-inset-bottom)); }
-h1 { font-size: 1.5rem; margin-bottom: 0; } header p { margin-top: 0; }
+h1 { font-size: 1.5rem; font-weight: 600; margin-bottom: 0; } header p { margin-top: 0; }
 section { background: var(--surface-card); border: 0.5px solid var(--border); border-radius: var(--radius-card); padding: 20px; }
-h2 { font-size: 1rem; }
+h2 { font-size: 1rem; font-weight: 400; }
+#body:focus { outline: none; }
 button { font: inherit; min-height: 44px; padding: 10px 14px; cursor: pointer; border: 1px solid var(--border-strong); border-radius: var(--radius-control); background: var(--surface-card); color: var(--text-accent); }
 button:disabled { cursor: default; }
-button:focus-visible, a:focus-visible { outline: 3px solid var(--border-accent); outline-offset: 3px; }
-button:not(:disabled):hover { background: var(--bg-accent); border-color: var(--border-accent); }
-a { color: var(--text-accent); }
-#choices { display: grid; gap: 12px; } #choices button { text-align: left; color: var(--text-primary); }
-#choices button[aria-pressed="true"] { border: 2px solid var(--border-accent); background: var(--bg-accent); }
+button:focus-visible, a:focus-visible { outline: 2px solid var(--text-secondary); outline-offset: 3px; }
+button:not(:disabled):hover { background: var(--surface-card-hover); }
+a { color: var(--text-primary); }
+#choices { display: grid; gap: 12px; } #choices button { text-align: left; color: var(--text-primary); border: 1px solid var(--border); border-radius: 10px; font-weight: 400; }
+#choices button[aria-pressed="true"], #choices button:not(:disabled):hover { border-color: var(--border-accent); background: var(--bg-accent); }
 .term { color: var(--text-accent); text-decoration: underline dashed; text-underline-offset: 4px; padding: 3px 6px; }
 .actions { display: flex; flex-wrap: wrap; gap: 12px; margin: 22px 0; }
-#next { background: var(--fill-accent); color: var(--on-accent); }
-#next:not(:disabled):hover { background: var(--fill-accent-hover); }
+#next, #back { color: var(--text-primary); }
 #next:disabled { opacity: .55; }
 .explanation, #definition { background: var(--bg-brand); color: var(--text-brand); font-family: Georgia, "Hiragino Mincho ProN", serif; padding: 14px; border-radius: var(--radius-control); }
 .result { padding: 14px; border-radius: var(--radius-control); }
