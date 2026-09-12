@@ -176,6 +176,24 @@ async function prepareOffline() {
 
 $('next').addEventListener('click', () => run(nextQuestion));
 $('back').addEventListener('click', () => run(goBack));
+let sheetScrollY = 0;
+function closeSheet(sheet) {
+  document.body.classList.remove('sheet-open');
+  document.body.style.removeProperty('top');
+  window.scrollTo(0, sheetScrollY);
+}
+document.querySelectorAll('[data-sheet]').forEach(button => {
+  button.addEventListener('click', () => {
+    sheetScrollY = window.scrollY;
+    document.body.style.top = `-${sheetScrollY}px`;
+    document.body.classList.add('sheet-open');
+    $(button.dataset.sheet).showModal();
+  });
+});
+document.querySelectorAll('.sheet').forEach(sheet => {
+  sheet.querySelector('[data-close-sheet]').addEventListener('click', () => sheet.close());
+  sheet.addEventListener('close', () => closeSheet(sheet));
+});
 run(async () => {
   const response = await fetch('./data.json');
   if (!response.ok) throw new Error('ダミーデータを読み込めません。');
@@ -183,6 +201,9 @@ run(async () => {
   validateData();
   db = await openDatabase();
   await nextQuestion();
-  data.terms.forEach(t => $('terms').append(button(t.label, () => openTerm(t.id), 'term')));
+  data.terms.forEach(t => $('terms').append(button(t.label, async () => {
+    $('terms-sheet').close();
+    await openTerm(t.id);
+  }, 'term')));
   void prepareOffline();
 });

@@ -12,7 +12,7 @@
 </head>
 <body>
   <div class="study-screen">
-  <header><h1>用語から学ぶクイズ <span id="app-version" aria-label="バージョン11">v11</span></h1></header>
+  <header><h1>用語から学ぶクイズ <span id="app-version" aria-label="バージョン12">v12</span></h1></header>
   <main>
     <p id="cache-status" role="status" hidden></p>
     <p id="error" role="alert" hidden></p>
@@ -20,16 +20,24 @@
     <section id="question" aria-labelledby="body" hidden>
       <p id="meta"></p><h2 id="body" tabindex="-1"></h2>
       <div id="choices"></div>
+      <nav class="supplement-actions" aria-label="補足情報">
+        <button type="button" data-sheet="sources-sheet" aria-haspopup="dialog">参考資料</button>
+        <button type="button" data-sheet="terms-sheet" aria-haspopup="dialog">用語一覧</button>
+      </nav>
       <div id="feedback" aria-live="polite"></div>
       <p id="definition" role="status" hidden></p>
       <div class="actions"><button id="back" hidden>元の問題に戻る</button><button id="next">次の問題</button></div>
     </section>
   </main>
   </div>
-  <aside aria-label="補足情報">
-    <details><summary>参考資料（オンライン）</summary><ul id="sources"></ul></details>
-    <details><summary>用語一覧</summary><div id="terms"></div></details>
-  </aside>
+  <dialog id="sources-sheet" class="sheet" aria-labelledby="sources-title">
+    <div class="sheet-header"><h2 id="sources-title">参考資料（オンライン）</h2><button type="button" data-close-sheet>閉じる</button></div>
+    <div class="sheet-content"><ul id="sources"></ul></div>
+  </dialog>
+  <dialog id="terms-sheet" class="sheet" aria-labelledby="terms-title">
+    <div class="sheet-header"><h2 id="terms-title">用語一覧</h2><button type="button" data-close-sheet>閉じる</button></div>
+    <div class="sheet-content"><div id="terms"></div></div>
+  </dialog>
   <noscript>このアプリにはJavaScriptが必要です。</noscript>
   <script type="module" src="./app.js"></script>
 </body>
