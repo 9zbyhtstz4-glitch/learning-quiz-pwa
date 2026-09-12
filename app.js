@@ -202,6 +202,7 @@ run(async () => {
   if (!response.ok) throw new Error('ダミーデータを読み込めません。');
   data = await response.json();
   validateData();
+  $('library-count').textContent = `収録 ${data.questions.length}問 · 用語 ${data.terms.length}件`;
   db = await openDatabase();
   await nextQuestion();
   data.terms.forEach(t => $('terms').append(button(t.label, async () => {

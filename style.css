@@ -42,7 +42,8 @@
 * { box-sizing: border-box; }
 body { margin: 0 auto; max-width: 42rem; padding: calc(12px + env(safe-area-inset-top)) max(14px, env(safe-area-inset-right)) calc(12px + env(safe-area-inset-bottom)) max(14px, env(safe-area-inset-left)); }
 .study-screen { min-height: calc(100dvh - 24px - env(safe-area-inset-top) - env(safe-area-inset-bottom)); }
-h1 { font-size: 1.25rem; line-height: 1.4; font-weight: 500; margin: 0 0 12px; }
+h1 { font-size: 1.25rem; line-height: 1.4; font-weight: 500; margin: 0 0 4px; }
+#library-count { margin: 0 0 12px; }
 #app-version { font-size: 13px; font-weight: 400; color: var(--text-muted); white-space: nowrap; margin-left: 6px; }
 section { background: var(--surface-card); border: 0.5px solid var(--border); border-radius: var(--radius-card); padding: 14px; }
 h2 { font-size: 1rem; line-height: 1.6; font-weight: 400; margin: 8px 0 20px; }
