@@ -167,9 +167,10 @@ async function prepareOffline() {
     if (!('serviceWorker' in navigator)) throw new Error('HTTPSまたはlocalhostで起動してください。');
     await navigator.serviceWorker.register('./sw.js');
     await navigator.serviceWorker.ready;
-    $('cache-status').textContent = 'オフライン準備完了。この端末でネット接続なしでも使えます。';
+    $('cache-status').hidden = true;
   } catch (error) {
-    $('cache-status').textContent = `オフライン準備に失敗しました。オンラインで再読み込みしてください。${error.message}`;
+    $('cache-status').textContent = 'オフライン準備に失敗しました。再読み込みしてください。';
+    $('cache-status').hidden = false;
   }
 }
 
