@@ -132,6 +132,13 @@
       "url": "https://platform.claude.com/docs/ja/agents-and-tools/tool-use/memory-tool",
       "source": "claude-docs",
       "fieldId": "llm-techniques"
+    },
+    {
+      "id": "a-prompting-best-practices",
+      "title": "プロンプティングのベストプラクティス",
+      "url": "https://platform.claude.com/docs/ja/build-with-claude/prompt-engineering/claude-prompting-best-practices",
+      "source": "claude-docs",
+      "fieldId": "prompting"
     }
   ],
   "terms": [
@@ -1789,6 +1796,276 @@
       ],
       "referenceArticleIds": [
         "a-memory-tool"
+      ]
+    },
+    {
+      "id": "golden-rule",
+      "label": "プロンプトの黄金律",
+      "shortDefinition": "プロンプトが十分に明確かを確かめる基準。タスクのコンテキストが最小限の同僚に見せて従うよう頼み、その同僚が混乱するならモデルも混乱すると考える。",
+      "fieldId": "prompting",
+      "relatedTermIds": [
+        "explicit-instruction",
+        "context-motivation"
+      ],
+      "questionIds": [
+        "q-golden-rule"
+      ],
+      "referenceArticleIds": [
+        "a-prompting-best-practices"
+      ]
+    },
+    {
+      "id": "explicit-instruction",
+      "label": "明確で直接的な指示",
+      "shortDefinition": "モデルは明確で明示的な指示によく応答する。望む出力形式や制約を具体的に示し、期待以上の振る舞いも推測に任せず明示的に求める。手順が重要なら番号付きのステップで示す。",
+      "fieldId": "prompting",
+      "relatedTermIds": [
+        "golden-rule",
+        "explicit-action-request",
+        "context-motivation",
+        "multishot-examples",
+        "role-prompting",
+        "long-context-ordering",
+        "overengineering-control"
+      ],
+      "questionIds": [
+        "q-explicit-instruction"
+      ],
+      "referenceArticleIds": [
+        "a-prompting-best-practices"
+      ]
+    },
+    {
+      "id": "context-motivation",
+      "label": "指示の理由付け",
+      "shortDefinition": "指示の背景にある理由や動機を伝えること。なぜその振る舞いが重要かを説明すると、モデルは目標をよく理解し、説明から一般化して想定外の場面にも対応できる。",
+      "fieldId": "prompting",
+      "relatedTermIds": [
+        "explicit-instruction",
+        "positive-instruction",
+        "golden-rule",
+        "role-prompting"
+      ],
+      "questionIds": [
+        "q-context-motivation"
+      ],
+      "referenceArticleIds": [
+        "a-prompting-best-practices"
+      ]
+    },
+    {
+      "id": "multishot-examples",
+      "label": "例示（マルチショット）",
+      "shortDefinition": "出力の形式・トーン・構造を誘導する最も信頼性の高い方法の一つ。実際の用途に沿い、意図しないパターンを拾わないよう多様で、指示と区別できるよう構造化した例を3〜5個含める。",
+      "fieldId": "prompting",
+      "relatedTermIds": [
+        "xml-structuring",
+        "explicit-instruction",
+        "general-over-prescriptive"
+      ],
+      "questionIds": [
+        "q-multishot-examples"
+      ],
+      "referenceArticleIds": [
+        "a-prompting-best-practices"
+      ]
+    },
+    {
+      "id": "xml-structuring",
+      "label": "XMLタグによる構造化",
+      "shortDefinition": "指示・コンテキスト・例・入力が混在するプロンプトで、種類ごとにタグで囲んで境界を明示する手法。一貫した説明的なタグ名を使い、自然な階層があればネストする。",
+      "fieldId": "prompting",
+      "relatedTermIds": [
+        "multishot-examples",
+        "format-indicator",
+        "long-context-ordering"
+      ],
+      "questionIds": [
+        "q-xml-structuring"
+      ],
+      "referenceArticleIds": [
+        "a-prompting-best-practices"
+      ]
+    },
+    {
+      "id": "role-prompting",
+      "label": "役割の付与",
+      "shortDefinition": "システムプロンプトで役割を設定すると、ユースケースに合わせて振る舞いとトーンが絞り込まれる。たった1文でも違いが生まれる、コストの低い手法。",
+      "fieldId": "prompting",
+      "relatedTermIds": [
+        "explicit-instruction",
+        "context-motivation"
+      ],
+      "questionIds": [
+        "q-role-prompting"
+      ],
+      "referenceArticleIds": [
+        "a-prompting-best-practices"
+      ]
+    },
+    {
+      "id": "long-context-ordering",
+      "label": "長文コンテキストの配置順序",
+      "shortDefinition": "大きなドキュメントを扱うときは、長文データをプロンプトの先頭付近に置き、クエリを末尾に置く。テストでは応答品質が最大30パーセント向上することがある。",
+      "fieldId": "prompting",
+      "relatedTermIds": [
+        "xml-structuring",
+        "explicit-instruction"
+      ],
+      "questionIds": [
+        "q-long-context-ordering"
+      ],
+      "referenceArticleIds": [
+        "a-prompting-best-practices"
+      ]
+    },
+    {
+      "id": "positive-instruction",
+      "label": "肯定形での指示",
+      "shortDefinition": "何をしないかではなく、何をするかを伝える指示の仕方。禁止だけでは代わりに何をすればよいかが伝わらないため、望む形を具体的に述べる。",
+      "fieldId": "prompting",
+      "relatedTermIds": [
+        "context-motivation",
+        "format-indicator"
+      ],
+      "questionIds": [
+        "q-positive-instruction"
+      ],
+      "referenceArticleIds": [
+        "a-prompting-best-practices"
+      ]
+    },
+    {
+      "id": "format-indicator",
+      "label": "形式インジケーター・スタイル模倣",
+      "shortDefinition": "出力の該当部分を特定のタグ内に書かせて形式を指定する方法と、プロンプト自体を望む書式で書いて応答のスタイルに反映させる方法。装飾記法を減らしたいならプロンプトからも取り除く。",
+      "fieldId": "prompting",
+      "relatedTermIds": [
+        "positive-instruction",
+        "xml-structuring"
+      ],
+      "questionIds": [
+        "q-format-indicator"
+      ],
+      "referenceArticleIds": [
+        "a-prompting-best-practices"
+      ]
+    },
+    {
+      "id": "explicit-action-request",
+      "label": "行動の明示的な要求",
+      "shortDefinition": "実行してほしいときは行動を求める形で書くこと。「変更を提案してもらえますか」と頼むと、変更が意図であっても実装せず提案だけを返すことがある。",
+      "fieldId": "prompting",
+      "relatedTermIds": [
+        "explicit-instruction",
+        "over-prompting",
+        "parallel-tool-calls",
+        "reversibility-guardrail"
+      ],
+      "questionIds": [
+        "q-explicit-action-request"
+      ],
+      "referenceArticleIds": [
+        "a-prompting-best-practices"
+      ]
+    },
+    {
+      "id": "over-prompting",
+      "label": "過剰なプロンプト",
+      "shortDefinition": "指示への反応性が高いモデルでは、以前のモデル向けに書いた強い言葉遣いや包括的な指示が過剰なトリガーを招く。強調を控え、的を絞った指示に置き換える。",
+      "fieldId": "prompting",
+      "relatedTermIds": [
+        "explicit-action-request",
+        "self-check-prompt",
+        "parallel-tool-calls"
+      ],
+      "questionIds": [
+        "q-over-prompting"
+      ],
+      "referenceArticleIds": [
+        "a-prompting-best-practices"
+      ]
+    },
+    {
+      "id": "parallel-tool-calls",
+      "label": "並列ツール呼び出しの誘導",
+      "shortDefinition": "独立したツール呼び出しを並列に実行させる誘導。並列にしてよいのは呼び出し同士に依存関係がない場合だけで、前の結果を使う呼び出しは順に実行する。",
+      "fieldId": "llm-performance",
+      "relatedTermIds": [
+        "explicit-action-request",
+        "over-prompting"
+      ],
+      "questionIds": [
+        "q-parallel-tool-calls"
+      ],
+      "referenceArticleIds": [
+        "a-prompting-best-practices"
+      ]
+    },
+    {
+      "id": "self-check-prompt",
+      "label": "自己チェックの依頼",
+      "shortDefinition": "終える前に基準に照らして回答を検証させる一文を加える手法。コーディングや数学で誤りを捕捉しやすいが、自分でよく検証するモデルでは過剰な検証を招くため、その場合は削除する。",
+      "fieldId": "prompting",
+      "relatedTermIds": [
+        "over-prompting",
+        "general-over-prescriptive",
+        "overengineering-control"
+      ],
+      "questionIds": [
+        "q-self-check-prompt"
+      ],
+      "referenceArticleIds": [
+        "a-prompting-best-practices"
+      ]
+    },
+    {
+      "id": "general-over-prescriptive",
+      "label": "規定的な手順より一般的な指示",
+      "shortDefinition": "推論を促すときは、人間が手書きした詳細な手順より「徹底的に考えて」のような一般的な指示のほうが良い推論を生むことが多い。モデルの推論は人間の規定をしばしば上回る。",
+      "fieldId": "prompting",
+      "relatedTermIds": [
+        "multishot-examples",
+        "self-check-prompt"
+      ],
+      "questionIds": [
+        "q-general-over-prescriptive"
+      ],
+      "referenceArticleIds": [
+        "a-prompting-best-practices"
+      ]
+    },
+    {
+      "id": "overengineering-control",
+      "label": "過剰設計の抑制",
+      "shortDefinition": "余分なファイル、不必要な抽象化、要求されていない柔軟性の追加を抑える観点。依頼以上の変更をせず、検証は境界だけで行い、将来の仮定に備えない。適切な複雑さは現在のタスクに必要な最小限。",
+      "fieldId": "prompting",
+      "relatedTermIds": [
+        "explicit-instruction",
+        "self-check-prompt",
+        "reversibility-guardrail"
+      ],
+      "questionIds": [
+        "q-overengineering-control"
+      ],
+      "referenceArticleIds": [
+        "a-prompting-best-practices"
+      ]
+    },
+    {
+      "id": "reversibility-guardrail",
+      "label": "可逆性による判断",
+      "shortDefinition": "行動の可逆性と影響範囲で判断させる考え方。局所的で元に戻せる操作は進め、破壊的・元に戻しにくい・他者に見える操作は確認を求める。障害の近道に破壊的な操作を使わない。",
+      "fieldId": "security",
+      "relatedTermIds": [
+        "explicit-action-request",
+        "overengineering-control"
+      ],
+      "questionIds": [
+        "q-reversibility-guardrail"
+      ],
+      "referenceArticleIds": [
+        "a-prompting-best-practices"
       ]
     }
   ],
@@ -4333,6 +4610,450 @@
       ],
       "sourceArticleIds": [
         "a-memory-tool"
+      ],
+      "generatedBy": "gemini-3.8-flash"
+    },
+    {
+      "id": "q-golden-rule",
+      "type": "term",
+      "fieldId": "prompting",
+      "patternType": "select-correct",
+      "body": "{{term:explicit-instruction}}に沿ったプロンプトが適切に設計されているかを判断する「プロンプトの黄金律」の基準として、正しいものはどれか？",
+      "choices": [
+        "対象となるタスクに関するコンテキストが最小限の同僚にプロンプトを見せ、それに従うよう頼んでみて混乱するかどうかで判断する。",
+        "対象となるタスクに関する専門知識を持つ技術者にプロンプトを見せ、使用されている専門用語が正確かどうかで判断する。",
+        "対象となるタスクに関するコンテキストが最小限の同僚にプロンプトを見せ、出力結果を独自のアルゴリズムで採点できるかどうかで判断する。"
+      ],
+      "answerIndex": 0,
+      "revealAnswer": true,
+      "explanation": "モデルを「優秀だがあなたの規範やワークフローに関するコンテキストを持たない新入社員」と考えます。 そのため、タスクのコンテキストを持たない同僚がプロンプトを見て混乱するようであれば、モデルも混乱するという基準で明確さを判定します。",
+      "termIds": [
+        "explicit-instruction"
+      ],
+      "sourceArticleIds": [
+        "a-prompting-best-practices"
+      ],
+      "generatedBy": "gemini-3.8-flash"
+    },
+    {
+      "id": "q-explicit-instruction",
+      "type": "term",
+      "fieldId": "prompting",
+      "patternType": "select-incorrect",
+      "body": "{{term:golden-rule}}を満たすための「明確で直接的な指示」の書き方として、誤っているものはどれか？",
+      "choices": [
+        "手順の順序や完全性が重要なタスクの場合は、番号付きリストや箇条書きを用いて順序立てたステップとして指示を提供する。",
+        "期待以上の振る舞いを望むタスクの場合は、モデル自身が曖昧なプロンプトから文脈を推測して柔軟に対応できるよう余白を残す。",
+        "完全な実装を望むタスクの場合は、関連する機能をできるだけ多く含めてほしい旨など、望む出力について修飾語を添えて具体的に示す。"
+      ],
+      "answerIndex": 1,
+      "revealAnswer": true,
+      "explanation": "モデルは明確で明示的な指示によく応答します。そのため、期待以上の振る舞いを望む場合は、曖昧なプロンプトからの推測に頼るのではなく、明示的に要求するアプローチが求められます。したがって「モデル自身が推測できるよう余白を残す」という記述が誤りです。",
+      "termIds": [
+        "golden-rule"
+      ],
+      "sourceArticleIds": [
+        "a-prompting-best-practices"
+      ],
+      "generatedBy": "gemini-3.8-flash"
+    },
+    {
+      "id": "q-context-motivation",
+      "type": "term",
+      "fieldId": "prompting",
+      "patternType": "select-best",
+      "body": "{{term:explicit-instruction}}と共に推奨される「理由を添える」アプローチの効果として、最も適切なものはどれか？",
+      "choices": [
+        "指示の背景にあるコンテキストや動機を伝えることで、モデルが説明から一般化し、想定外の場面にも適切に対応できるようになる。",
+        "指示の背景にあるコンテキストや動機を伝えることで、モデルが内部のパラメータを更新し、次回以降の実行速度が向上するようになる。",
+        "指示の背景にあるコンテキストや動機を伝えることで、モデルが外部の検索エンジンへ自動的にアクセスし、最新の事例を参照できるようになる。"
+      ],
+      "answerIndex": 0,
+      "revealAnswer": true,
+      "explanation": "単に禁止事項を並べるのではなく、「なぜその振る舞いが重要なのか」を説明することで、モデルが目標をよりよく理解します。 モデルは説明から一般化する能力があるため、理由を伝えると想定外の場面にも適切に対応できるようになります。",
+      "termIds": [
+        "explicit-instruction"
+      ],
+      "sourceArticleIds": [
+        "a-prompting-best-practices"
+      ],
+      "generatedBy": "gemini-3.8-flash"
+    },
+    {
+      "id": "q-multishot-examples",
+      "type": "term",
+      "fieldId": "prompting",
+      "patternType": "select-correct",
+      "body": "{{term:xml-structuring}}と併用される「例示（マルチショット）」に含める例の条件として、正しいものはどれか？",
+      "choices": [
+        "モデルが一つの正解パターンを深く学習できるよう、出力の形式やトーンが完全に一致した単一の事例を3から5個繰り返して含める。",
+        "モデルが意図しないパターンを拾うのを防ぐため、エッジケースをカバーするなど十分に変化をつけた多様な事例を3から5個含める。",
+        "モデルが自律的に新しいパターンを生み出せるよう、実際のユースケースとは全く関係のないランダムな事例を3から5個含める。"
+      ],
+      "answerIndex": 1,
+      "revealAnswer": true,
+      "explanation": "良い例の条件には「多様である」ことが含まれます。 エッジケースをカバーし、モデルが意図しないパターンを拾わないように十分に変化をつけた例を、3〜5個含めることが最良の結果を得るための実践的な条件です。",
+      "termIds": [
+        "xml-structuring"
+      ],
+      "sourceArticleIds": [
+        "a-prompting-best-practices"
+      ],
+      "generatedBy": "gemini-3.8-flash"
+    },
+    {
+      "id": "q-xml-structuring",
+      "type": "term",
+      "fieldId": "prompting",
+      "patternType": "select-incorrect",
+      "body": "{{term:multishot-examples}}を提示する際にも有効な「XMLタグによる構造化」の手法として、誤っているものはどれか？",
+      "choices": [
+        "プロンプト全体を通して一貫性のある説明的なタグ名を使用し、各種類のコンテンツをそれぞれのタグで囲んで構成する。",
+        "プロンプト全体を単一の巨大なタグで囲み、コンテンツの階層や境界をなくしてモデルが自由に解析できるように構成する。",
+        "プロンプトのコンテンツに自然な階層が存在する場合は、親タグの中に子タグを含めるようにタグをネストさせて構成する。"
+      ],
+      "answerIndex": 1,
+      "revealAnswer": true,
+      "explanation": "XMLタグによる構造化は、指示、コンテキスト、例などが混在している場合に、それぞれの境界を明示して曖昧さなく解析させるための手法です。 階層をなくして自由に解析させるのではなく、明確な境界を設けます。したがって「単一の巨大なタグで囲み、コンテンツの階層や境界をなくす」という記述が誤りです。",
+      "termIds": [
+        "multishot-examples"
+      ],
+      "sourceArticleIds": [
+        "a-prompting-best-practices"
+      ],
+      "generatedBy": "gemini-3.8-flash"
+    },
+    {
+      "id": "q-role-prompting",
+      "type": "term",
+      "fieldId": "prompting",
+      "patternType": "select-best",
+      "body": "{{term:explicit-instruction}}に加えて適用される「役割の付与」の効果として、最も適切なものはどれか？",
+      "choices": [
+        "長い背景説明を記述しなくても、システムプロンプトに短い一文を設定するだけで、ユースケースに合わせて振る舞いとトーンが絞り込まれる。",
+        "長い背景説明を記述しなくても、システムプロンプトに短い一文を設定するだけで、出力されるすべての回答が専門用語のみで構成される。",
+        "長い背景説明を記述しなくても、システムプロンプトに短い一文を設定するだけで、モデルが参照する学習データの日付が最新に固定される。"
+      ],
+      "answerIndex": 0,
+      "revealAnswer": true,
+      "explanation": "役割の付与（role prompting）は、「あなたは特定の言語を専門とする有能なコーディングアシスタントです」といった短い一文を追加する手法です。 これにより、長い説明を書かなくても振る舞いとトーンが絞り込まれます。",
+      "termIds": [
+        "explicit-instruction"
+      ],
+      "sourceArticleIds": [
+        "a-prompting-best-practices"
+      ],
+      "generatedBy": "gemini-3.8-flash"
+    },
+    {
+      "id": "q-long-context-ordering",
+      "type": "term",
+      "fieldId": "prompting",
+      "patternType": "select-correct",
+      "body": "{{term:xml-structuring}}で構造化された大きなドキュメントを扱う際の「長文コンテキストの配置順序」として、正しいものはどれか？",
+      "choices": [
+        "長文データをプロンプトの先頭付近に配置し、クエリや指示を末尾に置くことで、応答品質が向上する傾向がある。",
+        "長文データをプロンプトの末尾付近に配置し、クエリや指示を先頭に置くことで、応答品質が向上する傾向がある。",
+        "長文データとクエリをプロンプトの中央に交互に配置し、全体を均等に分割することで、応答品質が向上する傾向がある。"
+      ],
+      "answerIndex": 0,
+      "revealAnswer": true,
+      "explanation": "大きなドキュメントを扱う場合、長文データをクエリ・指示・例よりも上（先頭付近）に配置します。 そしてテストによれば、クエリを末尾に置くことで応答品質が最大30パーセント向上することが確認されています。",
+      "termIds": [
+        "xml-structuring"
+      ],
+      "sourceArticleIds": [
+        "a-prompting-best-practices"
+      ],
+      "generatedBy": "gemini-3.8-flash"
+    },
+    {
+      "id": "q-positive-instruction",
+      "type": "term",
+      "fieldId": "prompting",
+      "patternType": "select-incorrect",
+      "body": "{{term:context-motivation}}を提示する際にも意識すべき「否定形ではなく肯定形で指示する」手法として、誤っているものはどれか？",
+      "choices": [
+        "モデルに対して望む出力フォーマットを誘導するため、「何をしないか」ではなく「何をするか」を明確に言語化して伝える。",
+        "モデルに対して望む出力フォーマットを誘導するため、代わりに何をすればよいかが伝わらない単純な禁止表現の使用を避ける。",
+        "モデルに対して望む出力フォーマットを誘導するため、発生しうるすべての禁止事項を列挙したリストを指示の冒頭に配置する。"
+      ],
+      "answerIndex": 2,
+      "revealAnswer": true,
+      "explanation": "肯定形での指示は、「何をしないか（禁止）」ではなく「何をするか（望む形）」を伝える手法です。 禁止事項を並べるだけでは代わりに何をすべきかが伝わりません。したがって「発生しうるすべての禁止事項を列挙したリストを指示の冒頭に配置する」という記述が誤りです。",
+      "termIds": [
+        "context-motivation"
+      ],
+      "sourceArticleIds": [
+        "a-prompting-best-practices"
+      ],
+      "generatedBy": "gemini-3.8-flash"
+    },
+    {
+      "id": "q-format-indicator",
+      "type": "term",
+      "fieldId": "prompting",
+      "patternType": "select-best",
+      "body": "{{term:positive-instruction}}と同様に出力を誘導する「形式インジケーターとスタイルの模倣」の手法として、最も適切なものはどれか？",
+      "choices": [
+        "プロンプトから装飾記法を取り除くと出力に含まれる装飾記法も減るなど、プロンプトの書き方そのものが応答スタイルに影響を与える。",
+        "プロンプトから装飾記法を取り除くと出力に含まれる装飾記法が増えるなど、プロンプトの書き方とは逆の応答スタイルが強制的に適用される。",
+        "プロンプトから装飾記法を取り除いても出力には常に標準的な装飾記法が適用されるなど、プロンプトの書き方は応答スタイルに影響を与えない。"
+      ],
+      "answerIndex": 0,
+      "revealAnswer": true,
+      "explanation": "モデルはプロンプトで使用されているフォーマットスタイルに影響を受けます。 言葉で形式を指定するだけでなく、自分が望むスタイル（装飾記法のない書き方など）でプロンプトを書くことによって、出力のスタイルを模倣させることができます。",
+      "termIds": [
+        "positive-instruction"
+      ],
+      "sourceArticleIds": [
+        "a-prompting-best-practices"
+      ],
+      "generatedBy": "gemini-3.8-flash"
+    },
+    {
+      "id": "q-explicit-action-request",
+      "type": "term",
+      "fieldId": "prompting",
+      "patternType": "select-correct",
+      "body": "{{term:explicit-instruction}}に沿った「行動を明示的に要求する」指示の書き方として、正しいものはどれか？",
+      "choices": [
+        "提案だけを返して実装を行わない事態を避けるため、「変更を提案してもらえますか」のような表現ではなく実行を求める形で書く。",
+        "提案だけを返して実装を行わない事態を避けるため、「関数を変更して性能を改善して」のような表現ではなく助言を求める形で書く。",
+        "提案だけを返して実装を行わない事態を避けるため、「変更を提案してもらえますか」のような表現を用いてモデルの自主性を促す形で書く。"
+      ],
+      "answerIndex": 0,
+      "revealAnswer": true,
+      "explanation": "「いくつか変更を提案してもらえますか」と書くと、モデルは文字通り提案だけを返し、実装しないことがあります。 そのため、実装を望む場合は「この関数を変更して性能を改善して」のように、行動を明示的に要求する形で書く必要があります。",
+      "termIds": [
+        "explicit-instruction"
+      ],
+      "sourceArticleIds": [
+        "a-prompting-best-practices"
+      ],
+      "generatedBy": "gemini-3.8-flash"
+    },
+    {
+      "id": "q-over-prompting",
+      "type": "term",
+      "fieldId": "prompting",
+      "patternType": "select-incorrect",
+      "body": "{{term:explicit-action-request}}に関連して発生しうる「過剰なプロンプト」への対処として、誤っているものはどれか？",
+      "choices": [
+        "新しいモデルでは指示に対する反応性が高いため、以前のモデル向けに書いていた強い言葉遣いの指示を控えめな表現に修正する。",
+        "新しいモデルでは指示に対する反応性が高いため、包括的で曖昧な指示を特定の状況に的を絞った具体的な指示に置き換える。",
+        "新しいモデルでは指示に対する反応性が高いため、以前のモデル向けに書いていた強い言葉遣いの指示をさらに強調して書き直す。"
+      ],
+      "answerIndex": 2,
+      "revealAnswer": true,
+      "explanation": "モデルの改善によりシステムプロンプトへの反応性が高まっているため、過去に有効だった強い言葉遣いや包括的な指示が、逆に「過剰なトリガー」を引き起こすことがあります。 そのため、解決策は強い言葉遣いを控えめにすることです。したがって「強い言葉遣いの指示をさらに強調して書き直す」という記述が誤りです。",
+      "termIds": [
+        "explicit-action-request"
+      ],
+      "sourceArticleIds": [
+        "a-prompting-best-practices"
+      ],
+      "generatedBy": "gemini-3.8-flash"
+    },
+    {
+      "id": "q-parallel-tool-calls",
+      "type": "term",
+      "fieldId": "llm-performance",
+      "patternType": "select-best",
+      "body": "{{term:explicit-action-request}}を用いて調整できる「並列ツール呼び出しの誘導」の条件として、最も適切なものはどれか？",
+      "choices": [
+        "並列に実行することが許可されるのは、それぞれのツール呼び出しが同じデータソースに対して同時に書き込みを行う場合のみである。",
+        "並列に実行することが許可されるのは、それぞれのツール呼び出しの間に実行順序を縛るような依存関係が存在しない場合のみである。",
+        "並列に実行することが許可されるのは、後続のツール呼び出しが直前のツール呼び出しの結果を入力として使用する場合のみである。"
+      ],
+      "answerIndex": 1,
+      "revealAnswer": true,
+      "explanation": "新しい世代のモデルは独立したツール呼び出しを並列に実行しますが、その重要な条件は「ツール呼び出しの間に依存関係がない場合」のみです。 後続の呼び出しが前の結果に依存する場合は順次実行しなければなりません。",
+      "termIds": [
+        "explicit-action-request"
+      ],
+      "sourceArticleIds": [
+        "a-prompting-best-practices"
+      ],
+      "generatedBy": "gemini-3.8-flash"
+    },
+    {
+      "id": "q-self-check-prompt",
+      "type": "term",
+      "fieldId": "prompting",
+      "patternType": "select-correct",
+      "body": "{{term:over-prompting}}の原因にもなりうる「自己チェックの依頼」の運用として、正しいものはどれか？",
+      "choices": [
+        "モデルが自己検証を行いすぎてトークンとレイテンシが増大している場合、指示の言い回しを調整して引き続きプロンプトに残すことが推奨される。",
+        "モデルが自己検証を行いすぎてトークンとレイテンシが増大している場合、関連する過去の検証指示は書き直すのではなく削除することが推奨される。",
+        "モデルが自己検証を行いすぎてトークンとレイテンシが増大している場合、エラーを確実に捕捉するため検証指示の頻度を増やすことが推奨される。"
+      ],
+      "answerIndex": 1,
+      "revealAnswer": true,
+      "explanation": "自分の作業をよく検証するようになった新しいモデルにおいて、過去の検証指示が引き継がれると過剰な検証を招きリソースを消費します。 そのような場合は、指示を書き直すのではなく削除することが推奨されています。",
+      "termIds": [
+        "over-prompting"
+      ],
+      "sourceArticleIds": [
+        "a-prompting-best-practices"
+      ],
+      "generatedBy": "gemini-3.8-flash"
+    },
+    {
+      "id": "q-general-over-prescriptive",
+      "type": "term",
+      "fieldId": "prompting",
+      "patternType": "select-incorrect",
+      "body": "{{term:multishot-examples}}による推論の誘導に関連する「規定的な手順より一般的な指示」のアプローチとして、誤っているものはどれか？",
+      "choices": [
+        "人間が手書きした詳細なステップバイステップの計画を提示するよりも、「徹底的に考えてください」という一般的な指示の方が優れた推論を生み出すことがよくある。",
+        "モデルの推論能力は人間が手書きで規定する手順をしばしば上回るため、一般的な指示を与えた方がより良い結果に結びつくことがよくある。",
+        "モデルの推論能力は人間が手書きで規定する手順には及ばないため、一般的な指示を与えるよりも常に詳細な計画を固定で与える方が優れた結果を生み出す。"
+      ],
+      "answerIndex": 2,
+      "revealAnswer": true,
+      "explanation": "モデルの推論は人間が規定するものをしばしば上回るため、「徹底的に考えてください」のような一般的な指示の方が、人間が手書きした詳細な計画よりも優れた推論を生み出すことがよくあります。 したがって「常に詳細な計画を固定で与える方が優れた結果を生み出す」という記述が誤りです。",
+      "termIds": [
+        "multishot-examples"
+      ],
+      "sourceArticleIds": [
+        "a-prompting-best-practices"
+      ],
+      "generatedBy": "gemini-3.8-flash"
+    },
+    {
+      "id": "q-overengineering-control",
+      "type": "term",
+      "fieldId": "prompting",
+      "patternType": "select-best",
+      "body": "{{term:explicit-instruction}}の設定によって回避すべき「過剰設計の抑制」の観点として、最も適切なものはどれか？",
+      "choices": [
+        "現在のタスクに必要な最小限の実装に留め、将来の仮定的な要件に備えた不必要な抽象化や共通化の仕組みを作らせない。",
+        "現在のタスクに必要な最小限の実装を無視し、将来の仮定的な要件に備えた防御的なエラー処理やフォールバックを無数に追加させる。",
+        "現在のタスクに必要な最小限の実装に留め、利用者の入力境界に対するセキュリティ検証も含めてすべて省略させる。"
+      ],
+      "answerIndex": 0,
+      "revealAnswer": true,
+      "explanation": "モデルがよかれと思って不必要な抽象化や余分なファイルを追加するのを抑制するため、「現在のタスクに必要な最小限」を適切な複雑さとする原則があります。 将来の仮定的な要件に備えて設計しないことが推奨されています。",
+      "termIds": [
+        "explicit-instruction"
+      ],
+      "sourceArticleIds": [
+        "a-prompting-best-practices"
+      ],
+      "generatedBy": "gemini-3.8-flash"
+    },
+    {
+      "id": "q-reversibility-guardrail",
+      "type": "term",
+      "fieldId": "security",
+      "patternType": "select-correct",
+      "body": "{{term:overengineering-control}}の考え方にも通じる「可逆性による判断」の基準として、正しいものはどれか？",
+      "choices": [
+        "障害にぶつかった際には、安全確認を迂回して破壊的なアクションを近道として用いることで迅速な解決を図るよう設定する。",
+        "共有システムに影響を与えるような元に戻しにくいアクションであっても、確認を求めずに自律的に処理を続行するよう設定する。",
+        "アクションが局所的で元に戻せる操作であれば推奨し、破壊的で元に戻しにくい操作であれば事前に確認を求めるよう設定する。"
+      ],
+      "answerIndex": 2,
+      "revealAnswer": true,
+      "explanation": "自律性と安全性のバランスを取るための考え方として、アクションの可逆性と影響範囲を考慮します。 元に戻せる操作は推奨され、破壊的な操作や元に戻しにくい操作には確認を求めるべきです。また、近道として破壊的なアクションを使わない原則も含まれます。",
+      "termIds": [
+        "overengineering-control"
+      ],
+      "sourceArticleIds": [
+        "a-prompting-best-practices"
+      ],
+      "generatedBy": "gemini-3.8-flash"
+    },
+    {
+      "id": "q-golden-rule-context-motivation",
+      "type": "relationship",
+      "fieldId": "prompting",
+      "patternType": "select-incorrect",
+      "body": "{{term:golden-rule}}と{{term:context-motivation}}が目指すプロンプト設計の関係性として、誤っているものはどれか？",
+      "choices": [
+        "どちらのアプローチも、モデルが初見のタスクに対処する上で不足している周辺情報を補い、目的を正しく共有するためのものである。",
+        "どちらのアプローチも、モデルが持っていない人間側の暗黙の前提を言語化して与え、想定外の判断ミスを防ぐためのものである。",
+        "どちらのアプローチも、モデルの内部パラメータを強制的に書き換え、特定の禁止事項を物理的に実行不可能にするためのものである。"
+      ],
+      "answerIndex": 2,
+      "revealAnswer": false,
+      "explanation": "プロンプトの明確さを判定する基準は、タスクの前提を全く知らない相手に伝わるかどうかを尺度とします。これにより、書き手が無意識に省略してしまった情報を洗い出します。\n\n指示に理由や背景を添えるアプローチは、モデルになぜその振る舞いが必要なのかを理解させます。これにより、単にルールを押し付けるのではなく、目的に沿った柔軟な応用を引き出します。",
+      "termIds": [
+        "golden-rule",
+        "context-motivation"
+      ],
+      "sourceArticleIds": [
+        "a-prompting-best-practices"
+      ],
+      "generatedBy": "gemini-3.8-flash"
+    },
+    {
+      "id": "q-positive-format-indicator",
+      "type": "relationship",
+      "fieldId": "prompting",
+      "patternType": "select-best",
+      "body": "{{term:positive-instruction}}と{{term:format-indicator}}の効果について、最も適切なものはどれか？",
+      "choices": [
+        "両者は、モデルの出力形式を望む形に誘導するための手法であり、片方は指示の論理的な記述を通じて、もう一方は指示自体の体裁を通じて効果を発揮する。",
+        "両者は、モデルの出力形式を制限するための手法であり、片方はシステムエラーによる強制終了を通じて、もう一方は課金の増額ペナルティを通じて効果を発揮する。",
+        "両者は、モデルの出力形式を自由にするための手法であり、片方はすべての出力規則を破棄させることで、もう一方はランダムな書式を生成させることで効果を発揮する。"
+      ],
+      "answerIndex": 0,
+      "revealAnswer": false,
+      "explanation": "「否定形ではなく肯定形で指示する」アプローチは、「何をしないか」ではなく「何をするか」を明確に言語化して伝えることで、モデルに期待するフォーマットを論理的に理解させます。\n\n「形式インジケーターとスタイルの模倣」アプローチは、書き手がプロンプト内で使用したフォーマットのスタイルそのものがモデルの応答に影響を与える性質を利用し、言葉での説明だけでなく実例としての体裁を通じて出力を誘導します。",
+      "termIds": [
+        "positive-instruction",
+        "format-indicator"
+      ],
+      "sourceArticleIds": [
+        "a-prompting-best-practices"
+      ],
+      "generatedBy": "gemini-3.8-flash"
+    },
+    {
+      "id": "q-action-request-over-prompting",
+      "type": "relationship",
+      "fieldId": "prompting",
+      "patternType": "select-correct",
+      "body": "{{term:explicit-action-request}}と{{term:over-prompting}}の調整における関係性として、正しいものはどれか？",
+      "choices": [
+        "モデルに対して実行を明示的に要求する表現は常に無害であるため、指示の強さを調整することなく過去のプロンプトをすべて流用する。",
+        "モデルに対して実行を明示的に要求するアプローチは有効であるが、反応性が向上した環境では強すぎる言葉遣いが逆効果になる場合がある。",
+        "モデルに対して実行を明示的に要求する表現は常に有害であるため、指示の強さを調整するのではなくすべての行動要求をプロンプトから削除する。"
+      ],
+      "answerIndex": 1,
+      "revealAnswer": false,
+      "explanation": "行動を明示的に要求する手法は、モデルが提案だけを返して実装を怠るのを防ぎ、期待通りのツール使用や作業を確実に実行させるために必要なアプローチです。\n\n過剰なプロンプトの概念が示す通り、新しい環境では指示への反応性が高まっているため、過去に有効だった「必ず使わなければならない」といった強すぎる指示は、必要以上に機能を呼び出す過剰なトリガーとなる場合があります。",
+      "termIds": [
+        "explicit-action-request",
+        "over-prompting"
+      ],
+      "sourceArticleIds": [
+        "a-prompting-best-practices"
+      ],
+      "generatedBy": "gemini-3.8-flash"
+    },
+    {
+      "id": "q-self-check-overengineering",
+      "type": "relationship",
+      "fieldId": "prompting",
+      "patternType": "select-best",
+      "body": "{{term:self-check-prompt}}と{{term:overengineering-control}}に共通する運用の課題として、最も適切なものはどれか？",
+      "choices": [
+        "出力の品質を担保するための指示やモデルの親切さが、結果として不要な処理や過剰な作り込みを生み出し、リソースを無駄に消費する要因になる場合があること。",
+        "出力の品質を担保するための指示やモデルの親切さが、結果としてシステム全体のセキュリティ設定を無効化し、致命的な情報漏洩を引き起こす要因になる場合があること。",
+        "出力の品質を担保するための指示やモデルの親切さが、結果としてユーザーインターフェースのデザインを破壊し、アプリケーションの操作性を著しく低下させる場合があること。"
+      ],
+      "answerIndex": 0,
+      "revealAnswer": false,
+      "explanation": "自己チェックの依頼はエラーを捕捉する有効な手法ですが、自身の作業を十分に検証できる環境において過去の強い検証指示が残っていると、過剰な検証ループを招きトークンとレイテンシを浪費してしまいます。\n\n過剰設計の抑制は、モデルが良かれと思って要求されていない柔軟性や不必要な抽象化を組み込むのを防ぐための観点であり、現在のタスクに必要な最小限の実装に留めることを目的としています。",
+      "termIds": [
+        "self-check-prompt",
+        "overengineering-control"
+      ],
+      "sourceArticleIds": [
+        "a-prompting-best-practices"
       ],
       "generatedBy": "gemini-3.8-flash"
     }
