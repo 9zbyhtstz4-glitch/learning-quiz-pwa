@@ -1,6 +1,6 @@
 // 配信内容を更新する際はバージョンも更新する。
 const PREFIX = `learning-quiz:${self.registration.scope}:`;
-const CACHE = `${PREFIX}v21`;
+const CACHE = `${PREFIX}v22`;
 const FILES = ['./', './index.html', './style.css', './app.js', './config.js',
   './progress.js', './db.js', './data.json', './manifest.json',
   './icons/icon-192.png', './icons/icon-512.png', './icons/apple-touch-icon.png'];

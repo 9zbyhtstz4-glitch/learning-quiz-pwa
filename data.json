@@ -104,6 +104,20 @@
       "url": "https://platform.claude.com/docs/ja/test-and-evaluate/develop-tests",
       "source": "claude-docs",
       "fieldId": "evaluation"
+    },
+    {
+      "id": "a-compaction",
+      "title": "コンパクション",
+      "url": "https://platform.claude.com/docs/ja/build-with-claude/compaction",
+      "source": "claude-docs",
+      "fieldId": "llm-performance"
+    },
+    {
+      "id": "a-context-editing",
+      "title": "コンテキスト編集",
+      "url": "https://platform.claude.com/docs/ja/build-with-claude/context-editing",
+      "source": "claude-docs",
+      "fieldId": "llm-performance"
     }
   ],
   "terms": [
@@ -115,7 +129,12 @@
       "relatedTermIds": [
         "rag",
         "context-window-exceeded",
-        "separate-grader"
+        "separate-grader",
+        "context-rot",
+        "context-accounting",
+        "token-accumulation",
+        "context-awareness",
+        "state-artifact"
       ],
       "questionIds": [
         "q-context-window"
@@ -195,7 +214,9 @@
         "tool-choice",
         "tool-search-tool",
         "input-json-delta",
-        "interleaved-thinking"
+        "interleaved-thinking",
+        "compaction-tool-conflict",
+        "clear-tool-results"
       ],
       "questionIds": [
         "q-tool-use"
@@ -210,7 +231,8 @@
       "shortDefinition": "着手する前に、ユースケースにおける成功基準の明確な定義やテスト方法を確立しておくことが推奨される。",
       "fieldId": "llm",
       "relatedTermIds": [
-        "context-window"
+        "context-window",
+        "context-engineering"
       ],
       "questionIds": [
         "q-prompt-engineering"
@@ -225,7 +247,8 @@
       "shortDefinition": "ツール呼び出しを確実に必須化したい場合は、プロンプトでの指示に頼らずパラメータ側で直接設定を行う。",
       "fieldId": "llm",
       "relatedTermIds": [
-        "tool-use"
+        "tool-use",
+        "compaction-tool-conflict"
       ],
       "questionIds": [
         "q-tool-choice"
@@ -486,7 +509,8 @@
         "adaptive-thinking",
         "thinking-cost",
         "thinking-display",
-        "summarized-thinking"
+        "summarized-thinking",
+        "clear-thinking"
       ],
       "questionIds": [
         "q-thinking"
@@ -536,7 +560,8 @@
       "fieldId": "llm-parameters",
       "relatedTermIds": [
         "adaptive-thinking",
-        "thinking-cost"
+        "thinking-cost",
+        "task-budget"
       ],
       "questionIds": [
         "q-effort"
@@ -605,7 +630,8 @@
       "relatedTermIds": [
         "thinking-signature",
         "assistant-turn",
-        "redacted-thinking"
+        "redacted-thinking",
+        "clear-thinking"
       ],
       "questionIds": [
         "q-preserving-thinking"
@@ -703,7 +729,8 @@
       "fieldId": "llm-basics",
       "relatedTermIds": [
         "context-window",
-        "thinking-cost"
+        "thinking-cost",
+        "prompt-too-long"
       ],
       "questionIds": [
         "q-context-window-exceeded"
@@ -938,6 +965,269 @@
       ],
       "referenceArticleIds": [
         "a-develop-tests"
+      ]
+    },
+    {
+      "id": "context-rot",
+      "label": "コンテキストの劣化",
+      "shortDefinition": "トークン数が増えるにつれて精度と再現率が低下する現象。容量が大きくても多ければ良いわけではなく、何を含めるかの厳選が容量の大きさと同じくらい重要になる。",
+      "fieldId": "llm-basics",
+      "relatedTermIds": [
+        "context-window",
+        "compaction",
+        "context-engineering"
+      ],
+      "questionIds": [
+        "q-context-rot"
+      ],
+      "referenceArticleIds": [
+        "a-context-windows"
+      ]
+    },
+    {
+      "id": "context-engineering",
+      "label": "コンテキストエンジニアリング",
+      "shortDefinition": "コンテキストに何を含め、何を含めないかを設計する考え方。プロンプトエンジニアリングが「どう書くか」を扱うのに対し、「何を渡すか」を扱う。",
+      "fieldId": "prompting",
+      "relatedTermIds": [
+        "context-rot",
+        "prompt-engineering"
+      ],
+      "questionIds": [
+        "q-context-engineering"
+      ],
+      "referenceArticleIds": [
+        "a-context-windows"
+      ]
+    },
+    {
+      "id": "context-accounting",
+      "label": "コンテキストの計上",
+      "shortDefinition": "システムプロンプト、ツール結果や画像を含むメッセージ、ツール定義、生成される出力など、リクエスト内のすべてがコンテキストウィンドウに数えられる。キャッシュされたプレフィックスも占有し続ける。",
+      "fieldId": "llm-basics",
+      "relatedTermIds": [
+        "context-window"
+      ],
+      "questionIds": [
+        "q-context-accounting"
+      ],
+      "referenceArticleIds": [
+        "a-context-windows"
+      ]
+    },
+    {
+      "id": "token-accumulation",
+      "label": "段階的なトークンの蓄積",
+      "shortDefinition": "会話を重ねるにつれて各メッセージと応答がコンテキストウィンドウに蓄積され、以前のターンは完全に保持される。出力が次のターンの入力の一部になる循環構造を持つ。",
+      "fieldId": "llm-basics",
+      "relatedTermIds": [
+        "context-window",
+        "compaction",
+        "context-rot"
+      ],
+      "questionIds": [
+        "q-token-accumulation"
+      ],
+      "referenceArticleIds": [
+        "a-context-windows"
+      ]
+    },
+    {
+      "id": "token-counting",
+      "label": "トークンカウントAPI",
+      "shortDefinition": "メッセージを送信する前にトークン使用量を見積もる仕組み。リクエストがコンテキストウィンドウの上限に収まるかを、送ってから失敗するのではなく事前に確かめる。",
+      "fieldId": "llm-performance",
+      "relatedTermIds": [
+        "context-accounting",
+        "prompt-too-long"
+      ],
+      "questionIds": [
+        "q-token-counting"
+      ],
+      "referenceArticleIds": [
+        "a-context-windows"
+      ]
+    },
+    {
+      "id": "context-awareness",
+      "label": "コンテキスト認識",
+      "shortDefinition": "一部のモデルが残りのコンテキストウィンドウを追跡する能力。APIが合計と各ツール呼び出し後の残り容量を自動で伝え、モデルは推測でなく把握した容量で長いタスクを管理する。",
+      "fieldId": "llm-reasoning",
+      "relatedTermIds": [
+        "context-window",
+        "task-budget",
+        "token-accumulation"
+      ],
+      "questionIds": [
+        "q-context-awareness"
+      ],
+      "referenceArticleIds": [
+        "a-context-windows"
+      ]
+    },
+    {
+      "id": "task-budget",
+      "label": "タスク予算",
+      "shortDefinition": "コンテキスト認識の情報を受け取らないモデル向けに、開発者が明示的な予算をモデルへ与える仕組み。残り容量を意識させるという目的はコンテキスト認識と共通する。",
+      "fieldId": "llm-parameters",
+      "relatedTermIds": [
+        "context-awareness",
+        "effort"
+      ],
+      "questionIds": [
+        "q-task-budget"
+      ],
+      "referenceArticleIds": [
+        "a-context-windows"
+      ]
+    },
+    {
+      "id": "compaction",
+      "label": "サーバーサイドコンパクション",
+      "shortDefinition": "コンテキストウィンドウの上限に近づくと、会話の前半をサーバー上で自動的に要約する戦略。クライアント側の要約コードが不要で、容量の確保に加えて長い会話での品質低下も防ぐ。",
+      "fieldId": "llm-performance",
+      "relatedTermIds": [
+        "context-rot",
+        "context-editing",
+        "token-accumulation"
+      ],
+      "questionIds": [
+        "q-compaction"
+      ],
+      "referenceArticleIds": [
+        "a-compaction"
+      ]
+    },
+    {
+      "id": "compaction-tool-conflict",
+      "label": "コンパクション時のツール呼び出し問題",
+      "shortDefinition": "ツールが定義されていると、モデルが内部の要約ステップ中に要約を書く代わりにツールを呼び、空のコンパクションが返ることがある。要約の指示で、書いている間はツールを呼ばないよう明示して防ぐ。",
+      "fieldId": "llm-performance",
+      "relatedTermIds": [
+        "compaction",
+        "tool-use",
+        "tool-choice"
+      ],
+      "questionIds": [
+        "q-compaction-tool-conflict"
+      ],
+      "referenceArticleIds": [
+        "a-compaction"
+      ]
+    },
+    {
+      "id": "context-editing",
+      "label": "コンテキスト編集",
+      "shortDefinition": "コンパクションより専門的なニーズに応える戦略。要約して置き換えるのではなく、ツール結果や思考ブロックといったコンテンツをサーバーサイドでクリアする。",
+      "fieldId": "llm-performance",
+      "relatedTermIds": [
+        "compaction",
+        "clear-tool-results",
+        "clear-thinking"
+      ],
+      "questionIds": [
+        "q-context-editing"
+      ],
+      "referenceArticleIds": [
+        "a-context-editing"
+      ]
+    },
+    {
+      "id": "clear-tool-results",
+      "label": "ツール結果のクリア",
+      "shortDefinition": "会話がしきい値を超えて増えたときにツール結果をクリアする戦略。ファイルの内容や検索結果などの古いツール結果は、モデルが処理した後は不要になるという考えに基づく。",
+      "fieldId": "llm-performance",
+      "relatedTermIds": [
+        "context-editing",
+        "tool-use",
+        "context-rot"
+      ],
+      "questionIds": [
+        "q-clear-tool-results"
+      ],
+      "referenceArticleIds": [
+        "a-context-editing"
+      ]
+    },
+    {
+      "id": "clear-thinking",
+      "label": "思考ブロックのクリア",
+      "shortDefinition": "会話内の思考ブロックを管理する戦略。推論の連続性のために保持するか、領域の節約のために積極的にクリアするかを選ぶ。モデルごとにデフォルトが違うため明示的に設定する。",
+      "fieldId": "llm-reasoning",
+      "relatedTermIds": [
+        "context-editing",
+        "preserving-thinking",
+        "thinking"
+      ],
+      "questionIds": [
+        "q-clear-thinking"
+      ],
+      "referenceArticleIds": [
+        "a-context-editing"
+      ]
+    },
+    {
+      "id": "editing-cache-conflict",
+      "label": "コンテキスト編集とキャッシュの衝突",
+      "shortDefinition": "コンテンツをクリアするとプロンプト構造が変わり、キャッシュされたプレフィックスが無効化される。無効化に見合うよう、毎回十分な量のトークンをクリアするのが対策になる。",
+      "fieldId": "llm-performance",
+      "relatedTermIds": [
+        "context-editing"
+      ],
+      "questionIds": [
+        "q-editing-cache-conflict"
+      ],
+      "referenceArticleIds": [
+        "a-context-editing"
+      ]
+    },
+    {
+      "id": "prompt-too-long",
+      "label": "入力超過エラー",
+      "shortDefinition": "入力だけですでにコンテキストウィンドウを超えている場合に、すべてのモデルで返るエラー。受け付けたうえで生成の途中に上限へ達して止まる場合とは区別される。",
+      "fieldId": "llm-basics",
+      "relatedTermIds": [
+        "context-window-exceeded",
+        "token-counting",
+        "context-accounting"
+      ],
+      "questionIds": [
+        "q-prompt-too-long"
+      ],
+      "referenceArticleIds": [
+        "a-context-windows"
+      ]
+    },
+    {
+      "id": "usage-reporting",
+      "label": "使用量の内訳",
+      "shortDefinition": "応答のusageフィールドは消費量を報告する。プロンプトキャッシングを使うと入力は通常・キャッシュ読み取り・キャッシュ作成の3つに分かれるが、3つともコンテキストウィンドウに数えられる。",
+      "fieldId": "data-formats",
+      "relatedTermIds": [
+        "context-accounting"
+      ],
+      "questionIds": [
+        "q-usage-reporting"
+      ],
+      "referenceArticleIds": [
+        "a-context-windows"
+      ]
+    },
+    {
+      "id": "state-artifact",
+      "label": "状態アーティファクト",
+      "shortDefinition": "複数のセッションにまたがって動くエージェントのために、新しいセッションの開始時にコンテキストを素早く復元できるよう設計しておく成果物。セッション間の引き継ぎを扱う。",
+      "fieldId": "llm-reasoning",
+      "relatedTermIds": [
+        "compaction",
+        "context-engineering",
+        "context-window"
+      ],
+      "questionIds": [
+        "q-state-artifact"
+      ],
+      "referenceArticleIds": [
+        "a-context-windows"
       ]
     }
   ],
@@ -1220,7 +1510,7 @@
       ],
       "answerIndex": 0,
       "revealAnswer": true,
-      "explanation": "ツール検索ツールは、対象のツール定義の読み込みを遅延（`defer_loading: true`を指定）させ、必要になった時点でオンデマンドに検索・読み込みを行うサーバーツールです。これにより、コンテキストウィンドウの消費を抑えながら数千規模のツールを扱うことが可能になります。",
+      "explanation": "ツール検索ツールは、対象のツール定義の読み込みを遅延（defer_loading: trueを指定）させ、必要になった時点でオンデマンドに検索・読み込みを行うサーバーツールです。これにより、コンテキストウィンドウの消費を抑えながら数千規模のツールを扱うことが可能になります。",
       "termIds": [
         "tool-search-tool"
       ],
@@ -2194,6 +2484,450 @@
       ],
       "sourceArticleIds": [
         "a-develop-tests"
+      ],
+      "generatedBy": "gemini-3.8-flash"
+    },
+    {
+      "id": "q-context-rot",
+      "type": "term",
+      "fieldId": "llm-basics",
+      "patternType": "select-correct",
+      "body": "{{term:context-window}}が大きいほど複雑な指示を処理できるが、これに伴って発生する「コンテキストの劣化」の性質として、正しいものはどれか？",
+      "choices": [
+        "情報量が増加するにつれて、モデルの回答における精度と再現率が次第に低下していくという性質である。",
+        "情報量が増加するにつれて、モデルの回答における計算速度と記憶容量が指数関数的に向上するという性質である。",
+        "情報量が増加するにつれて、モデルの回答における言語表現と多様性が自動的に制限されていくという性質である。"
+      ],
+      "answerIndex": 0,
+      "revealAnswer": true,
+      "explanation": "コンテキストウィンドウが大きくても、トークン数が増えるにつれてモデルの精度と再現率は低下します。この現象はコンテキストの劣化と呼ばれ、情報を含める際の厳選が重要となる理由です。",
+      "termIds": [
+        "context-window"
+      ],
+      "sourceArticleIds": [
+        "a-context-windows"
+      ],
+      "generatedBy": "gemini-3.8-flash"
+    },
+    {
+      "id": "q-context-engineering",
+      "type": "term",
+      "fieldId": "prompting",
+      "patternType": "select-incorrect",
+      "body": "{{term:context-rot}}などの課題を防ぐために行う「コンテキストエンジニアリング」の手法として、誤っているものはどれか？",
+      "choices": [
+        "リクエストの容量を限界まで使い切るのではなく、要件に合わせて情報を厳選して渡すように設計する手法。",
+        "リクエストの容量を限界まで使い切るために、関連性の薄い情報も積極的に詰め込んで渡すように設計する手法。",
+        "リクエストの表現方法そのものを工夫するのではなく、どのような情報をモデルに渡すかを細かく設計する手法。"
+      ],
+      "answerIndex": 1,
+      "revealAnswer": true,
+      "explanation": "コンテキストエンジニアリングは、コンテキストの劣化を防ぐために「容量いっぱいまで詰め込む」のではなく、何を含め何を含めないかを「厳選する」設計手法です。したがって「関連性の薄い情報も積極的に詰め込んで渡す」という記述が誤りです。",
+      "termIds": [
+        "context-rot"
+      ],
+      "sourceArticleIds": [
+        "a-context-windows"
+      ],
+      "generatedBy": "gemini-3.8-flash"
+    },
+    {
+      "id": "q-context-accounting",
+      "type": "term",
+      "fieldId": "llm-basics",
+      "patternType": "select-best",
+      "body": "モデルの{{term:context-window}}を消費する要素について、仕様として最も適切なものはどれか？",
+      "choices": [
+        "送信したメッセージの内容と画像の容量のみがカウントされ、ツール定義やシステムプロンプトは消費量から除外される仕組みである。",
+        "キャッシュされたプレフィックスは消費量から完全に除外され、新たに送信したメッセージの内容のみがカウントされる仕組みである。",
+        "ツール定義やシステムプロンプトなどを含めたすべての内容がカウントされ、キャッシュされた部分も引き続き消費される仕組みである。"
+      ],
+      "answerIndex": 2,
+      "revealAnswer": true,
+      "explanation": "リクエスト内のすべてがコンテキストウィンドウにカウントされます。これにはメッセージ、画像、ツール結果だけでなく、見落としがちなツール定義も含まれます。また、キャッシュされたプロンプトプレフィックスも引き続き容量を占有します。",
+      "termIds": [
+        "context-window"
+      ],
+      "sourceArticleIds": [
+        "a-context-windows"
+      ],
+      "generatedBy": "gemini-3.8-flash"
+    },
+    {
+      "id": "q-token-accumulation",
+      "type": "term",
+      "fieldId": "llm-basics",
+      "patternType": "select-correct",
+      "body": "会話が続くにつれて{{term:context-window}}の中で発生する段階的なトークンの蓄積について、正しいものはどれか？",
+      "choices": [
+        "会話が進むにつれて古い履歴が自動で削除され、最新のユーザーメッセージのみが保持されて入力となる仕様になっている。",
+        "会話が進むにつれて以前の履歴が完全に保持され、前回の出力が次のターンの入力の一部として追加される仕様になっている。",
+        "会話が進むにつれて各ターンの出力が独立して処理され、前回の出力は次の入力には一切反映されない仕様になっている。"
+      ],
+      "answerIndex": 1,
+      "revealAnswer": true,
+      "explanation": "会話がターンを重ねると、以前のターンは完全に保持され、出力が次のターンの入力の一部となって循環的に蓄積されていく構造になっています。",
+      "termIds": [
+        "context-window"
+      ],
+      "sourceArticleIds": [
+        "a-context-windows"
+      ],
+      "generatedBy": "gemini-3.8-flash"
+    },
+    {
+      "id": "q-token-counting",
+      "type": "term",
+      "fieldId": "llm-performance",
+      "patternType": "select-incorrect",
+      "body": "{{term:context-window}}の上限に収まるかを確認するための「トークンカウントAPI」の運用として、誤っているものはどれか？",
+      "choices": [
+        "リクエストを実際に送信して失敗するのを防ぐため、メッセージを送る前に使用量を事前見積もりする目的で利用される。",
+        "リクエストを実際に送信して失敗するのを防ぐため、複雑なマルチターンの会話などで正確なカウントを得る目的で利用される。",
+        "リクエストを実際に送信して失敗したことを受けて、どの部分が上限を超過していたのかを事後分析する目的で利用される。"
+      ],
+      "answerIndex": 2,
+      "revealAnswer": true,
+      "explanation": "トークンカウントAPIは「送ってみて失敗する」のを防ぐため、事前にトークン使用量を見積もる仕組みです。したがって「送信して失敗したことを受けて事後分析する」という記述が誤りです。",
+      "termIds": [
+        "context-window"
+      ],
+      "sourceArticleIds": [
+        "a-context-windows"
+      ],
+      "generatedBy": "gemini-3.8-flash"
+    },
+    {
+      "id": "q-context-awareness",
+      "type": "term",
+      "fieldId": "llm-reasoning",
+      "patternType": "select-best",
+      "body": "一部のモデルに備わっている、{{term:context-window}}の残り容量を把握する「コンテキスト認識」の仕様として、最も適切なものはどれか？",
+      "choices": [
+        "システムが各ツール呼び出しの後に残り容量の更新情報を自動で伝えるため、開発者が明示的に予算のタグを送る必要はない。",
+        "開発者が各ツール呼び出しの後に残り容量の更新情報を手動で伝えるため、システムが暗黙的に予算のタグを送ることはない。",
+        "システムが各ツール呼び出しの前に残り容量の更新情報を推測で伝えるため、開発者が明示的に予算のタグを送る必要はない。"
+      ],
+      "answerIndex": 0,
+      "revealAnswer": true,
+      "explanation": "コンテキスト認識は、システムが各ツール呼び出しの後に残り容量の更新情報を自動的に伝える仕組みです。開発者が有効化したり、自分で予算のタグを送ったりする必要はありません。",
+      "termIds": [
+        "context-window"
+      ],
+      "sourceArticleIds": [
+        "a-context-windows"
+      ],
+      "generatedBy": "gemini-3.8-flash"
+    },
+    {
+      "id": "q-task-budget",
+      "type": "term",
+      "fieldId": "llm-parameters",
+      "patternType": "select-correct",
+      "body": "自動で容量を把握する{{term:context-awareness}}に対応していないモデル向けの「タスク予算」の仕様として、正しいものはどれか？",
+      "choices": [
+        "システムが会話履歴から推論して自動的に残り容量を算出するための仕組みであり、開発者のコード側での設定作業は要求されない。",
+        "システムが画像や外部文書から推論して自動的に残り容量を算出するための仕組みであり、開発者のコード側での設定作業は要求されない。",
+        "モデルに利用可能な残り容量を明示的に認識させるための仕組みであり、開発者のコード側で意図的に設定作業を行うことが要求される。"
+      ],
+      "answerIndex": 2,
+      "revealAnswer": true,
+      "explanation": "自動的に機能するコンテキスト認識とは対照的に、タスク予算は開発者が意図的に明示的な予算をモデルに与える仕組みです。",
+      "termIds": [
+        "context-awareness"
+      ],
+      "sourceArticleIds": [
+        "a-context-windows"
+      ],
+      "generatedBy": "gemini-3.8-flash"
+    },
+    {
+      "id": "q-compaction",
+      "type": "term",
+      "fieldId": "llm-performance",
+      "patternType": "select-incorrect",
+      "body": "{{term:context-rot}}による品質低下を防ぐ「サーバーサイドコンパクション」の特徴として、誤っているものはどれか？",
+      "choices": [
+        "クライアント側のアプリケーションに複雑な要約コードを実装し、定期的に会話の履歴を短く切り詰める処理を実行する必要がある。",
+        "上限に近づいた際に会話の前半部分を自動的に要約し、不要になった古いコンテンツを簡潔な情報に置き換える処理を実行する。",
+        "コンテキストを小さく保つことで容量を確保するだけでなく、会話が長くなるにつれて生じる応答品質の低下を防ぐ処理を実行する。"
+      ],
+      "answerIndex": 0,
+      "revealAnswer": true,
+      "explanation": "サーバーサイドコンパクションはサーバー上で自動的に要約を実行するため、クライアント側の要約コードを必要としないのが大きな利点です。したがって「クライアント側に要約コードを実装する必要がある」という記述が誤りです。",
+      "termIds": [
+        "context-rot"
+      ],
+      "sourceArticleIds": [
+        "a-compaction"
+      ],
+      "generatedBy": "gemini-3.8-flash"
+    },
+    {
+      "id": "q-compaction-tool-conflict",
+      "type": "term",
+      "fieldId": "llm-performance",
+      "patternType": "select-best",
+      "body": "{{term:compaction}}を実行する際に発生しうるツールの競合問題への対処として、最も適切なものはどれか？",
+      "choices": [
+        "要約処理を開始する前にツールの定義自体をシステムから完全に削除し、機能そのものを呼び出せないように設計を調整する。",
+        "要約処理を実行する指示の中に、内部的な処理を行っている間はツールを絶対に呼び出さないよう明示的な文言を追加する。",
+        "要約処理が完了するまでネットワークの通信を一時的に遮断し、外部のツールが不用意に情報を取得できないように制限をかける。"
+      ],
+      "answerIndex": 1,
+      "revealAnswer": true,
+      "explanation": "コンパクション中にモデルが誤ってツールを呼び出してしまうことを防ぐため、要約の指示の中で「要約を書いている間はツールを呼ばない」よう明示的に指示を追加して対処します。",
+      "termIds": [
+        "compaction"
+      ],
+      "sourceArticleIds": [
+        "a-compaction"
+      ],
+      "generatedBy": "gemini-3.8-flash"
+    },
+    {
+      "id": "q-context-editing",
+      "type": "term",
+      "fieldId": "llm-performance",
+      "patternType": "select-correct",
+      "body": "要約で置き換える{{term:compaction}}とは異なる「コンテキスト編集」のアプローチとして、正しいものはどれか？",
+      "choices": [
+        "不要になった古い結果や思考ブロックを完全に削除してクリアし、より専門的な要件に合わせてコンテキスト領域を確保する。",
+        "不要になった古い結果や思考ブロックを外部のデータベースへ退避させ、より専門的な要件に合わせてコンテキスト領域を確保する。",
+        "不要になった古い結果や思考ブロックを暗号化してサイズを圧縮し、より専門的な要件に合わせてコンテキスト領域を確保する。"
+      ],
+      "answerIndex": 0,
+      "revealAnswer": true,
+      "explanation": "コンパクションが「要約して置き換える」のに対し、専門的なニーズに応えるコンテキスト編集は、ツール結果や思考ブロックなどのコンテンツを「完全に削除してクリアする」アプローチをとります。",
+      "termIds": [
+        "compaction"
+      ],
+      "sourceArticleIds": [
+        "a-context-editing"
+      ],
+      "generatedBy": "gemini-3.8-flash"
+    },
+    {
+      "id": "q-clear-tool-results",
+      "type": "term",
+      "fieldId": "llm-performance",
+      "patternType": "select-incorrect",
+      "body": "{{term:context-editing}}の戦略の一つである「ツール結果のクリア」の運用として、誤っているものはどれか？",
+      "choices": [
+        "検索結果やファイルの内容などの古い情報は処理が済んだ後には不要になるという根拠に基づいて対象のデータを削除する。",
+        "検索結果やファイルの内容などの古い情報は処理が済んだ後にも必須になるという根拠に基づいて対象のデータを削除せずに残す。",
+        "検索結果やファイルの内容などの古い情報が積み重なりやすいエージェントワークフローにおいてコンテキストを節約するために削除する。"
+      ],
+      "answerIndex": 1,
+      "revealAnswer": true,
+      "explanation": "古いツール結果はその時点では有用でも処理後は不要になるという根拠に基づいて削除を行います。したがって「処理が済んだ後にも必須になるという根拠に基づいて残す」という記述が誤りです。",
+      "termIds": [
+        "context-editing"
+      ],
+      "sourceArticleIds": [
+        "a-context-editing"
+      ],
+      "generatedBy": "gemini-3.8-flash"
+    },
+    {
+      "id": "q-clear-thinking",
+      "type": "term",
+      "fieldId": "llm-reasoning",
+      "patternType": "select-best",
+      "body": "{{term:context-editing}}において思考ブロックを管理する際の考え方として、最も適切なものはどれか？",
+      "choices": [
+        "推論の連続性を保つためにすべての思考ブロックを自動で削除し、常に最新のシステムプロンプトだけで処理を構築するよう設計する。",
+        "推論の連続性を保つためにすべての思考ブロックをファイルへ退避し、常に外部からデータを読み込んで処理を構築するよう設計する。",
+        "推論の連続性を保つためにブロックを保持するか、領域を節約するために積極的にクリアするかというトレードオフを考慮して設計する。"
+      ],
+      "answerIndex": 2,
+      "revealAnswer": true,
+      "explanation": "思考ブロックのクリアにおいては、推論の連続性を維持するために保持するか、コンテキスト領域を節約するためにより積極的にクリアするかのトレードオフを選んで設計することが重要です。",
+      "termIds": [
+        "context-editing"
+      ],
+      "sourceArticleIds": [
+        "a-context-editing"
+      ],
+      "generatedBy": "gemini-3.8-flash"
+    },
+    {
+      "id": "q-editing-cache-conflict",
+      "type": "term",
+      "fieldId": "llm-performance",
+      "patternType": "select-correct",
+      "body": "{{term:context-editing}}がプロンプトのキャッシュに与える影響とその対策として、正しいものはどれか？",
+      "choices": [
+        "コンテンツをクリアしてもプロンプトの構造は維持され、キャッシュのヒット率が自動的に向上するため、頻繁に削除を実行することが推奨される。",
+        "コンテンツをクリアするとプロンプトの構造が変わりキャッシュが無効化されるため、無効化に見合う十分な量をまとめて削除することが推奨される。",
+        "コンテンツをクリアするとプロンプトの構造が変わりキャッシュが上書きされるため、少量のトークンを毎回こまめに削除することが推奨される。"
+      ],
+      "answerIndex": 1,
+      "revealAnswer": true,
+      "explanation": "コンテンツをクリアするとプロンプト構造が変わりキャッシュが無効化されるため、無効化のコストに見合うように、毎回十分なトークンがクリアされるようパラメータで調整することが推奨されます。",
+      "termIds": [
+        "context-editing"
+      ],
+      "sourceArticleIds": [
+        "a-context-editing"
+      ],
+      "generatedBy": "gemini-3.8-flash"
+    },
+    {
+      "id": "q-prompt-too-long",
+      "type": "term",
+      "fieldId": "llm-basics",
+      "patternType": "select-incorrect",
+      "body": "{{term:token-counting}}などで事前に防ぐべき「入力超過エラー」の仕様として、誤っているものはどれか？",
+      "choices": [
+        "生成処理が始まる前の段階で入力自体がモデルの上限を超過している場合に、すべてのモデルにおいて事前のエラーとして返却される。",
+        "生成途中で上限に達して専用の理由とともに停止する挙動とは明確に区別されており、リクエスト自体が受け付けられない状態を指す。",
+        "生成途中で上限に達して専用の理由とともに停止する挙動と同一のものとして扱われ、リクエスト自体は受け付けられる状態を指す。"
+      ],
+      "answerIndex": 2,
+      "revealAnswer": true,
+      "explanation": "入力のみですでに上限を超過している場合はリクエスト自体が受け付けられず事前のエラーとなるため、途中で上限に達して止まる挙動とは明確に区別されます。したがって「途中で上限に達して停止する挙動と同一のものとして扱われる」という記述が誤りです。",
+      "termIds": [
+        "token-counting"
+      ],
+      "sourceArticleIds": [
+        "a-context-windows"
+      ],
+      "generatedBy": "gemini-3.8-flash"
+    },
+    {
+      "id": "q-usage-reporting",
+      "type": "term",
+      "fieldId": "data-formats",
+      "patternType": "select-best",
+      "body": "応答に含まれる利用量報告において、キャッシュを利用した際の{{term:context-window}}の計算方法として、最も適切なものはどれか？",
+      "choices": [
+        "入力のカウントは通常の入力とキャッシュ関連の複数項目に分割して報告されるが、それらすべてがウィンドウの消費量として合算される。",
+        "入力のカウントは通常の入力とキャッシュ関連の複数項目に分割して報告され、キャッシュ関連の数値はウィンドウの消費量から除外される。",
+        "入力のカウントは通常の入力とキャッシュ関連の複数項目に分割して報告され、通常の入力の数値のみがウィンドウの消費量から除外される。"
+      ],
+      "answerIndex": 0,
+      "revealAnswer": true,
+      "explanation": "プロンプトキャッシングを利用すると使用量報告の内訳は分割されますが、通常の入力トークンとキャッシュ関連のトークンのすべてがコンテキストウィンドウの消費量として合算されます。",
+      "termIds": [
+        "context-window"
+      ],
+      "sourceArticleIds": [
+        "a-context-windows"
+      ],
+      "generatedBy": "gemini-3.8-flash"
+    },
+    {
+      "id": "q-state-artifact",
+      "type": "term",
+      "fieldId": "llm-reasoning",
+      "patternType": "select-correct",
+      "body": "1セッション内の圧縮を扱う{{term:compaction}}とは異なる「状態アーティファクト」の役割として、正しいものはどれか？",
+      "choices": [
+        "単一のセッション内で発生するネットワークの切断に備えてデータをメモリに保持し、通信が回復した際に迅速に処理を再開できるようにする役割。",
+        "単一のセッション内で発生するプログラムの例外に備えてデータをメモリに保持し、エラーが解消された際に迅速に処理を再開できるようにする役割。",
+        "複数のセッションにまたがって動くシステムのためにデータを設計し、新しいセッションの開始時にコンテキストを迅速に復元できるようにする役割。"
+      ],
+      "answerIndex": 2,
+      "revealAnswer": true,
+      "explanation": "状態アーティファクトは、複数のセッションにまたがって動くエージェントのために、新しいセッションの開始時にコンテキストを迅速に復元できるように設計された成果物のことです。",
+      "termIds": [
+        "compaction"
+      ],
+      "sourceArticleIds": [
+        "a-context-windows"
+      ],
+      "generatedBy": "gemini-3.8-flash"
+    },
+    {
+      "id": "q-context-rot-compaction",
+      "type": "relationship",
+      "fieldId": "llm-basics",
+      "patternType": "select-incorrect",
+      "body": "{{term:context-rot}}と{{term:compaction}}の関係性について説明したものとして、誤っているものはどれか？",
+      "choices": [
+        "古い内容を簡潔な要約に置き換える処理は、会話の品質低下を促進してしまうため、モデルの回答における正確性を高める目的では利用されない。",
+        "古い内容を簡潔な要約に置き換える処理は、記憶できるデータ量を確保するだけでなく、会話が長くなることによる品質の低下を防ぐ目的でも利用される。",
+        "会話が長くなるにつれて精度が低下する現象に対処するため、古い内容を簡潔な要約に置き換える処理を導入してシステム全体の品質を維持する。"
+      ],
+      "answerIndex": 0,
+      "revealAnswer": false,
+      "explanation": "容量の上限を確保する最適化手法は、同時に会話が長くなるにつれて発生する精度や再現率の低下現象を緩和するためにも適用されます。不要な情報を要約して削ぎ落とすことで、結果的に情報処理の品質を維持する狙いが含まれています。",
+      "termIds": [
+        "context-rot",
+        "compaction"
+      ],
+      "sourceArticleIds": [
+        "a-compaction"
+      ],
+      "generatedBy": "gemini-3.8-flash"
+    },
+    {
+      "id": "q-token-counting-prompt-too-long",
+      "type": "relationship",
+      "fieldId": "llm-performance",
+      "patternType": "select-best",
+      "body": "{{term:token-counting}}と{{term:prompt-too-long}}の関係性を示す運用手法として、最も適切なものはどれか？",
+      "choices": [
+        "リクエストが上限を超過して弾かれたことを事後分析のツールで検知し、次回の送信に向けて内容の長さを段階的に削減していく手法。",
+        "リクエストが上限を超過して弾かれる事態を回避するため、メッセージを送信する前に使用量を見積もり規定内に収まっているかを確認する手法。",
+        "リクエストが上限を超過して弾かれる事態を許容するため、メッセージを送信した後にシステム側で強制的に余分なデータを切り捨てる手法。"
+      ],
+      "answerIndex": 1,
+      "revealAnswer": false,
+      "explanation": "モデルが処理を開始する前に受け付けを拒否する事態を防ぐため、事前にサイズを見積もる手段が活用されます。エラーが発生してから対処するのではなく、送信前の段階で容量を正確に把握して問題を未然に防ぐ運用が求められます。",
+      "termIds": [
+        "token-counting",
+        "prompt-too-long"
+      ],
+      "sourceArticleIds": [
+        "a-context-windows"
+      ],
+      "generatedBy": "gemini-3.8-flash"
+    },
+    {
+      "id": "q-context-accounting-usage",
+      "type": "relationship",
+      "fieldId": "llm-basics",
+      "patternType": "select-correct",
+      "body": "{{term:context-accounting}}での取り扱いと、{{term:usage-reporting}}への反映に関する説明として、正しいものはどれか？",
+      "choices": [
+        "リクエストに含まれるすべての要素が容量としてカウントされ、キャッシュされたプロンプトであっても内訳が分割されるだけで消費量として報告される。",
+        "リクエストに含まれる一部の要素のみが容量としてカウントされ、キャッシュされたプロンプトであれば内訳が分割されて消費量から完全に除外される。",
+        "リクエストに含まれるすべての要素が容量としてカウントされ、キャッシュされたプロンプトであっても内訳は分割されずに通常分として合算報告される。"
+      ],
+      "answerIndex": 0,
+      "revealAnswer": false,
+      "explanation": "リクエストの構築に含まれる要素は、すべて利用枠を占有するものとしてカウントされます。コスト削減のための技術を適用した場合、報告される明細の項目は細分化されますが、全体として占有している容量そのものが削減されるわけではありません。",
+      "termIds": [
+        "context-accounting",
+        "usage-reporting"
+      ],
+      "sourceArticleIds": [
+        "a-context-windows"
+      ],
+      "generatedBy": "gemini-3.8-flash"
+    },
+    {
+      "id": "q-prompt-too-long-vs-exceeded",
+      "type": "relationship",
+      "fieldId": "llm-basics",
+      "patternType": "select-best",
+      "body": "{{term:prompt-too-long}}と{{term:context-window-exceeded}}が示す事象の違いとして、最も適切なものはどれか？",
+      "choices": [
+        "前者は処理が始まってから途中で中断される事象であり、後者は入り口の段階でリクエスト自体が拒否される事象である。",
+        "前者は入り口の段階でリクエスト自体が拒否される事象であり、後者は処理が始まってから途中で中断される事象である。",
+        "前者は画像の読み込みが原因で拒否される事象であり、後者はテキストの出力が原因で中断される事象である。"
+      ],
+      "answerIndex": 1,
+      "revealAnswer": false,
+      "explanation": "入力情報が多すぎる場合に発生する事象と、処理の実行中に上限に到達してしまう事象は、システム上の扱いが明確に分かれています。前者は処理が開始される前にエラーとして拒否されるのに対し、後者は処理が開始された上で専用のステータスとともに中断されます。",
+      "termIds": [
+        "prompt-too-long",
+        "context-window-exceeded"
+      ],
+      "sourceArticleIds": [
+        "a-context-windows"
       ],
       "generatedBy": "gemini-3.8-flash"
     }
