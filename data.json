@@ -97,6 +97,13 @@
       "url": "https://platform.claude.com/docs/ja/build-with-claude/effort",
       "source": "claude-docs",
       "fieldId": "llm-parameters"
+    },
+    {
+      "id": "a-develop-tests",
+      "title": "成功基準を定義し、評価を構築する",
+      "url": "https://platform.claude.com/docs/ja/test-and-evaluate/develop-tests",
+      "source": "claude-docs",
+      "fieldId": "evaluation"
     }
   ],
   "terms": [
@@ -107,7 +114,8 @@
       "fieldId": "llm",
       "relatedTermIds": [
         "rag",
-        "context-window-exceeded"
+        "context-window-exceeded",
+        "separate-grader"
       ],
       "questionIds": [
         "q-context-window"
@@ -704,6 +712,233 @@
         "a-thinking",
         "a-context-windows"
       ]
+    },
+    {
+      "id": "success-criteria",
+      "label": "成功基準",
+      "shortDefinition": "LLMアプリの構築で最初に定義するもの。具体的・測定可能・達成可能・関連性があるという4条件を満たし、倫理や安全性のような曖昧なトピックも定量化して表す。",
+      "fieldId": "evaluation",
+      "relatedTermIds": [
+        "multidimensional-criteria",
+        "holdout-test-set"
+      ],
+      "questionIds": [
+        "q-success-criteria"
+      ],
+      "referenceArticleIds": [
+        "a-develop-tests"
+      ]
+    },
+    {
+      "id": "multidimensional-criteria",
+      "label": "多次元的な評価",
+      "shortDefinition": "単一の指標では品質・安全性・速度といった異なる側面を同時に捉えられないため、複数の成功基準に沿って測ること。ほとんどのユースケースで必要になる。",
+      "fieldId": "evaluation",
+      "relatedTermIds": [
+        "success-criteria"
+      ],
+      "questionIds": [
+        "q-multidimensional-criteria"
+      ],
+      "referenceArticleIds": [
+        "a-develop-tests"
+      ]
+    },
+    {
+      "id": "holdout-test-set",
+      "label": "ホールドアウトテストセット",
+      "shortDefinition": "評価のために事前に取り分けておく多様なデータ。成功基準の「測定可能」「関連性がある」を実際に成立させる土台になる。",
+      "fieldId": "evaluation",
+      "relatedTermIds": [
+        "success-criteria",
+        "edge-case"
+      ],
+      "questionIds": [
+        "q-holdout-test-set"
+      ],
+      "referenceArticleIds": [
+        "a-develop-tests"
+      ]
+    },
+    {
+      "id": "edge-case",
+      "label": "エッジケース",
+      "shortDefinition": "無関係な入力、過度に長い入力、質の低い入力、人間でさえ評価の合意に達するのが難しい曖昧な事例など。実世界のタスク分布を反映するために評価へ含める。",
+      "fieldId": "evaluation",
+      "relatedTermIds": [
+        "holdout-test-set",
+        "success-criteria"
+      ],
+      "questionIds": [
+        "q-edge-case"
+      ],
+      "referenceArticleIds": [
+        "a-develop-tests"
+      ]
+    },
+    {
+      "id": "eval-design-principles",
+      "label": "評価設計の3原則",
+      "shortDefinition": "タスク固有にする、可能な限り自動化する、質より量を優先する。シグナルがやや低い自動採点による多数の質問のほうが、高品質な手作業による少数の質問より優れるとされる。",
+      "fieldId": "evaluation",
+      "relatedTermIds": [
+        "code-based-grading",
+        "llm-as-judge",
+        "human-grading"
+      ],
+      "questionIds": [
+        "q-eval-design-principles"
+      ],
+      "referenceArticleIds": [
+        "a-develop-tests"
+      ]
+    },
+    {
+      "id": "exact-match",
+      "label": "完全一致評価",
+      "shortDefinition": "空白と大文字小文字を正規化したうえで、出力が事前に定義された正解と一致するかを測る方法。シンプルで曖昧さがなく、カテゴリカルな回答を持つタスクに向く。",
+      "fieldId": "evaluation",
+      "relatedTermIds": [
+        "code-based-grading",
+        "cosine-similarity"
+      ],
+      "questionIds": [
+        "q-exact-match"
+      ],
+      "referenceArticleIds": [
+        "a-develop-tests"
+      ]
+    },
+    {
+      "id": "code-based-grading",
+      "label": "コードベースの採点",
+      "shortDefinition": "最も速く、最も信頼性が高く、非常にスケーラブルな採点方法。ルールベースの厳格さがあまり求められない、より複雑な判断のニュアンスには欠ける。",
+      "fieldId": "evaluation",
+      "relatedTermIds": [
+        "exact-match",
+        "llm-as-judge",
+        "human-grading"
+      ],
+      "questionIds": [
+        "q-code-based-grading"
+      ],
+      "referenceArticleIds": [
+        "a-develop-tests"
+      ]
+    },
+    {
+      "id": "human-grading",
+      "label": "人間による採点",
+      "shortDefinition": "最も柔軟で高品質だが、遅くて高価でスケールしない。質より量を優先するという評価設計の原則から、可能であれば避けることが推奨される。",
+      "fieldId": "evaluation",
+      "relatedTermIds": [
+        "code-based-grading",
+        "llm-as-judge",
+        "eval-design-principles"
+      ],
+      "questionIds": [
+        "q-human-grading"
+      ],
+      "referenceArticleIds": [
+        "a-develop-tests"
+      ]
+    },
+    {
+      "id": "llm-as-judge",
+      "label": "LLMベースの採点",
+      "shortDefinition": "LLM自身に評価させる方法。速くて柔軟でスケーラブル。まず信頼性を確認してからスケールさせ、スコアを出す前に推論させてその推論を破棄すると複雑な判断の精度が上がる。",
+      "fieldId": "evaluation",
+      "relatedTermIds": [
+        "rubric",
+        "separate-grader",
+        "likert-scale"
+      ],
+      "questionIds": [
+        "q-llm-as-judge"
+      ],
+      "referenceArticleIds": [
+        "a-develop-tests"
+      ]
+    },
+    {
+      "id": "rubric",
+      "label": "ルーブリック",
+      "shortDefinition": "採点の基準を明文化したもの。LLMベースの採点には詳細で明確なものが要る。1つの成功基準であっても、総合的な評価のために複数必要になる場合がある。",
+      "fieldId": "evaluation",
+      "relatedTermIds": [
+        "llm-as-judge",
+        "likert-scale",
+        "success-criteria"
+      ],
+      "questionIds": [
+        "q-rubric"
+      ],
+      "referenceArticleIds": [
+        "a-develop-tests"
+      ]
+    },
+    {
+      "id": "separate-grader",
+      "label": "別モデルによる採点",
+      "shortDefinition": "評価対象の出力を生成したモデルとは別のモデルで採点すること。同じモデルでは自分の判断基準をそのまま当てはめてしまい、独立した検証にならない。",
+      "fieldId": "evaluation",
+      "relatedTermIds": [
+        "llm-as-judge",
+        "context-window"
+      ],
+      "questionIds": [
+        "q-separate-grader"
+      ],
+      "referenceArticleIds": [
+        "a-develop-tests"
+      ]
+    },
+    {
+      "id": "likert-scale",
+      "label": "リッカート尺度",
+      "shortDefinition": "主観的な態度や認識を判断するための心理測定尺度。共感やプロフェッショナリズム、忍耐力など、従来の指標では定量化が難しいニュアンスのある側面の評価に向く。",
+      "fieldId": "evaluation",
+      "relatedTermIds": [
+        "llm-as-judge",
+        "rubric"
+      ],
+      "questionIds": [
+        "q-likert-scale"
+      ],
+      "referenceArticleIds": [
+        "a-develop-tests"
+      ]
+    },
+    {
+      "id": "classification-metrics",
+      "label": "分類の評価指標",
+      "shortDefinition": "F1スコア・BLEUスコア・パープレキシティはタスク固有の指標、正解率・適合率・再現率は汎用の指標、応答時間・稼働率は運用の指標として区分される。",
+      "fieldId": "evaluation",
+      "relatedTermIds": [
+        "success-criteria",
+        "edge-case"
+      ],
+      "questionIds": [
+        "q-classification-metrics"
+      ],
+      "referenceArticleIds": [
+        "a-develop-tests"
+      ]
+    },
+    {
+      "id": "cosine-similarity",
+      "label": "コサイン類似度",
+      "shortDefinition": "出力を文埋め込みというベクトルに変換し、ベクトル間の角度のコサインを計算して類似度を測る手法。1に近いほど類似度が高く、言い回しが違っても意味の近さを捉えられる。",
+      "fieldId": "llm-basics",
+      "relatedTermIds": [
+        "exact-match"
+      ],
+      "questionIds": [
+        "q-cosine-similarity"
+      ],
+      "referenceArticleIds": [
+        "a-develop-tests"
+      ]
     }
   ],
   "questions": [
@@ -941,7 +1176,7 @@
       ],
       "answerIndex": 1,
       "revealAnswer": true,
-      "explanation": "Claudeのツール呼び出しはシステムプロンプトでも調整可能ですが、確実に必須化したい場合はプロンプトに頼るのではなく、`tool_choice`パラメータを使用して制御することが推奨されています。",
+      "explanation": "Claudeのツール呼び出しはシステムプロンプトでも調整可能ですが、確実に必須化したい場合はプロンプトに頼るのではなく、tool_choiceパラメータを使用して制御することが推奨されています。",
       "termIds": [
         "tool-choice"
       ],
@@ -1658,6 +1893,309 @@
         "a-thinking"
       ],
       "generatedBy": "manual"
+    },
+    {
+      "id": "q-success-criteria",
+      "type": "term",
+      "fieldId": "evaluation",
+      "patternType": "select-incorrect",
+      "body": "LLMベースのアプリケーション構築において最初に定義する「成功基準」の性質として、誤っているものはどれか？",
+      "choices": [
+        "倫理や安全性などの曖昧なトピックは数値化が難しいため、定量的な指標の対象から除外して評価する。",
+        "医療アプリでは引用精度が重要になるなど、アプリケーションの目的やユーザーのニーズに合わせて設定する。",
+        "過去の実験やベンチマークなどの実績に基づき、現在のモデルの能力に対して現実的に達成可能に設定する。"
+      ],
+      "answerIndex": 0,
+      "revealAnswer": true,
+      "explanation": "倫理や安全性のような曖昧なトピックであっても、「1万回の試行のうち有害フラグが立つ出力が0.1パーセント未満」のように定量化して測定することが求められます。",
+      "termIds": [],
+      "sourceArticleIds": [
+        "a-develop-tests"
+      ],
+      "generatedBy": "gemini-3.8-flash"
+    },
+    {
+      "id": "q-multidimensional-criteria",
+      "type": "term",
+      "fieldId": "evaluation",
+      "patternType": "select-best",
+      "body": "ほとんどのユースケースで必要とされる「多次元的な評価」を採用する理由として、最も適切なものはどれか？",
+      "choices": [
+        "個別の評価指標は計算負荷が非常に高くなるため、複数の要件を一つの数式に統合して一括で処理する手法。",
+        "単一の評価指標では品質や速度などの異なる側面を捉えきれないため、複数の観点を同時に用いて測定する手法。",
+        "特定の評価指標が時間経過とともに陳腐化するため、定期的に新しい基準へと自動的に切り替えて評価する手法。"
+      ],
+      "answerIndex": 1,
+      "revealAnswer": true,
+      "explanation": "品質、安全性、速度といった異なる側面を単一の指標で同時に捉えることは困難です。そのため、ほとんどのユースケースでは複数の成功基準に沿った多次元的な評価が必要になります。",
+      "termIds": [],
+      "sourceArticleIds": [
+        "a-develop-tests"
+      ],
+      "generatedBy": "gemini-3.8-flash"
+    },
+    {
+      "id": "q-holdout-test-set",
+      "type": "term",
+      "fieldId": "evaluation",
+      "patternType": "select-correct",
+      "body": "成功基準を測定するために用意される「ホールドアウトテストセット」の説明として、正しいものはどれか？",
+      "choices": [
+        "本番環境での予期せぬ障害を防ぐために、システムの通信を一時的に遮断して完全に隔離しておく環境のこと。",
+        "学習データの不足を補うために、外部のインターネット空間から動的に収集して追加で組み込むデータ群のこと。",
+        "パフォーマンスを客観的に評価するために、学習プロセスとは別に事前に取り分けて確保しておく多様なデータのこと。"
+      ],
+      "answerIndex": 2,
+      "revealAnswer": true,
+      "explanation": "ホールドアウトテストセットとは、モデルの評価スコアを測定するために事前に取り分けておく多様なテスト用のデータのことです。測定可能性を担保し、評価の信頼性を支える重要な要素となります。",
+      "termIds": [],
+      "sourceArticleIds": [
+        "a-develop-tests"
+      ],
+      "generatedBy": "gemini-3.8-flash"
+    },
+    {
+      "id": "q-edge-case",
+      "type": "term",
+      "fieldId": "evaluation",
+      "patternType": "select-incorrect",
+      "body": "評価を設計する際に考慮すべき「エッジケース」の取り扱いとして、誤っているものはどれか？",
+      "choices": [
+        "評価基準の信頼性を一定に保つため、人間であっても判断の合意に達するのが難しい曖昧な事例は除外する。",
+        "現実世界のタスク分布を正確に反映するため、無関係な入力データや質の低いユーザーからの事例も含める。",
+        "日常的な利用状況をより広くカバーするため、複数の感情が混ざった文章や話題が急変する事例も含める。"
+      ],
+      "answerIndex": 0,
+      "revealAnswer": true,
+      "explanation": "エッジケースには、人間でさえ評価の合意に達するのが難しい曖昧なテストケースも含まれます。これらを除外するのではなく、実世界のタスク分布を反映した評価ケースとして考慮に入れる必要があります。",
+      "termIds": [],
+      "sourceArticleIds": [
+        "a-develop-tests"
+      ],
+      "generatedBy": "gemini-3.8-flash"
+    },
+    {
+      "id": "q-eval-design-principles",
+      "type": "term",
+      "fieldId": "evaluation",
+      "patternType": "select-best",
+      "body": "推奨されている「評価設計の3原則」の考え方として、最も適切なものはどれか？",
+      "choices": [
+        "自動採点は精度にばらつきが生じやすいため、少量のデータを人間の専門家が時間をかけて深く評価すべきである。",
+        "自動採点はシグナルがやや低くなる傾向があるものの、手作業の品質よりも全体のデータ量を優先して評価すべきである。",
+        "自動採点は人間の手作業と完全に同一の結果をもたらすため、質や量を意識せずに無作為なデータを抽出して評価すべきである。"
+      ],
+      "answerIndex": 1,
+      "revealAnswer": true,
+      "explanation": "評価設計の原則では「質より量を優先する」ことが推奨されています。シグナルがやや低い自動採点による大量の質問の方が、高品質な人間の手作業による少数の質問よりも優れているとされています。",
+      "termIds": [],
+      "sourceArticleIds": [
+        "a-develop-tests"
+      ],
+      "generatedBy": "gemini-3.8-flash"
+    },
+    {
+      "id": "q-exact-match",
+      "type": "term",
+      "fieldId": "evaluation",
+      "patternType": "select-correct",
+      "body": "モデルの出力を検証する「完全一致評価」の特徴として、正しいものはどれか？",
+      "choices": [
+        "表現の揺れやニュアンスの違いを吸収できるため、自由記述形式のテキストを詳細に分析するタスクに最適である。",
+        "文脈に応じて意味の近さを柔軟に判断できるため、複数言語が混在する複雑なドキュメントのタスクに最適である。",
+        "シンプルで曖昧さのない指標として機能するため、明確なカテゴリカルな回答があらかじめ決まるタスクに最適である。"
+      ],
+      "answerIndex": 2,
+      "revealAnswer": true,
+      "explanation": "完全一致評価は、事前に定義された正解と出力が完全に一致するかを測るシンプルで曖昧さのない指標です。そのため、感情分析のように明確でカテゴリカルな回答を持つタスクに最適であり、自由記述には向きません。",
+      "termIds": [],
+      "sourceArticleIds": [
+        "a-develop-tests"
+      ],
+      "generatedBy": "gemini-3.8-flash"
+    },
+    {
+      "id": "q-code-based-grading",
+      "type": "term",
+      "fieldId": "evaluation",
+      "patternType": "select-incorrect",
+      "body": "採点手法の一つである「コードベースの採点」の性質として、誤っているものはどれか？",
+      "choices": [
+        "柔軟な文脈理解が可能であるため、ルールベースの厳格さがあまり求められない複雑なニュアンスの判断に適した特徴を持つ。",
+        "評価プロセスをプログラムで自動化できるため、大量のデータセットに対しても極めて高速でスケーラブルに処理する特徴を持つ。",
+        "文字列の完全一致などを機械的に判定するため、人間の主観が混入せずに一貫性のある信頼性の高い結果を算出する特徴を持つ。"
+      ],
+      "answerIndex": 0,
+      "revealAnswer": true,
+      "explanation": "コードベースの採点は最も速く信頼性が高くスケーラブルですが、ルールベースの厳格さがあまり求められないより複雑な判断に対するニュアンスに欠けるという弱点があります。",
+      "termIds": [],
+      "sourceArticleIds": [
+        "a-develop-tests"
+      ],
+      "generatedBy": "gemini-3.8-flash"
+    },
+    {
+      "id": "q-human-grading",
+      "type": "term",
+      "fieldId": "evaluation",
+      "patternType": "select-best",
+      "body": "採点手法の一つである「人間による採点」に対するアプローチとして、最も適切なものはどれか？",
+      "choices": [
+        "モデルが生成した文章の文脈を理解できないため、品質が著しく低下するという理由からできる限り導入を避けるべき手法。",
+        "最も柔軟で高品質な評価が可能であるものの、処理速度が遅くコストが高くなり拡張性がないため可能であれば避けるべき手法。",
+        "主観的な基準によってのみ採点されてしまうため、定量的な指標を算出するプロセスにおいて根本的なエラーを引き起こす手法。"
+      ],
+      "answerIndex": 1,
+      "revealAnswer": true,
+      "explanation": "人間による採点は最も柔軟で高品質ですが、遅くて高価でありスケールしないという欠点があります。そのため、質より量を優先するという評価設計の原則に照らして、可能であれば避けるよう推奨されています。",
+      "termIds": [],
+      "sourceArticleIds": [
+        "a-develop-tests"
+      ],
+      "generatedBy": "gemini-3.8-flash"
+    },
+    {
+      "id": "q-llm-as-judge",
+      "type": "term",
+      "fieldId": "evaluation",
+      "patternType": "select-correct",
+      "body": "採点手法の一つである「LLMベースの採点」において、複雑な判断の精度を向上させるための仕組みとして、正しいものはどれか？",
+      "choices": [
+        "評価対象の出力を生成したモデルと同じモデルを評価役に指定し、評価基準のブレをなくすことで一貫性のある数値を算出する手法。",
+        "評価スコアを提示する前に内部での推論プロセスを完全に省略させ、処理時間を大幅に短縮することでシステム負荷を軽減する手法。",
+        "評価スコアを提示する前にまず推論を展開させ、その後に該当の推論部分を破棄させることで複雑な判断のパフォーマンスを上げる手法。"
+      ],
+      "answerIndex": 2,
+      "revealAnswer": true,
+      "explanation": "LLMベースの採点では、スコアを出す前にまず推論させ、その後その推論を破棄することで評価パフォーマンスが向上します。また、評価役には対象の出力を生成したモデルとは別のモデルを使うことがベストプラクティスです。",
+      "termIds": [],
+      "sourceArticleIds": [
+        "a-develop-tests"
+      ],
+      "generatedBy": "gemini-3.8-flash"
+    },
+    {
+      "id": "q-rubric",
+      "type": "term",
+      "fieldId": "evaluation",
+      "patternType": "select-incorrect",
+      "body": "採点の基準を明文化する「ルーブリック」の運用について、誤っているものはどれか？",
+      "choices": [
+        "評価プロセス全体の複雑化を避けるため、特定の成功基準に対しては必ず単一のシンプルなルールのみを適用して運用される。",
+        "採点の基準を明確に言語化したものであり、自動評価を正しく機能させるために詳細で具体的な指示を記述して運用される。",
+        "定性的な尺度の基準としても活用されており、特定の単語が含まれているかなどの条件を定義して自動的な判断に運用される。"
+      ],
+      "answerIndex": 0,
+      "revealAnswer": true,
+      "explanation": "特定のユースケースや特定の成功基準であっても、総合的な評価を行うために複数のルーブリックが必要になる場合があります。単一のルールのみに制限されるわけではありません。",
+      "termIds": [],
+      "sourceArticleIds": [
+        "a-develop-tests"
+      ],
+      "generatedBy": "gemini-3.8-flash"
+    },
+    {
+      "id": "q-separate-grader",
+      "type": "term",
+      "fieldId": "evaluation",
+      "patternType": "select-best",
+      "body": "LLMベースの採点において推奨される「別モデルによる採点」の目的として、最も適切なものはどれか？",
+      "choices": [
+        "評価プロセスで使用するコンテキストウィンドウを統一し、すべてのモデル間で同じパラメータを強制的に共有させるための設計思想。",
+        "評価対象の出力を生成したモデルとは異なるモデルを採点役に据え、自分自身の判断基準をそのまま適用する状態を防ぐための設計思想。",
+        "評価対象の出力を生成したモデル自身に採点を実行させ、自己学習のサイクルを高速化して継続的にモデルを調整するための設計思想。"
+      ],
+      "answerIndex": 1,
+      "revealAnswer": true,
+      "explanation": "同じモデルが自分の出力を採点すると、自身の判断基準をそのまま適用してしまい独立した検証になりません。そのため、別のモデルを評価者として使用することがベストプラクティスとされています。",
+      "termIds": [],
+      "sourceArticleIds": [
+        "a-develop-tests"
+      ],
+      "generatedBy": "gemini-3.8-flash"
+    },
+    {
+      "id": "q-likert-scale",
+      "type": "term",
+      "fieldId": "evaluation",
+      "patternType": "select-correct",
+      "body": "心理測定から派生した「リッカート尺度」をモデル評価に導入する目的として、正しいものはどれか？",
+      "choices": [
+        "応答時間をミリ秒単位で厳密に測定し、システムの物理的なパフォーマンスを数値として定量化するためのインフラ運用用の指標。",
+        "テキスト内の単語の出現頻度を機械的にカウントし、キーワードの網羅性をパーセンテージで定量化するためのデータ解析用の指標。",
+        "共感やプロフェッショナリズムなど、従来の単純な手法では定量化が難しいニュアンスを含む側面を判断するための心理測定の指標。"
+      ],
+      "answerIndex": 2,
+      "revealAnswer": true,
+      "explanation": "リッカート尺度は主観的な態度や認識を判断するための心理測定尺度です。共感やプロフェッショナリズムなど、従来の指標では定量化が難しいニュアンスのある側面の評価に最適であり、LLMによる採点と組み合わせて使われます。",
+      "termIds": [],
+      "sourceArticleIds": [
+        "a-develop-tests"
+      ],
+      "generatedBy": "gemini-3.8-flash"
+    },
+    {
+      "id": "q-classification-metrics",
+      "type": "term",
+      "fieldId": "evaluation",
+      "patternType": "select-incorrect",
+      "body": "定量的評価に用いられる「分類の評価指標」の区分として、誤っているものはどれか？",
+      "choices": [
+        "定量的な指標のうち、パープレキシティやF1スコアなどはどのようなシステムにも適用可能な汎用の評価指標として分類される。",
+        "定量的な指標のうち、正解率や適合率および再現率などは、どのようなシステムにも適用可能な汎用の評価指標として分類される。",
+        "定量的な指標のうち、システムの応答時間や全体の稼働率などは、実用的なパフォーマンスを測る運用の評価指標として分類される。"
+      ],
+      "answerIndex": 0,
+      "revealAnswer": true,
+      "explanation": "F1スコア、BLEUスコア、パープレキシティなどは汎用指標ではなく、タスク固有の指標として分類されています。正解率や適合率などは汎用の指標に該当します。",
+      "termIds": [],
+      "sourceArticleIds": [
+        "a-develop-tests"
+      ],
+      "generatedBy": "gemini-3.8-flash"
+    },
+    {
+      "id": "q-cosine-similarity",
+      "type": "term",
+      "fieldId": "llm-basics",
+      "patternType": "select-best",
+      "body": "モデル出力を比較する「コサイン類似度と文埋め込み」の特徴として、最も適切なものはどれか？",
+      "choices": [
+        "モデルの出力を文の長さに基づいた数値へと変換し、その差異を測ることで文章の視覚的なフォーマットの一致度を判定する仕組み。",
+        "モデルの出力を文埋め込みのベクトルへと変換し、その角度から意味的な近さを測ることで表現が異なっていても類似度を判定する仕組み。",
+        "モデルの出力を単語ごとの配列へと変換し、空白や大文字小文字を正規化した状態での完全一致を測ることで正解率を判定する仕組み。"
+      ],
+      "answerIndex": 1,
+      "revealAnswer": true,
+      "explanation": "コサイン類似度は、出力を文埋め込み（ベクトル）に変換し、ベクトル間の角度のコサインを計算することで類似度を測ります。言い回しが異なっていても意味が近い回答を高く評価できるため、一貫性の評価などに適しています。",
+      "termIds": [],
+      "sourceArticleIds": [
+        "a-develop-tests"
+      ],
+      "generatedBy": "gemini-3.8-flash"
+    },
+    {
+      "id": "q-exact-match-vs-similarity",
+      "type": "relationship",
+      "fieldId": "evaluation",
+      "patternType": "select-correct",
+      "body": "モデルの出力を評価する手法である{{term:exact-match}}と{{term:cosine-similarity}}の使い分けとして、正しい関係性はどれか？",
+      "choices": [
+        "完全一致評価は回答テキストにおける表現の揺れを柔軟に許容したい用途に採用され、コサイン類似度は回答のカテゴリが明確に一つに決まる用途に採用される。",
+        "完全一致評価とコサイン類似度はいずれもテキストが正解と一言一句一致するかを判定する用途に採用され、内部のアルゴリズムにおける計算の速度のみが異なる。",
+        "完全一致評価は回答のカテゴリが明確に一つに決まっている用途に採用され、コサイン類似度は表現の揺れが存在してもテキストの意味の近さを評価する用途に採用される。"
+      ],
+      "answerIndex": 2,
+      "revealAnswer": false,
+      "explanation": "評価の指標は、タスクの回答がどのような形をとるかによって選び分けられます。一方は、出力を正規化したうえで正解と文字列として突き合わせる方法で、判定に迷いが生じにくい性質があります。もう一方は、出力を文埋め込みというベクトルに変換し、ベクトル同士がなす角度から意味の近さを数値化する方法です。文字として違えば別物と扱うのか、言い回しが違っても意味が近ければ近いと扱うのか。この違いが、それぞれの向き不向きを決めています。",
+      "termIds": [
+        "exact-match",
+        "cosine-similarity"
+      ],
+      "sourceArticleIds": [
+        "a-develop-tests"
+      ],
+      "generatedBy": "gemini-3.8-flash"
     }
   ]
 }
