@@ -53,13 +53,12 @@ GitHub Pagesはmainブランチのルート（/）を配信します。.nojekyll
 
 ## 進捗ルールと設定
 
-config.jsの初期値は30問・24時間・7日・maxDepth: 2です(schema-definition.md 6.1節の本来値)。
+config.jsの初期値は30問・7日・maxDepth: 2です(schema-definition.md 6.1節)。出題後24時間の待機条件は2026-09-13に廃止しました。
 coolingQuestionCountは収録問題数より小さい必要があります。収録数以上にすると、間に挟む問題が尽きてcoolingがdueに戻らず、全問回答後に待機中のまま復習が再開しません。`node tools/audit-data.cjs`がこの不整合を警告します。
 短時間で挙動を確認する場合だけ、次のように変更します。
 
 ```js
 coolingQuestionCount: 1,
-coolingHours: 0,
 restingDays: 0.001, // 約86秒
 maxDepth: 2,
 ```
@@ -67,7 +66,7 @@ maxDepth: 2,
 キャッシュ済みの設定を更新するには、sw.jsのCACHEバージョン（v4）を増やし、オンラインでページを開いた後、同じアプリのタブ／ウィンドウをすべて閉じて開き直します。更新待ちのService Workerは、既存のアプリを終了すると有効になります。設定変更は既存の進捗にも適用されます。
 
 - 初回出題直後にunseen→cooling。
-- cooling→dueは他問数と時間のAND条件。出題・回答・次問選択の際に経過条件を評価して保存。
+- cooling→dueは他問数だけが条件で、出題後の経過時間は問わない。出題・回答・次問選択の際に評価して保存。
 - dueで連続正答2回以上になるとresting。誤答はdueのまま連続正答数を0に戻す。
 - restingは最後の出題から7日経過、または誤答でdueへ戻る。
 - 連続正答数は状態をまたいで保持し、誤答時だけ0に戻す。
@@ -105,7 +104,7 @@ schema-definition.md 7.3節の自己参照マーカー禁止を検査し、違�
 node --test "tests/*.test.mjs"
 ```
 
-状態遷移、時間・問数の境界、優先度、分野の絞り込み、coolingへのアクセス、短縮設定、シャッフル(progress 10件)、用語タップのフォールバックと分野に依存しない遷移(navigation 5件)、分野一覧の生成と表示名(fields 3件)の計18件を検証します。
+状態遷移、他問数と7日の境界、優先度、分野の絞り込み、coolingへのアクセス、短縮設定、シャッフル(progress 10件)、用語タップのフォールバックと分野に依存しない遷移(navigation 5件)、分野一覧の生成と表示名(fields 3件)の計18件を検証します。
 サーバー起動中に <http://localhost:8080/tests/storage.html> を開くと、実ブラウザーのIndexedDBで再接続・並行更新・ロールバックの3件を検証できます。テスト専用DBだけを作成・削除し、アプリの進捗は読み取り表示のみ行います。
 
 ブラウザーでの確認手順：

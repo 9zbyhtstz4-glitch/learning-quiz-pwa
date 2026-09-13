@@ -1,7 +1,7 @@
 import test from 'node:test';
 import assert from 'node:assert/strict';
 import { initialProgress, refresh, recordPresentation, recordAnswer, selectNext, shuffledIndices } from '../progress.js';
-const config = { coolingQuestionCount: 30, coolingHours: 24, restingDays: 7 };
+const config = { coolingQuestionCount: 30, restingDays: 7 };
 const hour = 3600000;
 const q = { id: 'a', answerIndex: 2 };
 
@@ -16,12 +16,11 @@ test('初回出題、他問カウント、同一問題は他問に含めない',
   assert.equal(ps[0].seenSinceCount, 2);
   assert.equal(ps[1].seenSinceCount, 0);
 });
-test('coolingは問数と時間の両条件が必要（境界値）', () => {
+test('coolingは他問数だけでdueになり、経過時間は問わない（境界値）', () => {
   const p = { ...initialProgress('a'), state:'cooling', lastSeenAt:0, seenSinceCount:29 };
-  refresh([p], 24*hour, config); assert.equal(p.state, 'cooling');
+  refresh([p], 365*24*hour, config); assert.equal(p.state, 'cooling');   // 時間が経っても他問数が足りなければcoolingのまま
   p.seenSinceCount = 30;
-  refresh([p], 24*hour-1, config); assert.equal(p.state, 'cooling');
-  refresh([p], 24*hour, config); assert.equal(p.state, 'due');
+  refresh([p], 0, config); assert.equal(p.state, 'due');                 // 他問数を満たせば出題直後でもdue
 });
 test('due誤答でstreakのみリセット、正答2回でresting', () => {
   const p = { ...initialProgress('a'), state:'due', lastSeenAt:0, correctStreak:1 };
@@ -74,7 +73,7 @@ test('cooling用語へ再遷移・回答でき、履歴を保存', () => {
   assert.equal(ps[1].seenSinceCount,1);
 });
 test('短縮設定でdueへ進める', () => {
-  const c={...config,coolingQuestionCount:1,coolingHours:0};
+  const c={...config,coolingQuestionCount:1};
   const ps=['a','b'].map(initialProgress);
   recordPresentation(ps,'a',0,c); recordPresentation(ps,'b',1,c);
   assert.equal(ps[0].state,'due');

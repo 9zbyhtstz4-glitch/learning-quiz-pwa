@@ -125,7 +125,7 @@ InterruptStack ---questionId(一時参照)---> Question
 
 ```
 unseen  → cooling(出題直後)
-cooling → due     (条件: 他の問題をN問経過 かつ M時間経過。設定ファイルで変更可能。暫定値: 30問 かつ 24h)
+cooling → due     (条件: 他の問題をN問経過。設定ファイルで変更可能。暫定値: 30問。経過時間の条件は2026-09-13に廃止)
 due     → resting (条件: 連続正答2回)
 due     内での誤答 → 状態はdueのまま、correctStreakを0にリセット
 resting → due     (条件A: 最後の出題からD日経過。設定ファイルで変更可能。暫定値: 7日)
@@ -205,6 +205,7 @@ resting → due     (条件B: resting状態で誤答した場合は即座に降�
 - 配信先 → GitHub Pages(1GB容量・100GB/月帯域の無料枠で本アプリの規模には十分)
 - `InterruptStack.maxDepth` → 2で確定
 - `cooling → due` / `resting → due`の具体的な条件・カウント方法 → 6.1節参照
+- `cooling → due`の経過時間の条件(24h)を廃止し、他問数の条件のみとした(2026-09-13)。全問を1日で出題し終えると、24時間待つまで閲覧専用の画面から進めなくなっていたため
 
 ---
 

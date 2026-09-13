@@ -6,8 +6,7 @@ export function initialProgress(questionId) {
 export function refresh(records, now, config) {
   for (const p of records) {
     if (p.lastSeenAt === null) continue;
-    if (p.state === 'cooling' && p.seenSinceCount >= config.coolingQuestionCount &&
-        now - p.lastSeenAt >= config.coolingHours * 3600000) p.state = 'due';
+    if (p.state === 'cooling' && p.seenSinceCount >= config.coolingQuestionCount) p.state = 'due';
     if (p.state === 'resting' && now - p.lastSeenAt >= config.restingDays * 86400000)
       p.state = 'due';
   }
