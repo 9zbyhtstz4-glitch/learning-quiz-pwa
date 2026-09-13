@@ -10,6 +10,17 @@ schema-definition.md v0.2に基づく、外部ライブラリ・npm・ビルド�
 問題96件（用語81・関係性15）、用語81件、参考記事18件を同梱しています。出典はClaude公式ドキュメントです。
 収録件数はタイトル下に「収録 96問 · 用語 81件」として表示します。data.jsonから毎回数えるため、問題や用語を追加しても書き換えは不要です。
 
+## 分野を絞った出題
+
+収録件数の右にある「分野：すべて」から、出題する分野を1つ選べます。一覧はdata.jsonの問題のfieldIdから毎回作り、各分野の問題数を添えます。
+表示名はfields.jsの対応表で決まり、並び順も対応表の順です。新しいfieldIdを使ったら対応表に日本語名を追加してください。追加漏れは`node tools/audit-data.cjs`が警告し、画面では分野IDを出さずに「名称未設定の分野」と表示します。
+
+- 絞り込むのは「次の問題」の自動選択だけです。優先度unseen > due > restingは分野の中で保たれます。
+- 問題文の用語タップと用語一覧からの遷移は、分野に関係なく行えます。
+- 分野を切り替えても進捗(状態・回答履歴・他問数)は変わりません。他問数は、分野の外で出題された問題も含めて数えます。
+- 選んだ分野に出題できる問題がなければ、全問coolingの時と同じく待機案内を出し、用語タップを使い続けられます。待機中に分野を選び直すと、その分野で次の問題を探します。
+- 選んだ分野はIndexedDBのsettingsストアに保存し、再起動後も維持します。
+
 ## ローカル起動
 
 Node.jsが利用可能な環境で、このフォルダーを作業ディレクトリとして実行します。
@@ -36,7 +47,7 @@ GitHub Pagesはmainブランチのルート（/）を配信します。.nojekyll
 4. ホーム画面から起動し、そこで準備完了を確認する。
 5. 機内モードにし、Wi-Fiもオフにして再起動・回答・用語遷移を確認する。
 
-アプリ資源はService WorkerのCache Storage、進捗はIndexedDB（learning-quiz / progress）に保存します。
+アプリ資源はService WorkerのCache Storage、進捗はIndexedDB（learning-quiz / progress）、選択中の分野は同じDBのsettingsストアに保存します。
 参考資料の外部リンクだけはオンライン時に使用します。学習処理に通信・外部APIは不要です。
 端末・ブラウザーのサイトデータ削除で保存内容も失われます。
 
@@ -76,22 +87,25 @@ revealAnswer:falseでは、正誤メッセージ・正解位置・正誤色を�
 
 ## 確認方法
 
-データを追加・変更したら、投入前に点検します。
+データを追加・変更したら、整形してから点検します。整形は何度実行しても結果が変わりません。
 
 ```powershell
+node tools/normalize-data.cjs
 node tools/audit-data.cjs
 ```
 
+整形では、問題文の{{term:id}}マーカー前後の半角空白を除き、relatedTermIdsを双方向にそろえます。
+
 必須制約(用語ごとのterm型問題、{{term:id}}とtermIdsの整合、choices3件、answerIndex 0〜2、記事参照の実在、id重複)と、
 schema-definition.md 7.3節の自己参照マーカー禁止を検査し、違反をidつきで一覧表示します。
-警告としては、5.3節に反するrelationshipのrevealAnswer: true、5.1節が想定する2件に満たないrelationshipのtermIds、select-correct / select-incorrect / select-best以外のpatternTypeも報告します。
-あわせてanswerIndex・patternType・typeの分布を出力します。エラーがあれば終了コード1で失敗します。
+警告としては、5.3節に反するrelationshipのrevealAnswer: true、5.1節が想定する2件に満たないrelationshipのtermIds、select-correct / select-incorrect / select-best以外のpatternType、fields.jsに表示名のないfieldIdも報告します。
+あわせてanswerIndex・patternType・type・fieldIdの分布を出力します。エラーがあれば終了コード1で失敗します。
 
 ```powershell
-node --test tests/progress.test.mjs
+node --test "tests/*.test.mjs"
 ```
 
-状態遷移、時間・問数の境界、優先度、coolingへのアクセス、短縮設定、シャッフルの9件を検証します。
+状態遷移、時間・問数の境界、優先度、分野の絞り込み、coolingへのアクセス、短縮設定、シャッフル(progress 10件)、用語タップのフォールバックと分野に依存しない遷移(navigation 5件)、分野一覧の生成と表示名(fields 3件)の計18件を検証します。
 サーバー起動中に <http://localhost:8080/tests/storage.html> を開くと、実ブラウザーのIndexedDBで再接続・並行更新・ロールバックの3件を検証できます。テスト専用DBだけを作成・削除し、アプリの進捗は読み取り表示のみ行います。
 
 ブラウザーでの確認手順：

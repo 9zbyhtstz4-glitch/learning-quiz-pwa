@@ -1,6 +1,7 @@
 import { config } from './config.js';
 import { refresh, recordPresentation, recordAnswer, selectNext, shuffledIndices } from './progress.js';
-import { openDatabase, updateProgress } from './db.js';
+import { openDatabase, updateProgress, readSetting, writeSetting } from './db.js';
+import { fieldOptions } from './fields.js';
 
 const $ = id => document.getElementById(id);
 let data, db, current = null, busy = false;
@@ -9,6 +10,10 @@ const interruptStack = { stack: [], maxDepth: config.maxDepth };
 const suspendedViews = [];
 const questionById = new Map();
 const termById = new Map();
+// 選択中の分野(nullはすべての分野)。絞り込むのは次の問題の自動選択だけで、用語タップの遷移には使わない。
+let selectedField = null;
+let allowed = null;
+const fieldById = new Map();
 
 function button(text, action, className = '') {
   const el = document.createElement('button');
@@ -35,20 +40,60 @@ function makeView(id) {
 
 async function nextQuestion() {
   if (interruptStack.stack.length) return;
-  const id = await updateProgress(db, data.questions, records => {
+  const { id, elsewhere } = await updateProgress(db, data.questions, records => {
     const now = Date.now();
     refresh(records, now, config);
-    const id = selectNext(records);
+    const id = selectNext(records, allowed);
     if (id) recordPresentation(records, id, now, config);
-    return id;
+    // 絞り込み中に出題できないときだけ、他の分野にはまだ出題できる問題があるかを見る。
+    return { id, elsewhere: !id && allowed !== null && selectNext(records) !== null };
   });
   if (id) current = makeView(id);
-  else if (current) current.waiting = true;
+  else if (current) Object.assign(current, { waiting: true, elsewhere });
   else {
-    // セッション復元ではない。全問coolingで再起動した時の閲覧専用の問題文。
-    current = { ...makeView(data.questions[0].id), waiting: true, readOnly: true };
+    // セッション復元ではない。出題できる問題がないまま再起動した時の閲覧専用の問題文。
+    const first = data.questions.find(q => !allowed || allowed.has(q.id));
+    current = { ...makeView(first.id), waiting: true, readOnly: true, elsewhere };
   }
   render();
+}
+
+function allowedFor(fieldId) {
+  return fieldId === null ? null : new Set(data.questions.filter(q => q.fieldId === fieldId).map(q => q.id));
+}
+
+function renderFields() {
+  const label = selectedField === null ? 'すべて' : fieldById.get(selectedField).label;
+  $('field-open').textContent = `分野：${label}`;
+  $('field-open').setAttribute('aria-label', `出題する分野を選ぶ。現在は${label}`);
+  const options = [{ id: null, label: 'すべての分野', count: data.questions.length }, ...fieldById.values()];
+  $('fields').replaceChildren(...options.map(({ id, label, count }) => {
+    const el = button('', () => selectField(id));
+    el.setAttribute('aria-pressed', String(selectedField === id));
+    const name = document.createElement('span');
+    name.textContent = label;
+    const size = document.createElement('span');
+    size.className = 'field-count';
+    size.textContent = `${count}問`;
+    el.replaceChildren(name, size);
+    return el;
+  }));
+}
+
+async function selectField(fieldId) {
+  selectedField = fieldId;
+  allowed = allowedFor(fieldId);
+  await writeSetting(db, 'field', fieldId);
+  renderFields();
+  $('field-sheet').close();
+  // 待機中なら「出題条件を再確認」と同じく、選び直した分野で次の問題を探す。回答中の問題はそのまま残す。
+  if (current?.waiting && !interruptStack.stack.length) await nextQuestion();
+}
+
+function waitingText() {
+  if (selectedField === null) return '待機中・用語は確認できます';
+  const hint = current.elsewhere ? '分野を変えると続けられます・' : '';
+  return `「${fieldById.get(selectedField).label}」の分野は待機中・${hint}用語は確認できます`;
 }
 
 async function openTerm(id) {
@@ -91,6 +136,7 @@ function render(focus = true) {
   const q = questionById.get(current.questionId);
   $('question').hidden = false;
   $('waiting').hidden = !current.waiting;
+  if (current.waiting) $('waiting').textContent = waitingText();
   $('definition').hidden = true;
   $('meta').textContent = `${q.type === 'term' ? '用語問題' : '関係性問題'} · 中断 ${interruptStack.stack.length} / ${interruptStack.maxDepth}`;
   $('body').replaceChildren();
@@ -204,6 +250,13 @@ run(async () => {
   validateData();
   $('library-count').textContent = `収録 ${data.questions.length}問 · 用語 ${data.terms.length}件`;
   db = await openDatabase();
+  fieldOptions(data.questions).forEach(f => fieldById.set(f.id, f));
+  const saved = await readSetting(db, 'field');
+  // 保存していた分野がデータから消えていたら、すべての分野に戻す。
+  selectedField = fieldById.has(saved) ? saved : null;
+  if (saved != null && selectedField === null) await writeSetting(db, 'field', null);
+  allowed = allowedFor(selectedField);
+  renderFields();
   await nextQuestion();
   data.terms.forEach(t => $('terms').append(button(t.label, async () => {
     $('terms-sheet').close();

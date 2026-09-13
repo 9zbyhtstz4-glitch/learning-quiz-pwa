@@ -43,7 +43,16 @@
 body { margin: 0 auto; max-width: 42rem; padding: calc(12px + env(safe-area-inset-top)) max(14px, env(safe-area-inset-right)) calc(12px + env(safe-area-inset-bottom)) max(14px, env(safe-area-inset-left)); }
 .study-screen { min-height: calc(100dvh - 24px - env(safe-area-inset-top) - env(safe-area-inset-bottom)); }
 h1 { font-size: 1.25rem; line-height: 1.4; font-weight: 500; margin: 0 0 4px; }
-#library-count { margin: 0 0 12px; }
+.header-meta { display: flex; flex-wrap: wrap; align-items: center; justify-content: space-between; column-gap: 12px; margin: 0 0 12px; }
+#library-count { margin: 0; }
+/* 分野の選択: 参考資料・用語一覧と同じ控えめな文字リンク。
+   負のマージンで行の高さを変えずに44pxのタップ領域を確保し、1画面に収まる配置を保つ(4.5節)。 */
+#field-open {
+  border: none; background: transparent; min-height: 44px; margin-block: -11px;
+  padding: 0 2px; color: var(--text-secondary); font-size: 13px; font-weight: 400;
+  text-decoration: underline; text-underline-offset: 3px;
+}
+#field-open:not(:disabled):hover { color: var(--text-primary); background: transparent; }
 #app-version { font-size: 13px; font-weight: 400; color: var(--text-muted); white-space: nowrap; margin-left: 6px; }
 section { background: var(--surface-card); border: 0.5px solid var(--border); border-radius: var(--radius-card); padding: 14px; }
 h2 { font-size: 1rem; line-height: 1.6; font-weight: 400; margin: 8px 0 20px; }
@@ -55,23 +64,27 @@ button:focus-visible, a:focus-visible { outline: 2px solid var(--text-secondary)
 button:not(:disabled):hover { background: var(--surface-card-hover); }
 a { color: var(--text-primary); }
 
-/* 選択肢: 個別カードではなく、1本の枠+行区切りのリスト */
-#choices { display: block; border: 1px solid var(--border); border-radius: var(--radius-control); overflow: hidden; margin-bottom: 20px; }
-#choices button {
+/* 選択肢と分野一覧: 個別カードではなく、1本の枠+行区切りのリスト。選択中は背景を塗らず左端の縦棒で示す(4.1節) */
+.option-list { display: block; border: 1px solid var(--border); border-radius: var(--radius-control); overflow: hidden; }
+.option-list button {
   display: block; width: 100%; text-align: left;
   padding: 10px 14px; line-height: 1.4; font-weight: 400;
   color: var(--text-primary); background: var(--surface-card);
   border: none; border-bottom: 1px solid var(--border); border-radius: 0;
 }
-#choices button:last-child { border-bottom: none; }
-#choices button[aria-pressed="true"] {
+.option-list button:last-child { border-bottom: none; }
+.option-list button[aria-pressed="true"] {
   border-left: 4px solid var(--border-accent);
   padding-left: 10px;
   color: var(--text-accent);
   font-weight: 500;
 }
-#choices button:not(:disabled):hover { background: var(--surface-card-hover); }
-#choices button:focus-visible { box-shadow: var(--focus-shadow); outline: none; }
+.option-list button:not(:disabled):hover { background: var(--surface-card-hover); }
+.option-list button:focus-visible { box-shadow: var(--focus-shadow); outline: none; }
+#choices { margin-bottom: 20px; }
+#fields button { display: flex; justify-content: space-between; align-items: baseline; gap: 12px; }
+.field-count { flex-shrink: 0; font-size: 13px; font-weight: 400; color: var(--text-muted); }
+.sheet-note { margin: 0 0 12px; font-size: 13px; color: var(--text-muted); }
 
 /* 問題文中の用語(タップ可能。枠なし、下線のみ) */
 .term { color: var(--text-accent); text-decoration: underline dashed; text-underline-offset: 4px; padding: 3px 6px; }

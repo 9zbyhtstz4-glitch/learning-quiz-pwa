@@ -12,7 +12,7 @@ try {
   const key = keys.find(key => key.startsWith(`learning-quiz:${base.href}:`));
   if (!key) throw new Error('Cache missing');
   const cache = await caches.open(key);
-  const assets = ['', 'index.html','style.css','app.js','config.js','progress.js','db.js',
+  const assets = ['', 'index.html','style.css','app.js','config.js','progress.js','db.js','fields.js',
     'data.json','manifest.json','icons/icon-192.png','icons/icon-512.png','icons/apple-touch-icon.png'];
   for (const asset of assets) {
     const response = await cache.match(new URL(asset, base));

@@ -12,14 +12,16 @@
 </head>
 <body>
   <div class="study-screen">
-  <header><h1>用語から学ぶクイズ <span id="app-version" aria-label="バージョン23">v23</span></h1><p id="library-count"></p></header>
+  <header><h1>用語から学ぶクイズ <span id="app-version" aria-label="バージョン24">v24</span></h1>
+    <div class="header-meta"><p id="library-count"></p><button type="button" id="field-open" data-sheet="field-sheet" aria-haspopup="dialog">分野：すべて</button></div>
+  </header>
   <main>
     <p id="cache-status" role="status" hidden></p>
     <p id="error" role="alert" hidden></p>
     <p id="waiting" role="status" hidden>待機中・用語は確認できます</p>
     <section id="question" aria-labelledby="body" hidden>
       <p id="meta"></p><h2 id="body" tabindex="-1"></h2>
-      <div id="choices"></div>
+      <div id="choices" class="option-list"></div>
       <nav class="supplement-actions" aria-label="補足情報">
         <button type="button" data-sheet="sources-sheet" aria-haspopup="dialog">参考資料</button>
         <button type="button" data-sheet="terms-sheet" aria-haspopup="dialog">用語一覧</button>
@@ -33,6 +35,10 @@
   <dialog id="sources-sheet" class="sheet" aria-labelledby="sources-title">
     <div class="sheet-header"><h2 id="sources-title">参考資料（オンライン）</h2><button type="button" data-close-sheet>閉じる</button></div>
     <div class="sheet-content"><ul id="sources"></ul></div>
+  </dialog>
+  <dialog id="field-sheet" class="sheet" aria-labelledby="field-title">
+    <div class="sheet-header"><h2 id="field-title">出題する分野</h2><button type="button" data-close-sheet>閉じる</button></div>
+    <div class="sheet-content"><p class="sheet-note">選んだ分野から次の問題を出します。問題文の用語は分野に関係なくタップできます。</p><div id="fields" class="option-list"></div></div>
   </dialog>
   <dialog id="terms-sheet" class="sheet" aria-labelledby="terms-title">
     <div class="sheet-header"><h2 id="terms-title">用語一覧</h2><button type="button" data-close-sheet>閉じる</button></div>

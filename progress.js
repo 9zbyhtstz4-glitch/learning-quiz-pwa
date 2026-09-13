@@ -35,9 +35,12 @@ export function recordAnswer(records, question, choiceIndex, now, config) {
   else if (p.state === 'resting' && !correct) p.state = 'due';
 }
 
-export function selectNext(records) {
+// allowed(問題IDのSet)を渡すと、その中からだけ選ぶ。優先度 unseen > due > resting は変わらない。
+// 絞り込みは選ぶ対象だけに効き、進捗の状態には触れない。
+export function selectNext(records, allowed = null) {
+  const pool = allowed ? records.filter(p => allowed.has(p.questionId)) : records;
   for (const state of ['unseen', 'due', 'resting']) {
-    const candidates = records.filter(p => p.state === state)
+    const candidates = pool.filter(p => p.state === state)
       .sort((a, b) => (a.lastSeenAt ?? -1) - (b.lastSeenAt ?? -1));
     if (candidates.length) return candidates[0].questionId;
   }

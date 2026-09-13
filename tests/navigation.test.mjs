@@ -6,11 +6,12 @@ import vm from 'node:vm';
 // 実際の遷移ハンドラーを実行し、フォールバック時の副作用を検証する。
 const source = readFileSync(new URL('../app.js', import.meta.url), 'utf8');
 const handler = source.slice(source.indexOf('async function openTerm('), source.indexOf('\nasync function answer('));
-function setup(currentId, stackIds) {
+function setup(currentId, stackIds, extra = {}) {
   const definition = { textContent: '', hidden: true };
   let saves = 0;
   let renders = 0;
   const context = vm.createContext({
+    ...extra,
     termById: new Map([['a', { questionIds: ['A'], shortDefinition: 'Aの定義' }]]),
     questionById: new Map([['A', { type: 'term' }]]),
     current: { questionId: currentId, order: [2, 0, 1], choiceIndex: 2 },
@@ -47,4 +48,12 @@ test('循環しない用語遷移は保存・push・表示を継続', async () =
   assert.equal(s.context.current.questionId, 'A');
   assert.equal(s.context.interruptStack.stack[0].questionId, 'B');
   assert.equal(s.context.suspendedViews[0].choiceIndex, 2);
+});
+test('分野を絞っていても、他分野の用語問題へ遷移できる', async () => {
+  // 遷移先Aを含まない分野を選んだ状態。絞り込みは次の問題の自動選択だけに効く。
+  const s = setup('B', [], { selectedField: 'other', allowed: new Set(['B']) });
+  await s.context.openTerm('a');
+  assert.equal(s.saves(), 1);
+  assert.equal(s.context.current.questionId, 'A');
+  assert.equal(s.context.interruptStack.stack.length, 1);
 });

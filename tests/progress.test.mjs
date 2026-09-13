@@ -51,6 +51,21 @@ test('優先順位と全問cooling時の待機', () => {
   assert.equal(selectNext(ps),'a'); ps[0].state='cooling';
   assert.equal(selectNext(ps),null);
 });
+test('分野の絞り込みは対象内で優先順位を保ち、対象外の状態に触れない', () => {
+  const ps = ['a','b','c','d'].map(initialProgress);
+  ps[0].state='due'; ps[1].state='resting'; ps[2].state='cooling';   // dは他分野のunseen
+  const before = JSON.stringify(ps);
+  const field = new Set(['a','b','c']);
+  assert.equal(selectNext(ps), 'd');            // 絞らなければunseenのdが最優先
+  assert.equal(selectNext(ps, field), 'a');     // 分野内ではdue > resting
+  ps[0].state='cooling';
+  assert.equal(selectNext(ps, field), 'b');
+  ps[1].state='cooling';
+  assert.equal(selectNext(ps, field), null);    // 分野内は全部coolingで待機
+  assert.equal(selectNext(ps), 'd');            // 他の分野にはまだ出題できる
+  ps[0].state='due'; ps[1].state='resting';
+  assert.equal(JSON.stringify(ps), before);     // 選ぶだけで進捗は変わらない
+});
 test('cooling用語へ再遷移・回答でき、履歴を保存', () => {
   const ps = ['a','b'].map(initialProgress);
   recordPresentation(ps,'a',0,config); recordPresentation(ps,'b',1,config);

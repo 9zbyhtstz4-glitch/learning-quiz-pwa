@@ -1,9 +1,12 @@
 const DB_NAME = 'learning-quiz';
+// v2で選択中の分野などを保存するsettingsストアを追加した。v1の進捗はそのまま引き継ぐ。
 export function openDatabase(name = DB_NAME) {
   return new Promise((resolve, reject) => {
-    const request = indexedDB.open(name, 1);
+    const request = indexedDB.open(name, 2);
     request.onupgradeneeded = () => {
-      request.result.createObjectStore('progress', { keyPath: 'questionId' });
+      const db = request.result;
+      if (!db.objectStoreNames.contains('progress')) db.createObjectStore('progress', { keyPath: 'questionId' });
+      if (!db.objectStoreNames.contains('settings')) db.createObjectStore('settings', { keyPath: 'key' });
     };
     request.onerror = () => reject(request.error);
     request.onblocked = () => reject(new Error('他のタブを閉じて再読み込みしてください。'));
@@ -34,6 +37,24 @@ export function updateProgress(db, questions, change) {
     };
     tx.oncomplete = () => resolve(result);
     tx.onabort = () => reject(failure ?? tx.error ?? new Error('進捗を保存できませんでした。'));
+    tx.onerror = () => {};
+  });
+}
+
+export function readSetting(db, key) {
+  return new Promise((resolve, reject) => {
+    const request = db.transaction('settings', 'readonly').objectStore('settings').get(key);
+    request.onsuccess = () => resolve(request.result?.value);
+    request.onerror = () => reject(request.error);
+  });
+}
+
+export function writeSetting(db, key, value) {
+  return new Promise((resolve, reject) => {
+    const tx = db.transaction('settings', 'readwrite');
+    tx.objectStore('settings').put({ key, value });
+    tx.oncomplete = () => resolve();
+    tx.onabort = () => reject(tx.error ?? new Error('設定を保存できませんでした。'));
     tx.onerror = () => {};
   });
 }

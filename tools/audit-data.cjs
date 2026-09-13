@@ -105,11 +105,19 @@ if (Number.isInteger(cooling) && cooling >= data.questions.length) {
     `収録を${cooling + 1}件以上にするか、coolingQuestionCountを${data.questions.length - 1}以下にしてください。`);
 }
 
+// --- 分野の表示名(fields.js) ---
+// 分野選択シートは、表示名のない分野を「名称未設定の分野」と表示する。fields.jsの `'id': '表示名',` 行を読む。
+const fieldLabels = new Map([...fs.readFileSync(path.join(root, 'fields.js'), 'utf8')
+  .matchAll(/^\s*'([^']+)':\s*'([^']+)',?\s*$/gm)].map(m => [m[1], m[2]]));
+for (const id of new Set(data.questions.map(q => q.fieldId)))
+  if (!fieldLabels.has(id)) warn(`fieldId ${id}`, 'fields.jsに日本語の表示名がありません。分野選択では「名称未設定の分野」と表示されます。');
+
 // --- 監査統計 ---
 const tally = (list, key) => list.reduce((m, x) => (m[key(x)] = (m[key(x)] ?? 0) + 1, m), {});
 const answerCounts = [0, 1, 2].map(i => data.questions.filter(q => q.answerIndex === i).length);
 const patternCounts = tally(data.questions, q => q.patternType ?? '未設定');
 const typeCounts = tally(data.questions, q => q.type);
+const fieldCounts = tally(data.questions, q => q.fieldId);
 
 const line = '-'.repeat(72);
 console.log(`${line}\nデータ点検: 問題${data.questions.length}件 / 用語${data.terms.length}件 / 記事${data.articles.length}件\n${line}`);
@@ -130,6 +138,10 @@ for (const [k, n] of Object.entries(patternCounts).sort((a, b) => b[1] - a[1])) 
 
 console.log('\n[ typeの分布 ]');
 for (const [k, n] of Object.entries(typeCounts).sort((a, b) => b[1] - a[1])) console.log(`  ${String(k).padEnd(18)} ${String(n).padStart(3)}件`);
+
+console.log('\n[ fieldIdの分布(分野選択の表示名) ]');
+for (const [k, n] of Object.entries(fieldCounts).sort((a, b) => b[1] - a[1]))
+  console.log(`  ${String(k).padEnd(18)} ${String(n).padStart(3)}件  ${fieldLabels.get(k) ?? '(表示名なし)'}`);
 
 console.log(`\n${line}`);
 if (warnings.length) {
