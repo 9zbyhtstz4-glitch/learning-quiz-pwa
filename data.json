@@ -118,6 +118,13 @@
       "url": "https://platform.claude.com/docs/ja/build-with-claude/context-editing",
       "source": "claude-docs",
       "fieldId": "llm-performance"
+    },
+    {
+      "id": "a-search-results",
+      "title": "検索結果",
+      "url": "https://platform.claude.com/docs/ja/build-with-claude/search-results",
+      "source": "claude-docs",
+      "fieldId": "data-formats"
     }
   ],
   "terms": [
@@ -1228,6 +1235,233 @@
       ],
       "referenceArticleIds": [
         "a-context-windows"
+      ]
+    },
+    {
+      "id": "search-result-block",
+      "label": "検索結果ブロック",
+      "shortDefinition": "Claudeが自分自身のコンテンツを、Web検索結果と同じ方法で引用できるようにするコンテンツブロック。各引用に提供したソースとタイトルが含まれ、回答を自分のドキュメントに帰属させるRAGで使う。",
+      "fieldId": "data-formats",
+      "relatedTermIds": [
+        "rag",
+        "source-attribution",
+        "citation-enabled"
+      ],
+      "questionIds": [
+        "q-search-result-block"
+      ],
+      "referenceArticleIds": [
+        "a-search-results"
+      ]
+    },
+    {
+      "id": "source-attribution",
+      "label": "ソース帰属",
+      "shortDefinition": "回答のどの部分がどの資料に基づくかを明示すること。検索結果のソースとタイトルが帰属の情報になり、ソースは安定した文字列であれば何でもよい。引用が有効なら特別なプロンプトなしに付く。",
+      "fieldId": "ai-safety",
+      "relatedTermIds": [
+        "search-result-block"
+      ],
+      "questionIds": [
+        "q-source-attribution"
+      ],
+      "referenceArticleIds": [
+        "a-search-results"
+      ]
+    },
+    {
+      "id": "citation-enabled",
+      "label": "引用の有効化",
+      "shortDefinition": "引用はデフォルトで無効で、明示的に有効にする必要がある。リクエスト内のすべての検索結果で有効か無効かのどちらかしか選べず、異なる設定を混在させるとエラーになる。",
+      "fieldId": "llm-parameters",
+      "relatedTermIds": [
+        "search-result-block",
+        "source-attribution"
+      ],
+      "questionIds": [
+        "q-citation-enabled"
+      ],
+      "referenceArticleIds": [
+        "a-search-results"
+      ]
+    },
+    {
+      "id": "citation-granularity",
+      "label": "引用可能な最小単位",
+      "shortDefinition": "テキストブロックが引用可能な最小単位で、ブロック内の一部ではなく全体が引用される。細かい引用が必要なら、コンテンツを小さなブロックに分割しておく。",
+      "fieldId": "data-formats",
+      "relatedTermIds": [
+        "search-result-block",
+        "cited-text",
+        "block-index"
+      ],
+      "questionIds": [
+        "q-citation-granularity"
+      ],
+      "referenceArticleIds": [
+        "a-search-results"
+      ]
+    },
+    {
+      "id": "cited-text",
+      "label": "引用テキスト",
+      "shortDefinition": "引用された範囲のブロックの内容を連結したもの。出力トークンには数えられないため、根拠として元の文章を返しても出力コストは増えない。",
+      "fieldId": "data-formats",
+      "relatedTermIds": [
+        "citation-granularity",
+        "block-index"
+      ],
+      "questionIds": [
+        "q-cited-text"
+      ],
+      "referenceArticleIds": [
+        "a-search-results"
+      ]
+    },
+    {
+      "id": "block-index",
+      "label": "ブロックインデックス",
+      "shortDefinition": "引用が検索結果のどの範囲を指すかを示す開始と終了の番号の組。終了は排他的で常に開始より大きく、この範囲が引用テキストの中身と対応する。",
+      "fieldId": "data-formats",
+      "relatedTermIds": [
+        "citation-granularity",
+        "cited-text",
+        "search-result-index"
+      ],
+      "questionIds": [
+        "q-block-index"
+      ],
+      "referenceArticleIds": [
+        "a-search-results"
+      ]
+    },
+    {
+      "id": "search-result-index",
+      "label": "検索結果インデックス",
+      "shortDefinition": "引用された検索結果がリクエスト内で何番目かを示す0始まりの番号。事前取得かツール経由かに関係なく、すべてのメッセージとツール結果を通して出現順に数える。",
+      "fieldId": "data-formats",
+      "relatedTermIds": [
+        "block-index",
+        "prefetched-content",
+        "dynamic-rag"
+      ],
+      "questionIds": [
+        "q-search-result-index"
+      ],
+      "referenceArticleIds": [
+        "a-search-results"
+      ]
+    },
+    {
+      "id": "dynamic-rag",
+      "label": "動的RAG",
+      "shortDefinition": "カスタムツールが実行時にコンテンツを取得して検索結果として返し、Claudeがそれを引用する方法。リアルタイム検索に向き、コンテキストのあふれを避けるため関連性の高い結果だけを返す。",
+      "fieldId": "llm-techniques",
+      "relatedTermIds": [
+        "prefetched-content",
+        "tool-use",
+        "rag"
+      ],
+      "questionIds": [
+        "q-dynamic-rag"
+      ],
+      "referenceArticleIds": [
+        "a-search-results"
+      ]
+    },
+    {
+      "id": "prefetched-content",
+      "label": "事前取得コンテンツ",
+      "shortDefinition": "ユーザーメッセージ内で検索結果を直接渡す方法。検索インフラやキャッシュから事前に取得した結果、テストや開発に向く。ツール経由の方法と同じ会話内で混在させられる。",
+      "fieldId": "llm-techniques",
+      "relatedTermIds": [
+        "dynamic-rag",
+        "search-result-index"
+      ],
+      "questionIds": [
+        "q-prefetched-content"
+      ],
+      "referenceArticleIds": [
+        "a-search-results"
+      ]
+    },
+    {
+      "id": "knowledge-base",
+      "label": "ナレッジベース",
+      "shortDefinition": "組織や製品に関する情報を集めた検索対象の資料群。モデルの訓練データに含まれない自社固有の情報を扱うため、動的RAGのツールが検索してソース・タイトル・本文の組で返す。",
+      "fieldId": "llm-techniques",
+      "relatedTermIds": [
+        "dynamic-rag",
+        "rag"
+      ],
+      "questionIds": [
+        "q-knowledge-base"
+      ],
+      "referenceArticleIds": [
+        "a-search-results"
+      ]
+    },
+    {
+      "id": "search-result-placement",
+      "label": "検索結果の配置制約",
+      "shortDefinition": "検索結果ブロックはユーザーメッセージ内(ツール結果内を含む)にのみ置け、検索結果を含むアシスタントメッセージは拒否される。外から与えられた資料であり、モデル自身の発言ではないため。",
+      "fieldId": "data-formats",
+      "relatedTermIds": [
+        "search-result-block"
+      ],
+      "questionIds": [
+        "q-search-result-placement"
+      ],
+      "referenceArticleIds": [
+        "a-search-results"
+      ]
+    },
+    {
+      "id": "tool-result-homogeneity",
+      "label": "ツール結果の同質性制約",
+      "shortDefinition": "ツール結果内のいずれかのブロックが検索結果なら、すべてのブロックが検索結果でなければならない。補足テキストは検索結果の中に入れれば、それも引用可能になる。",
+      "fieldId": "data-formats",
+      "relatedTermIds": [
+        "search-result-placement",
+        "dynamic-rag"
+      ],
+      "questionIds": [
+        "q-tool-result-homogeneity"
+      ],
+      "referenceArticleIds": [
+        "a-search-results"
+      ]
+    },
+    {
+      "id": "text-only-results",
+      "label": "テキストのみの制約",
+      "shortDefinition": "検索結果はテキストのみを保持し、画像などのメディアはコンテンツ配列内でサポートされない。各項目は空でない文字列のテキストブロックである必要がある。",
+      "fieldId": "data-formats",
+      "relatedTermIds": [
+        "search-result-block",
+        "search-result-placement"
+      ],
+      "questionIds": [
+        "q-text-only-results"
+      ],
+      "referenceArticleIds": [
+        "a-search-results"
+      ]
+    },
+    {
+      "id": "graceful-empty-result",
+      "label": "空の結果の扱い",
+      "shortDefinition": "検索が失敗したり何も返さなかったりしたとき、エラーを発生させる代わりに結果を説明するプレーンテキストを返す扱い方。Claudeが空の結果を説明し、会話は継続する。",
+      "fieldId": "llm-techniques",
+      "relatedTermIds": [
+        "dynamic-rag",
+        "overloaded-error"
+      ],
+      "questionIds": [
+        "q-graceful-empty-result"
+      ],
+      "referenceArticleIds": [
+        "a-search-results"
       ]
     }
   ],
@@ -2928,6 +3162,406 @@
       ],
       "sourceArticleIds": [
         "a-context-windows"
+      ],
+      "generatedBy": "gemini-3.8-flash"
+    },
+    {
+      "id": "q-search-result-block",
+      "type": "term",
+      "fieldId": "data-formats",
+      "patternType": "select-correct",
+      "body": "{{term:rag}} アプリケーションなどで用いられる「検索結果ブロック」の役割として、正しいものはどれか？",
+      "choices": [
+        "モデル自身の出力を圧縮して保存することで、後のターンでの処理速度を上げる仕組みである。",
+        "インターネット上の最新ニュースを自動で巡回して取得し、出力結果として返す仕組みである。",
+        "モデルが自分自身のコンテンツを、Web検索結果と同じように引用可能にする仕組みである。"
+      ],
+      "answerIndex": 2,
+      "revealAnswer": true,
+      "explanation": "検索結果ブロックは、回答を自分のドキュメントに帰属させる必要があるRAGアプリケーションにおいて、Claudeが自分自身のコンテンツを引用できるようにする仕組みです。",
+      "termIds": [
+        "rag"
+      ],
+      "sourceArticleIds": [
+        "a-search-results"
+      ],
+      "generatedBy": "gemini-3.8-flash"
+    },
+    {
+      "id": "q-source-attribution",
+      "type": "term",
+      "fieldId": "ai-safety",
+      "patternType": "select-incorrect",
+      "body": "{{term:tool-use}} などで得た回答の根拠を示す「ソース帰属」の仕様として、誤っているものはどれか？",
+      "choices": [
+        "帰属を示すソース文字列は、URLや内部識別子など安定した形式であれば何でも利用できる。",
+        "帰属を示すために、モデルに対して引用を付加するよう特別なプロンプトで指示する必要がある。",
+        "帰属を示すためには、対象となる各検索結果にソースとタイトルが必須項目として含まれている。"
+      ],
+      "answerIndex": 1,
+      "revealAnswer": true,
+      "explanation": "引用が有効に設定されていれば、特別なプロンプトなしに自動的に引用が付きます。したがって「特別なプロンプトで指示する必要がある」という記述が誤りです。",
+      "termIds": [
+        "tool-use"
+      ],
+      "sourceArticleIds": [
+        "a-search-results"
+      ],
+      "generatedBy": "gemini-3.8-flash"
+    },
+    {
+      "id": "q-citation-enabled",
+      "type": "term",
+      "fieldId": "llm-parameters",
+      "patternType": "select-best",
+      "body": "{{term:rag}} などで用いる「引用の有効化」の設定方法として、最も適切なものはどれか？",
+      "choices": [
+        "リクエスト内のすべての検索結果に対して、一律に有効にするか無効にするかしか選べない。",
+        "リクエスト内の特定の検索結果だけを個別に有効にし、他を無効にするような混在が可能である。",
+        "リクエスト内のすべての検索結果に対して、デフォルトで自動的に有効化された状態で処理される。"
+      ],
+      "answerIndex": 0,
+      "revealAnswer": true,
+      "explanation": "引用はデフォルトで無効であり、オール・オア・ナッシングの制約があります。リクエスト内のすべての検索結果で有効にするか、すべてで無効にするかのどちらかしかなく、混在させるとエラーになります。",
+      "termIds": [
+        "rag"
+      ],
+      "sourceArticleIds": [
+        "a-search-results"
+      ],
+      "generatedBy": "gemini-3.8-flash"
+    },
+    {
+      "id": "q-citation-granularity",
+      "type": "term",
+      "fieldId": "data-formats",
+      "patternType": "select-correct",
+      "body": "{{term:search-result-block}} を用いた「引用可能な最小単位」の仕様として、正しいものはどれか？",
+      "choices": [
+        "テキストブロック内の任意の部分文字列が引用可能な単位となるため、分割は不要である。",
+        "単語単位での引用が可能となるため、コンテンツをより細かく分割するほど正確性が下がる。",
+        "テキストブロック全体が引用可能な単位となるため、必要に応じてより小さく分割する。"
+      ],
+      "answerIndex": 2,
+      "revealAnswer": true,
+      "explanation": "テキストブロックが引用可能な最小単位であり、ブロック内の部分文字列ではなくブロック全体が引用されます。細かい粒度の引用を得るためには、コンテンツをより小さなブロックに分割する必要があります。",
+      "termIds": [
+        "search-result-block"
+      ],
+      "sourceArticleIds": [
+        "a-search-results"
+      ],
+      "generatedBy": "gemini-3.8-flash"
+    },
+    {
+      "id": "q-cited-text",
+      "type": "term",
+      "fieldId": "data-formats",
+      "patternType": "select-incorrect",
+      "body": "{{term:context-window}} にも関係する「引用テキスト」の仕様として、誤っているものはどれか？",
+      "choices": [
+        "引用テキストを返却した分だけ出力のコストが増加するため、長文での根拠提示は控えるべきである。",
+        "引用テキストは出力トークンとしてカウントされないため、コストを気にせずに元の文章を返却できる。",
+        "引用テキストは、引用の開始位置から終了位置までのブロックの内容を完全に結合したものである。"
+      ],
+      "answerIndex": 0,
+      "revealAnswer": true,
+      "explanation": "引用テキストは出力トークンにはカウントされません。根拠を示すために元の文章を返しても、その分の出力コストは増えない仕組みです。したがって「出力のコストが増加するため長文での根拠提示は控えるべきである」という記述が誤りです。",
+      "termIds": [
+        "context-window"
+      ],
+      "sourceArticleIds": [
+        "a-search-results"
+      ],
+      "generatedBy": "gemini-3.8-flash"
+    },
+    {
+      "id": "q-block-index",
+      "type": "term",
+      "fieldId": "data-formats",
+      "patternType": "select-best",
+      "body": "{{term:cited-text}} に対応する「ブロックインデックス」の仕様として、最も適切なものはどれか？",
+      "choices": [
+        "開始位置を示す一つのインデックスのみで構成され、後続するすべてのコンテンツを引用対象として指定する。",
+        "開始位置と終了位置のインデックスで構成され、終了位置のインデックスは常に開始位置より小さい値となる。",
+        "開始位置と終了位置のインデックスで構成され、終了位置のインデックスは常に開始位置より大きい値となる。"
+      ],
+      "answerIndex": 2,
+      "revealAnswer": true,
+      "explanation": "ブロックインデックスは開始と終了の組で構成され、終了インデックスは「排他的」であるため、常に開始インデックスより大きくなります。この範囲が引用テキストと対応します。",
+      "termIds": [
+        "cited-text"
+      ],
+      "sourceArticleIds": [
+        "a-search-results"
+      ],
+      "generatedBy": "gemini-3.8-flash"
+    },
+    {
+      "id": "q-search-result-index",
+      "type": "term",
+      "fieldId": "data-formats",
+      "patternType": "select-correct",
+      "body": "{{term:rag}} での会話における「検索結果インデックス」のカウント方法として、正しいものはどれか？",
+      "choices": [
+        "検索結果がツール経由か事前取得かで区別し、それぞれに別々の通し番号を付与してカウントする。",
+        "検索結果の提供方法に関係なく、会話内で出現した順序に沿って単一の通し番号でカウントする。",
+        "検索結果の重要度をモデルが判定し、関連性の高いものから順番に新しい通し番号をカウントする。"
+      ],
+      "answerIndex": 1,
+      "revealAnswer": true,
+      "explanation": "検索結果インデックスの数え方は「出現順」です。事前取得かツール経由かに関係なく、すべてのメッセージとツール結果にわたって、会話内で出現する順序で数えられます。",
+      "termIds": [
+        "rag"
+      ],
+      "sourceArticleIds": [
+        "a-search-results"
+      ],
+      "generatedBy": "gemini-3.8-flash"
+    },
+    {
+      "id": "q-dynamic-rag",
+      "type": "term",
+      "fieldId": "llm-techniques",
+      "patternType": "select-incorrect",
+      "body": "{{term:tool-use}} の仕組みを用いた「動的RAG」の特徴として、誤っているものはどれか？",
+      "choices": [
+        "カスタムツールが実行時にコンテンツを取得するため、リアルタイムな情報を扱う検索用途に適している。",
+        "情報のオーバーフローを防ぐため、すべての結果ではなく関連性の高い結果のみを返すのが望ましい。",
+        "ユーザーがあらかじめ用意した固定のコンテンツを利用するため、過去のクエリ結果のテストに適している。"
+      ],
+      "answerIndex": 2,
+      "revealAnswer": true,
+      "explanation": "ユーザーがあらかじめ用意した固定のコンテンツを利用し、テストなどに適しているのは「事前取得コンテンツ」の特徴です。動的RAGはツールが実行時にコンテンツを取得する仕組みです。",
+      "termIds": [
+        "tool-use"
+      ],
+      "sourceArticleIds": [
+        "a-search-results"
+      ],
+      "generatedBy": "gemini-3.8-flash"
+    },
+    {
+      "id": "q-prefetched-content",
+      "type": "term",
+      "fieldId": "llm-techniques",
+      "patternType": "select-best",
+      "body": "{{term:rag}} などにおける「事前取得コンテンツ」の用途として、最も適切なものはどれか？",
+      "choices": [
+        "検索インフラから事前に取得した結果を利用できるため、引用動作のテストや開発用途に適している。",
+        "ツールが実行時に最新の情報を外部から取得するため、リアルタイムなニュース検索用途に適している。",
+        "モデル自身のパラメータを調整して精度を上げるため、長時間のファインチューニング用途に適している。"
+      ],
+      "answerIndex": 0,
+      "revealAnswer": true,
+      "explanation": "事前取得コンテンツは、ユーザーメッセージ内で検索結果を直接提供する方法です。すでに結果がある場合や、既知のコンテンツで引用の動作をテストするのに最適です。",
+      "termIds": [
+        "rag"
+      ],
+      "sourceArticleIds": [
+        "a-search-results"
+      ],
+      "generatedBy": "gemini-3.8-flash"
+    },
+    {
+      "id": "q-knowledge-base",
+      "type": "term",
+      "fieldId": "llm-techniques",
+      "patternType": "select-correct",
+      "body": "{{term:dynamic-rag}} の検索対象となる「ナレッジベース」の役割として、正しいものはどれか？",
+      "choices": [
+        "モデルが自己学習を行うためにインターネットから無作為に収集し続ける巨大なデータセットのこと。",
+        "モデルの訓練データには含まれていない、組織固有の情報や製品に関する資料を集めた検索対象のこと。",
+        "モデルの出力結果をユーザーごとに暗号化して安全に保管するためのクラウド上の保存領域のこと。"
+      ],
+      "answerIndex": 1,
+      "revealAnswer": true,
+      "explanation": "ナレッジベースは、組織や製品に関する情報を集めた検索対象となる資料群です。モデルの訓練データには含まれない自社固有の情報を扱うための仕組みとして、動的RAGの検索対象となります。",
+      "termIds": [
+        "dynamic-rag"
+      ],
+      "sourceArticleIds": [
+        "a-search-results"
+      ],
+      "generatedBy": "gemini-3.8-flash"
+    },
+    {
+      "id": "q-search-result-placement",
+      "type": "term",
+      "fieldId": "data-formats",
+      "patternType": "select-incorrect",
+      "body": "{{term:search-result-block}} の配置に関する制約として、誤っているものはどれか？",
+      "choices": [
+        "検索結果は外部から与えられた資料として扱われるため、アシスタントメッセージ内に配置すると拒否される。",
+        "検索結果は外部から与えられた資料として扱われるため、ユーザーメッセージ内にのみ配置することが許可される。",
+        "検索結果はモデル自身の発言として扱われるため、アシスタントメッセージ内でのみ配置することが許可される。"
+      ],
+      "answerIndex": 2,
+      "revealAnswer": true,
+      "explanation": "検索結果ブロックは「外から与えられた資料」であるため、ユーザーメッセージ内（ツール結果を含む）にのみ配置できます。検索結果を含むアシスタントメッセージは拒否されます。したがって「モデル自身の発言として扱われ、アシスタントメッセージ内でのみ配置が許可される」という記述が誤りです。",
+      "termIds": [
+        "search-result-block"
+      ],
+      "sourceArticleIds": [
+        "a-search-results"
+      ],
+      "generatedBy": "gemini-3.8-flash"
+    },
+    {
+      "id": "q-tool-result-homogeneity",
+      "type": "term",
+      "fieldId": "data-formats",
+      "patternType": "select-best",
+      "body": "{{term:search-result-placement}} に関連する「ツール結果の同質性制約」の仕様として、最も適切なものはどれか？",
+      "choices": [
+        "同じツール結果内であれば、検索結果と他の任意のブロックタイプを自由に混在させることが許可される。",
+        "ツール結果内の一部が検索結果である場合、その中のすべてのブロックが検索結果でなければならない。",
+        "ユーザーメッセージ内では検索結果のみが許可され、画像や他のブロックと混在させるとエラーになる。"
+      ],
+      "answerIndex": 1,
+      "revealAnswer": true,
+      "explanation": "ツール結果はユーザーメッセージよりも厳格な制約を持ちます。いずれかのブロックが検索結果である場合、そのすべてのブロックが検索結果でなければならず、他のブロックタイプと混在させるとバリデーションエラーになります。",
+      "termIds": [
+        "search-result-placement"
+      ],
+      "sourceArticleIds": [
+        "a-search-results"
+      ],
+      "generatedBy": "gemini-3.8-flash"
+    },
+    {
+      "id": "q-text-only-results",
+      "type": "term",
+      "fieldId": "data-formats",
+      "patternType": "select-correct",
+      "body": "{{term:search-result-block}} における「テキストのみの制約」の仕様として、正しいものはどれか？",
+      "choices": [
+        "検索結果のコンテンツ配列内では画像がサポートされていないため、空でない文字列のテキストブロックで構成する。",
+        "検索結果のコンテンツ配列内ではメディアが必須となるため、各項目には必ず画像を含んだテキストブロックを指定する。",
+        "検索結果のコンテンツ配列内ではテキストが禁止されているため、URLや画像のバイナリデータのみで配列を構成する。"
+      ],
+      "answerIndex": 0,
+      "revealAnswer": true,
+      "explanation": "検索結果はテキストのみを保持します。画像やその他のメディアはサポートされておらず、各項目は空でない文字列のテキストブロックである必要があります。",
+      "termIds": [
+        "search-result-block"
+      ],
+      "sourceArticleIds": [
+        "a-search-results"
+      ],
+      "generatedBy": "gemini-3.8-flash"
+    },
+    {
+      "id": "q-graceful-empty-result",
+      "type": "term",
+      "fieldId": "llm-techniques",
+      "patternType": "select-incorrect",
+      "body": "{{term:dynamic-rag}} などで推奨される「空の結果の扱い」として、誤っているものはどれか？",
+      "choices": [
+        "検索が何も返さなかった場合、直ちにエラーを発生させて会話のプロセス全体を強制的に停止させるべきである。",
+        "検索が何も返さなかった場合、見つからなかった旨を説明するプレーンテキストブロックをエラーの代わりに返す。",
+        "検索が失敗した場合、空であることをモデルに伝えて説明させることで、会話を止めることなく継続させる。"
+      ],
+      "answerIndex": 0,
+      "revealAnswer": true,
+      "explanation": "検索が失敗したり何も返さなかった場合、エラーを発生させるのではなく、結果を説明するプレーンテキストブロック（例：「見つかりませんでした」）を返すことが推奨されています。これにより会話は継続します。",
+      "termIds": [
+        "dynamic-rag"
+      ],
+      "sourceArticleIds": [
+        "a-search-results"
+      ],
+      "generatedBy": "gemini-3.8-flash"
+    },
+    {
+      "id": "q-dynamic-rag-vs-prefetched",
+      "type": "relationship",
+      "fieldId": "llm-techniques",
+      "patternType": "select-correct",
+      "body": "{{term:dynamic-rag}} と {{term:prefetched-content}} の関係性を示す説明として、正しいものはどれか？",
+      "choices": [
+        "実行時に必要な情報を取得する手法と、事前のクエリや外部インフラなどからあらかじめ用意された情報を渡す手法。",
+        "あらかじめ用意された固定の情報を渡す手法と、ユーザーが手動で画面上に入力したテキストのみを抽出する手法。",
+        "実行時に必要な情報を取得する手法と、モデルが自身で学習した内部データのみから推論して情報を作り出す手法。"
+      ],
+      "answerIndex": 0,
+      "revealAnswer": false,
+      "explanation": "片方はカスタムツールなどが実行時にリアルタイムで情報を取得する方式であり、もう一方は既存の検索インフラなどから先に取得しておいた情報をユーザーメッセージとして直接提供する方式です。用途によって使い分けられます。",
+      "termIds": [
+        "dynamic-rag",
+        "prefetched-content"
+      ],
+      "sourceArticleIds": [
+        "a-search-results"
+      ],
+      "generatedBy": "gemini-3.8-flash"
+    },
+    {
+      "id": "q-granularity-cited-text",
+      "type": "relationship",
+      "fieldId": "data-formats",
+      "patternType": "select-incorrect",
+      "body": "{{term:citation-granularity}} の分割単位が {{term:cited-text}} に与える影響について、誤っているものはどれか？",
+      "choices": [
+        "コンテンツを一つの大きな塊としてまとめた場合、どのような指定が行われても結果的にその全文がそのまま返却される。",
+        "モデルは任意の部分的な文字列ではなく設定された枠組み全体を対象とするため、より細かく返却させるには事前の分割が必要となる。",
+        "コンテンツを一つの大きな塊としてまとめた場合、モデルが自動的に段落を判定して最も関連性の高い一部分のみを抽出して返却する。"
+      ],
+      "answerIndex": 2,
+      "revealAnswer": false,
+      "explanation": "引用の仕組みは、ブロック単位でのみ機能します。大きな一つのブロックとして渡されたコンテンツは、部分的に抽出されることはなく、引用される際は常にその全文がそのまま返されます。より細かい範囲で返してほしい場合は、事前にデータを小さなブロックに切り分けておく必要があります。",
+      "termIds": [
+        "citation-granularity",
+        "cited-text"
+      ],
+      "sourceArticleIds": [
+        "a-search-results"
+      ],
+      "generatedBy": "gemini-3.8-flash"
+    },
+    {
+      "id": "q-placement-vs-homogeneity",
+      "type": "relationship",
+      "fieldId": "data-formats",
+      "patternType": "select-best",
+      "body": "{{term:search-result-placement}} と {{term:tool-result-homogeneity}} の制約の違いについて、最も適切なものはどれか？",
+      "choices": [
+        "通常のメッセージ内では検索結果と画像を自由に並べられるが、ツールの応答内では検索結果を含める場合すべての要素を検索結果で統一しなければならない。",
+        "通常のメッセージ内では検索結果と画像を自由に並べられるが、ツールの応答内では検索結果を含めること自体が完全に禁止されている。",
+        "通常のメッセージ内では要素をすべて検索結果で統一しなければならないが、ツールの応答内では検索結果と画像を自由に並べることができる。"
+      ],
+      "answerIndex": 0,
+      "revealAnswer": false,
+      "explanation": "情報を配置する場所によって、他のデータタイプとの混在ルールが異なります。ユーザーメッセージ内では検索結果を他のブロックと並べられますが、ツール結果内ではより厳格な制約があり、検索結果を含む場合はすべてを検索結果で揃える必要があります。",
+      "termIds": [
+        "search-result-placement",
+        "tool-result-homogeneity"
+      ],
+      "sourceArticleIds": [
+        "a-search-results"
+      ],
+      "generatedBy": "gemini-3.8-flash"
+    },
+    {
+      "id": "q-empty-result-dynamic-rag",
+      "type": "relationship",
+      "fieldId": "llm-techniques",
+      "patternType": "select-best",
+      "body": "{{term:graceful-empty-result}} を導入することによる、{{term:dynamic-rag}} での処理への影響として、最も適切なものはどれか？",
+      "choices": [
+        "検索インフラが何も情報を返さなかった場合、エラーで処理を止めるのではなく状況を説明するテキストに置き換えることで対話の継続性を優先する。",
+        "検索インフラが何も情報を返さなかった場合、意図的にネットワークを切断してユーザーに再試行を促すことでシステムの処理負荷を削減する。",
+        "検索インフラが何も情報を返さなかった場合、関連性のないダミーデータを自動生成して結果を水増しすることでプロンプトのエラーを回避する。"
+      ],
+      "answerIndex": 0,
+      "revealAnswer": false,
+      "explanation": "実行時の検索が失敗したり結果が空だった場合、エラーを発生させてプロセスを停止させるのは望ましくありません。代わりに「結果がなかった」旨をテキストで返すことで、モデルがその状況を認識し、対話を止めることなく継続できるようにする設計です。",
+      "termIds": [
+        "graceful-empty-result",
+        "dynamic-rag"
+      ],
+      "sourceArticleIds": [
+        "a-search-results"
       ],
       "generatedBy": "gemini-3.8-flash"
     }
