@@ -143,4 +143,9 @@ body.sheet-open { position: fixed; width: 100%; left: 0; right: 0; overflow: hid
 .sheet-header { display: flex; align-items: center; justify-content: space-between; gap: 12px; padding: 12px 16px; border-bottom: 1px solid var(--border); flex-shrink: 0; }
 .sheet-header h2 { font-weight: 500; margin: 0; }
 .sheet-header button { color: var(--text-primary); }
+/* 分野シートの閉じる: 枠のない文字だけのボタン。文字の右端を見出しの余白にそろえ、タップ領域は左へ広げる。
+   開いた時のフォーカスは見出しに置き、閉じるにフォーカス枠が出ないようにする(Tab移動時の枠は残る)。 */
+#field-sheet .sheet-header button { border: none; background: transparent; padding: 10px 0 10px 12px; }
+#field-sheet .sheet-header button:not(:disabled):hover { background: transparent; }
+#field-title:focus { outline: none; }
 .sheet-content { min-height: 0; overflow-y: auto; overscroll-behavior: contain; padding: 16px 16px calc(16px + env(safe-area-inset-bottom)); overflow-wrap: anywhere; }
