@@ -125,6 +125,13 @@
       "url": "https://platform.claude.com/docs/ja/build-with-claude/search-results",
       "source": "claude-docs",
       "fieldId": "data-formats"
+    },
+    {
+      "id": "a-memory-tool",
+      "title": "メモリツール",
+      "url": "https://platform.claude.com/docs/ja/agents-and-tools/tool-use/memory-tool",
+      "source": "claude-docs",
+      "fieldId": "llm-techniques"
     }
   ],
   "terms": [
@@ -1508,6 +1515,280 @@
       ],
       "referenceArticleIds": [
         "a-search-results"
+      ]
+    },
+    {
+      "id": "memory-tool",
+      "label": "メモリツール",
+      "shortDefinition": "Claudeが会話をまたいで情報を保存・取得できるようにする仕組み。セッション間で残るファイルを作成・読み取り・更新・削除し、すべてをコンテキストウィンドウに持たずに知識を蓄積できる。",
+      "fieldId": "llm-techniques",
+      "relatedTermIds": [
+        "just-in-time-retrieval",
+        "storage-ownership",
+        "memory-protocol",
+        "is-error-flag",
+        "memory-with-compaction"
+      ],
+      "questionIds": [
+        "q-memory-tool"
+      ],
+      "referenceArticleIds": [
+        "a-memory-tool"
+      ]
+    },
+    {
+      "id": "just-in-time-retrieval",
+      "label": "ジャストインタイムのコンテキスト取得",
+      "shortDefinition": "関連する情報をすべて事前に読み込むのではなく、学んだことを記録しておき必要に応じて読み返す考え方。アクティブなコンテキストを現在のタスクに集中させ、長時間のセッションで特に効く。",
+      "fieldId": "llm-techniques",
+      "relatedTermIds": [
+        "memory-tool",
+        "memory-protocol",
+        "storage-size-limit",
+        "memory-with-compaction"
+      ],
+      "questionIds": [
+        "q-just-in-time-retrieval"
+      ],
+      "referenceArticleIds": [
+        "a-memory-tool"
+      ]
+    },
+    {
+      "id": "storage-ownership",
+      "label": "ストレージの所有",
+      "shortDefinition": "メモリツールはクライアントサイドで動き、Claudeはファイル操作をリクエストするだけで、実行するのはアプリケーション側。メモリは完全にアプリケーション内にあり、安全対策は実装者の責任になる。",
+      "fieldId": "security",
+      "relatedTermIds": [
+        "memory-tool",
+        "memory-path-prefix",
+        "path-traversal",
+        "sensitive-data-scrubbing",
+        "memory-expiration",
+        "is-error-flag"
+      ],
+      "questionIds": [
+        "q-storage-ownership"
+      ],
+      "referenceArticleIds": [
+        "a-memory-tool"
+      ]
+    },
+    {
+      "id": "memory-path-prefix",
+      "label": "メモリのパスプレフィックス",
+      "shortDefinition": "Claudeが操作するメモリのパスは実際の保存場所ではなくプレフィックスで、ハンドラーがユーザーごとのディレクトリやデータベースのキーなど実際のストレージへ対応づける。操作はこの配下に制限する。",
+      "fieldId": "data-formats",
+      "relatedTermIds": [
+        "storage-ownership",
+        "path-traversal",
+        "path-validation"
+      ],
+      "questionIds": [
+        "q-memory-path-prefix"
+      ],
+      "referenceArticleIds": [
+        "a-memory-tool"
+      ]
+    },
+    {
+      "id": "path-traversal",
+      "label": "パストラバーサル攻撃",
+      "shortDefinition": "相対パスの記法を悪用して、本来アクセスが許されていないディレクトリ外のファイルへ到達する攻撃。AIに固有ではなく、外部入力からファイルパスを受け取るあらゆるシステムに共通する古典的な脆弱性。",
+      "fieldId": "security",
+      "relatedTermIds": [
+        "path-validation",
+        "memory-path-prefix",
+        "storage-ownership"
+      ],
+      "questionIds": [
+        "q-path-traversal"
+      ],
+      "referenceArticleIds": [
+        "a-memory-tool"
+      ]
+    },
+    {
+      "id": "path-validation",
+      "label": "パスの検証",
+      "shortDefinition": "パストラバーサルを防ぐ対策。パスを正規形に解決してから、メモリディレクトリ内に留まるかを確かめる。URLエンコードなどですり抜けられるため、文字列として弾くだけでは不十分。",
+      "fieldId": "security",
+      "relatedTermIds": [
+        "path-traversal",
+        "memory-path-prefix",
+        "sensitive-data-scrubbing"
+      ],
+      "questionIds": [
+        "q-path-validation"
+      ],
+      "referenceArticleIds": [
+        "a-memory-tool"
+      ]
+    },
+    {
+      "id": "memory-protocol",
+      "label": "自動付加されるメモリプロトコル",
+      "shortDefinition": "メモリツールを有効にすると、APIがシステムプロンプトへ自動で追加する指示。最初にメモリを確認し、進捗を記録し、中断を前提とするよう求める。開発者が自分で送る必要はない。",
+      "fieldId": "prompting",
+      "relatedTermIds": [
+        "memory-tool",
+        "assume-interruption",
+        "just-in-time-retrieval"
+      ],
+      "questionIds": [
+        "q-memory-protocol"
+      ],
+      "referenceArticleIds": [
+        "a-memory-tool"
+      ]
+    },
+    {
+      "id": "assume-interruption",
+      "label": "中断を前提とする設計",
+      "shortDefinition": "コンテキストウィンドウはいつでもリセットされうるという前提に立つ設計。記録していない進捗は失われるため、途中経過をこまめに外部へ書き出す。途中保存やチェックポイントと同じ発想。",
+      "fieldId": "llm-reasoning",
+      "relatedTermIds": [
+        "memory-protocol",
+        "multisession-pattern",
+        "progress-log",
+        "memory-with-compaction"
+      ],
+      "questionIds": [
+        "q-assume-interruption"
+      ],
+      "referenceArticleIds": [
+        "a-memory-tool"
+      ]
+    },
+    {
+      "id": "multisession-pattern",
+      "label": "マルチセッションパターン",
+      "shortDefinition": "複数セッションにまたがる作業で、その場しのぎで書くのではなく、作業前にメモリファイルを意図的に用意する進め方。後続のセッションはそれを読んで再開し、終了前に記録を更新する。",
+      "fieldId": "llm-reasoning",
+      "relatedTermIds": [
+        "progress-log",
+        "assume-interruption",
+        "end-to-end-verification"
+      ],
+      "questionIds": [
+        "q-multisession-pattern"
+      ],
+      "referenceArticleIds": [
+        "a-memory-tool"
+      ]
+    },
+    {
+      "id": "progress-log",
+      "label": "進捗ログ",
+      "shortDefinition": "マルチセッションパターンで用意するメモリファイルの一つ。完了したことと次に行うことを追跡し、セッションの終了前に更新することで、次のセッションが正確な出発点を持てる。",
+      "fieldId": "llm-reasoning",
+      "relatedTermIds": [
+        "multisession-pattern",
+        "end-to-end-verification",
+        "assume-interruption"
+      ],
+      "questionIds": [
+        "q-progress-log"
+      ],
+      "referenceArticleIds": [
+        "a-memory-tool"
+      ]
+    },
+    {
+      "id": "end-to-end-verification",
+      "label": "エンドツーエンドの検証",
+      "shortDefinition": "一度に1つの機能に取り組み、コードを書いた時点ではなくエンドツーエンドで動作を確認してから完了とマークする原則。セッション間で進捗ログを正確に保つための規律。",
+      "fieldId": "evaluation",
+      "relatedTermIds": [
+        "progress-log",
+        "multisession-pattern"
+      ],
+      "questionIds": [
+        "q-end-to-end-verification"
+      ],
+      "referenceArticleIds": [
+        "a-memory-tool"
+      ]
+    },
+    {
+      "id": "sensitive-data-scrubbing",
+      "label": "機密情報の除去",
+      "shortDefinition": "Claudeは通常、機密情報の書き込みを拒否するが、より強い保証が必要ならハンドラーが書き込み前に機密データを除去する検証を加える。モデルの判断だけに頼らない多層防御。",
+      "fieldId": "security",
+      "relatedTermIds": [
+        "storage-ownership",
+        "path-validation"
+      ],
+      "questionIds": [
+        "q-sensitive-data-scrubbing"
+      ],
+      "referenceArticleIds": [
+        "a-memory-tool"
+      ]
+    },
+    {
+      "id": "memory-expiration",
+      "label": "メモリの有効期限",
+      "shortDefinition": "長期間アクセスされていないメモリファイルを定期的に削除する運用。保存できる仕組みは放置すると溜まり続けるため、不要なデータを持ち続けるリスクを減らす。",
+      "fieldId": "security",
+      "relatedTermIds": [
+        "storage-size-limit",
+        "storage-ownership"
+      ],
+      "questionIds": [
+        "q-memory-expiration"
+      ],
+      "referenceArticleIds": [
+        "a-memory-tool"
+      ]
+    },
+    {
+      "id": "storage-size-limit",
+      "label": "ストレージサイズの管理",
+      "shortDefinition": "メモリファイルのサイズに上限を設け、表示コマンドが返す文字数にも上限を設けて残りはページングさせる管理。一度に大量の内容が返ってコンテキストを圧迫するのを防ぐ。",
+      "fieldId": "llm-performance",
+      "relatedTermIds": [
+        "memory-expiration",
+        "just-in-time-retrieval"
+      ],
+      "questionIds": [
+        "q-storage-size-limit"
+      ],
+      "referenceArticleIds": [
+        "a-memory-tool"
+      ]
+    },
+    {
+      "id": "is-error-flag",
+      "label": "エラーの明示的な通知",
+      "shortDefinition": "メモリ操作が失敗したとき、本文にエラー文を入れるだけでなく、ツール結果にエラーを示すフラグを立てて構造として伝えること。空のストアを一覧表示するのはエラーではない。",
+      "fieldId": "data-formats",
+      "relatedTermIds": [
+        "storage-ownership",
+        "memory-tool"
+      ],
+      "questionIds": [
+        "q-is-error-flag"
+      ],
+      "referenceArticleIds": [
+        "a-memory-tool"
+      ]
+    },
+    {
+      "id": "memory-with-compaction",
+      "label": "コンパクションとの併用",
+      "shortDefinition": "古い会話をサーバー側で要約して小さく保つコンパクションと、要約を経ても残す必要がある情報を保持するメモリを組み合わせること。長時間実行されるエージェントでは両方の使用が推奨される。",
+      "fieldId": "llm-performance",
+      "relatedTermIds": [
+        "memory-tool",
+        "just-in-time-retrieval",
+        "assume-interruption"
+      ],
+      "questionIds": [
+        "q-memory-with-compaction"
+      ],
+      "referenceArticleIds": [
+        "a-memory-tool"
       ]
     }
   ],
@@ -3608,6 +3889,450 @@
       ],
       "sourceArticleIds": [
         "a-search-results"
+      ],
+      "generatedBy": "gemini-3.8-flash"
+    },
+    {
+      "id": "q-memory-tool",
+      "type": "term",
+      "fieldId": "llm-techniques",
+      "patternType": "select-correct",
+      "body": "{{term:just-in-time-retrieval}}を実現する「メモリツール」の役割として、正しいものはどれか？",
+      "choices": [
+        "モデル自身のパラメータを直接書き換えることで、会話終了後も永続的に新しい知識を定着させる仕組み。",
+        "全ての会話履歴を自動で圧縮してシステムプロンプトに追記することで、モデルの文脈理解を補助する仕組み。",
+        "会話をまたいで情報を保存・取得できるファイル操作を通じて、時間をかけて知識を蓄積していく仕組み。"
+      ],
+      "answerIndex": 2,
+      "revealAnswer": true,
+      "explanation": "セッション間で永続化されるファイルを作成・読み取り・更新・削除することで、すべてをコンテキストウィンドウに保持することなく、時間をかけて知識を蓄積できる仕組みです。",
+      "termIds": [
+        "just-in-time-retrieval"
+      ],
+      "sourceArticleIds": [
+        "a-memory-tool"
+      ],
+      "generatedBy": "gemini-3.8-flash"
+    },
+    {
+      "id": "q-just-in-time-retrieval",
+      "type": "term",
+      "fieldId": "llm-techniques",
+      "patternType": "select-incorrect",
+      "body": "{{term:memory-tool}}が促す「ジャストインタイムのコンテキスト取得」の考え方として、誤っているものはどれか？",
+      "choices": [
+        "長時間実行されるセッションにおいて、コンテキスト領域を圧迫せずに効率よくタスクを進めるための発想である。",
+        "関連するすべての情報を前もって読み込むことで、実行中の外部アクセスを完全に排除して処理速度を向上させる発想である。",
+        "アクティブなコンテキストを現在のタスクに集中させるため、学んだことを記録しておき必要に応じて読み返す発想である。"
+      ],
+      "answerIndex": 1,
+      "revealAnswer": true,
+      "explanation": "すべての情報を事前に読み込むのではなく、「記録しておき必要に応じて読み返す」という遅延取得の考え方であるため、前もって読み込んで外部アクセスを排除するという内容が誤りです。",
+      "termIds": [
+        "memory-tool"
+      ],
+      "sourceArticleIds": [
+        "a-memory-tool"
+      ],
+      "generatedBy": "gemini-3.8-flash"
+    },
+    {
+      "id": "q-storage-ownership",
+      "type": "term",
+      "fieldId": "security",
+      "patternType": "select-best",
+      "body": "{{term:memory-tool}}における「ストレージの所有」の仕様として、最も適切なものはどれか？",
+      "choices": [
+        "ファイル操作はクライアントサイドで実行されるため、データを安全に保護する仕組みはアプリケーションの開発者が実装する必要がある。",
+        "ファイル操作はモデル側のインフラ上で完結するため、データを安全に保護する仕組みはクラウドプロバイダーが自動的に適用する。",
+        "ファイル操作は専用の隔離されたネットワークを経由するため、データを安全に保護する仕組みの実装は原則として不要である。"
+      ],
+      "answerIndex": 0,
+      "revealAnswer": true,
+      "explanation": "モデルはファイル操作をリクエストするだけで、実際に実行するのはアプリケーション側です。データは完全にアプリケーション内に存在するため、安全対策は実装者の責任になります。",
+      "termIds": [
+        "memory-tool"
+      ],
+      "sourceArticleIds": [
+        "a-memory-tool"
+      ],
+      "generatedBy": "gemini-3.8-flash"
+    },
+    {
+      "id": "q-memory-path-prefix",
+      "type": "term",
+      "fieldId": "data-formats",
+      "patternType": "select-correct",
+      "body": "{{term:storage-ownership}}の観点から管理される「メモリのパスプレフィックス」の仕組みとして、正しいものはどれか？",
+      "choices": [
+        "操作対象として渡されるパスは物理的な保存先と完全に一致しており、OSのファイルシステム上でそのまま展開される。",
+        "操作対象として渡されるパスはプレフィックスであり、ハンドラーがそれを実際のストレージ環境へとマッピングする。",
+        "操作対象として渡されるパスは暗号化されたハッシュ値であり、システムが一時的なメモリ空間に復号して展開する。"
+      ],
+      "answerIndex": 1,
+      "revealAnswer": true,
+      "explanation": "モデルが操作するメモリのパスは、実際の保存場所そのものではなく論理的な接頭辞です。アプリケーション側のハンドラーが、それをユーザーごとのディレクトリやデータベースなどの実際のストレージへマッピングします。",
+      "termIds": [
+        "storage-ownership"
+      ],
+      "sourceArticleIds": [
+        "a-memory-tool"
+      ],
+      "generatedBy": "gemini-3.8-flash"
+    },
+    {
+      "id": "q-path-traversal",
+      "type": "term",
+      "fieldId": "security",
+      "patternType": "select-incorrect",
+      "body": "{{term:storage-ownership}}のシステムで警戒すべき「パストラバーサル攻撃」の手口として、誤っているものはどれか？",
+      "choices": [
+        "意図的に特殊な文字コードを混入させることで、ネットワーク通信そのものを遮断してシステムの機能停止を狙う攻撃である。",
+        "相対パスの記法などを悪用することで、本来アクセスが許可されていない所定のディレクトリ外のファイルへの到達を狙う攻撃である。",
+        "AIに特有の未知の脆弱性ではなく、外部からの入力でファイルパスを受け取るあらゆるシステムに共通する古典的な攻撃である。"
+      ],
+      "answerIndex": 0,
+      "revealAnswer": true,
+      "explanation": "パストラバーサル攻撃は、相対パスの記法などを悪用して許可されていないディレクトリ外のファイル（機密情報など）へ到達する古典的な攻撃です。ネットワーク通信自体を遮断する攻撃ではありません。",
+      "termIds": [
+        "storage-ownership"
+      ],
+      "sourceArticleIds": [
+        "a-memory-tool"
+      ],
+      "generatedBy": "gemini-3.8-flash"
+    },
+    {
+      "id": "q-path-validation",
+      "type": "term",
+      "fieldId": "security",
+      "patternType": "select-best",
+      "body": "{{term:path-traversal}}などを防ぐ「パスの検証」の運用として、最も適切なものはどれか？",
+      "choices": [
+        "親ディレクトリを指す記号などを含むパスについては、事前に文字列としての完全一致で拒否リストに登録しておけば安全である。",
+        "受け取ったパスを正規形に解決した上で、最終的な到達地点が所定のメモリディレクトリ内に留まっていることを確認する。",
+        "パスの文字列が短すぎる場合にのみ不正とみなす簡易的なチェックを行い、システムの負荷を最小限に抑えつつ安全性を担保する。"
+      ],
+      "answerIndex": 1,
+      "revealAnswer": true,
+      "explanation": "単に文字列として弾くだけでは不十分です（URLエンコードされた記法などのすり抜けがあるため）。パスを正規形に解決してから、指定されたディレクトリ内に留まっているかを確認する必要があります。",
+      "termIds": [
+        "path-traversal"
+      ],
+      "sourceArticleIds": [
+        "a-memory-tool"
+      ],
+      "generatedBy": "gemini-3.8-flash"
+    },
+    {
+      "id": "q-memory-protocol",
+      "type": "term",
+      "fieldId": "prompting",
+      "patternType": "select-correct",
+      "body": "{{term:memory-tool}}を有効化した際に「自動付加されるメモリプロトコル」の仕様として、正しいものはどれか？",
+      "choices": [
+        "中断を前提とした記録の指示などが、APIによってシステムプロンプトへ自動的に追加される。",
+        "中断を前提とした記録の指示などを、開発者が自身のコード内でシステムプロンプトへ追加する必要がある。",
+        "中断を前提とした記録の指示などは、セキュリティ上の理由からシステムプロンプトへの追加が禁止される。"
+      ],
+      "answerIndex": 0,
+      "revealAnswer": true,
+      "explanation": "メモリツールを有効にすると、何よりも先にメモリを確認することや、中断を前提として記録することなどの指示が、APIによって自動的にシステムプロンプトへ追加されます。開発者が自分で送る必要はありません。",
+      "termIds": [
+        "memory-tool"
+      ],
+      "sourceArticleIds": [
+        "a-memory-tool"
+      ],
+      "generatedBy": "gemini-3.8-flash"
+    },
+    {
+      "id": "q-assume-interruption",
+      "type": "term",
+      "fieldId": "llm-reasoning",
+      "patternType": "select-incorrect",
+      "body": "{{term:memory-protocol}}で指示される「中断を前提とする設計」の考え方として、誤っているものはどれか？",
+      "choices": [
+        "コンテキストウィンドウはいつリセットされるか分からないという前提に立ち、途中経過をこまめに外部へ書き出すよう促す思想である。",
+        "コンテキストウィンドウは永続的に保持されるという前提に立ち、ファイルへの保存はタスクの完了時に一度だけ行えばよいとする思想である。",
+        "記録していない進捗は失われるという前提に立ち、一般的なシステムの途中保存やチェックポイントと同じ発想をエージェントに適用した思想である。"
+      ],
+      "answerIndex": 1,
+      "revealAnswer": true,
+      "explanation": "コンテキストウィンドウはいつでもリセットされうるという前提に立ち、記録していない進捗は失われるためこまめに書き出すという設計思想です。永続的に保持されるという前提が誤りです。",
+      "termIds": [
+        "memory-protocol"
+      ],
+      "sourceArticleIds": [
+        "a-memory-tool"
+      ],
+      "generatedBy": "gemini-3.8-flash"
+    },
+    {
+      "id": "q-multisession-pattern",
+      "type": "term",
+      "fieldId": "llm-reasoning",
+      "patternType": "select-best",
+      "body": "{{term:assume-interruption}}の状況に対処する「マルチセッションパターン」の進め方として、最も適切なものはどれか？",
+      "choices": [
+        "作業の進行に合わせてその場しのぎでメモリを書き込み、セッションが予期せず終了した場合には新しい状態から作業を構築し直す。",
+        "作業開始時に過去の記憶を完全に消去する初期化を行い、セッション間での情報の引き継ぎを遮断して常に独立した状態でタスクを進行させる。",
+        "実質的な作業を始める前に意図的にメモリファイルをセットアップし、後続のセッションはそこから読み込むことで前回の状態から再開する。"
+      ],
+      "answerIndex": 2,
+      "revealAnswer": true,
+      "explanation": "マルチセッションパターンでは、行き当たりばったりでメモリを書くのではなく、初期化セッションで意図的にメモリファイルを用意し、後続のセッションはそれを読むことから始めるという手順を推奨しています。これによりメモリが復旧メカニズムとなります。",
+      "termIds": [
+        "assume-interruption"
+      ],
+      "sourceArticleIds": [
+        "a-memory-tool"
+      ],
+      "generatedBy": "gemini-3.8-flash"
+    },
+    {
+      "id": "q-progress-log",
+      "type": "term",
+      "fieldId": "llm-reasoning",
+      "patternType": "select-correct",
+      "body": "{{term:multisession-pattern}}で用意する「進捗ログ」の内容として、正しいものはどれか？",
+      "choices": [
+        "モデルが自己診断を行った結果のパラメーター数値や、通信環境のレイテンシ履歴などをシステム用に追跡したもの。",
+        "完了したタスクと次に行うべきタスクの状況や、プロジェクトに必要な起動スクリプトへの参照などを追跡したもの。",
+        "過去に発生したエラーのスタックトレースや、ユーザーからの入力データに含まれていた不適切な単語の履歴を追跡したもの。"
+      ],
+      "answerIndex": 1,
+      "revealAnswer": true,
+      "explanation": "進捗ログは、完了したことと次に行うことの追跡、および作業範囲を定義するチェックリストや初期化スクリプトへの参照などを記録したものです。これにより、次のセッションが正確な出発点を持てます。",
+      "termIds": [
+        "multisession-pattern"
+      ],
+      "sourceArticleIds": [
+        "a-memory-tool"
+      ],
+      "generatedBy": "gemini-3.8-flash"
+    },
+    {
+      "id": "q-end-to-end-verification",
+      "type": "term",
+      "fieldId": "evaluation",
+      "patternType": "select-incorrect",
+      "body": "{{term:progress-log}}を正確に保つための「エンドツーエンドの検証」の原則として、誤っているものはどれか？",
+      "choices": [
+        "コードを記述した時点では機能を完了とマークせず、実際に動作が確認された後で完了扱いにするという原則である。",
+        "複数の機能を同時並行で進行させることで効率を高め、テストを行わずにすべてを完了とマークするという原則である。",
+        "一度に一つの機能に取り組むことを重視し、記録の不一致によってセッションの引き継ぎが破綻するのを防ぐ原則である。"
+      ],
+      "answerIndex": 1,
+      "revealAnswer": true,
+      "explanation": "マルチセッションパターンの重要な原則として「一度に1つの機能に取り組むこと」が挙げられています。また、コードを書いた時点ではなく、動作が確認された後に完了とマークすることで、進捗ログを正確に保ちます。",
+      "termIds": [
+        "progress-log"
+      ],
+      "sourceArticleIds": [
+        "a-memory-tool"
+      ],
+      "generatedBy": "gemini-3.8-flash"
+    },
+    {
+      "id": "q-sensitive-data-scrubbing",
+      "type": "term",
+      "fieldId": "security",
+      "patternType": "select-best",
+      "body": "{{term:storage-ownership}}の観点から実行すべき「機密情報の除去」の運用として、最も適切なものはどれか？",
+      "choices": [
+        "モデルは機密情報の書き込みを自主的に拒否する傾向があるため、アプリケーション側にファイルの検証ロジックを実装する必要はない。",
+        "モデルは機密情報を自動で暗号化して保存する機能を標準で備えているため、アプリケーション側にファイルの検証ロジックを実装する必要はない。",
+        "モデルが機密情報の書き込みを拒否する傾向はあっても、より確実な保証を得るためにアプリケーション側で情報を除去する検証を実装する。"
+      ],
+      "answerIndex": 2,
+      "revealAnswer": true,
+      "explanation": "モデルは通常、機密情報の書き込みを拒否しますが、より強力な保証が必要な場合は、実装側（ハンドラー）でファイルを書き込む前に機密データを除去する検証を追加するという多層防御の考え方が推奨されます。",
+      "termIds": [
+        "storage-ownership"
+      ],
+      "sourceArticleIds": [
+        "a-memory-tool"
+      ],
+      "generatedBy": "gemini-3.8-flash"
+    },
+    {
+      "id": "q-memory-expiration",
+      "type": "term",
+      "fieldId": "security",
+      "patternType": "select-correct",
+      "body": "{{term:storage-size-limit}}と並んで必要となる「メモリの有効期限」の運用として、正しいものはどれか？",
+      "choices": [
+        "ファイルが作成されてから一定期間アクセスされていない場合に、不要なデータを保持し続けるリスクを減らすために定期的に削除する。",
+        "ファイルが作成されてから一定期間アクセスされていない場合に、重要なデータを保護するために自動的にクラウド上のアーカイブ領域へ移動させる。",
+        "ファイルが作成されてから一定期間アクセスされていない場合に、すべてのアクセス権限を一時的に凍結して監査用のログを出力する。"
+      ],
+      "answerIndex": 0,
+      "revealAnswer": true,
+      "explanation": "セキュリティ上の考慮事項として、不要なデータを保持し続けるリスクを減らすため、長期間アクセスされていないメモリファイルを定期的に削除することが推奨されています。",
+      "termIds": [
+        "storage-size-limit"
+      ],
+      "sourceArticleIds": [
+        "a-memory-tool"
+      ],
+      "generatedBy": "gemini-3.8-flash"
+    },
+    {
+      "id": "q-storage-size-limit",
+      "type": "term",
+      "fieldId": "llm-performance",
+      "patternType": "select-incorrect",
+      "body": "{{term:memory-expiration}}と並んで運用する「ストレージサイズの管理」の方法として、誤っているものはどれか？",
+      "choices": [
+        "コンテキストを圧迫することを防ぐため、ファイルが大きくなれる上限サイズを設ける。",
+        "一度に大量の内容が返ってくることを防ぐため、表示コマンドが返す文字数にも上限を設ける。",
+        "不要なデータへのアクセスを防ぐため、特定の時間帯にはファイルの読み書きを完全に禁止する。"
+      ],
+      "answerIndex": 2,
+      "revealAnswer": true,
+      "explanation": "ストレージサイズの管理では、ファイル全体の上限を設けるだけでなく、表示コマンドが返す文字数にも上限を設け（残りはページングする）、一度に大量の内容が返ってコンテキストを圧迫することを防ぐことが推奨されています。時間帯によるアクセス禁止はこれに該当しません。",
+      "termIds": [
+        "memory-expiration"
+      ],
+      "sourceArticleIds": [
+        "a-memory-tool"
+      ],
+      "generatedBy": "gemini-3.8-flash"
+    },
+    {
+      "id": "q-is-error-flag",
+      "type": "term",
+      "fieldId": "data-formats",
+      "patternType": "select-best",
+      "body": "{{term:storage-ownership}}の実装において求められる「エラーの明示的な通知」の仕様として、最も適切なものはどれか？",
+      "choices": [
+        "操作が失敗した場合は、本文にエラー文を含めるだけでなく、構造としてエラーであることを示す専用のフラグを立てて結果を返す。",
+        "操作が失敗した場合は、本文にエラー文を含めず、システムの内部ログにのみエラーコードを出力して結果を空の状態で返す。",
+        "初回の操作で対象のストアが空であった場合は、構造としてエラーであることを示す専用のフラグを立てて結果を返す。"
+      ],
+      "answerIndex": 0,
+      "revealAnswer": true,
+      "explanation": "メモリ操作が失敗したときは、単にエラー文を本文に入れるのではなく、構造として「これはエラーである」と伝えるフラグを立てる必要があります。また、空のストアに対する一覧表示は「何もない」だけでありエラーとは区別されます。",
+      "termIds": [
+        "storage-ownership"
+      ],
+      "sourceArticleIds": [
+        "a-memory-tool"
+      ],
+      "generatedBy": "gemini-3.8-flash"
+    },
+    {
+      "id": "q-memory-with-compaction",
+      "type": "term",
+      "fieldId": "llm-performance",
+      "patternType": "select-correct",
+      "body": "{{term:memory-tool}}と古いコンテキストを要約する仕組みの「コンパクションとの併用」について、正しいものはどれか？",
+      "choices": [
+        "両者は競合する機能であるため、長時間実行されるエージェントであっても同時に有効化してはならない。",
+        "両者は補完する機能であるため、長時間実行されるエージェントにおいては両方の使用が推奨されている。",
+        "両者は完全に同一の機能であるため、どちらか一方のみを有効化すれば期待される効果をすべて得られる。"
+      ],
+      "answerIndex": 1,
+      "revealAnswer": true,
+      "explanation": "クライアント側の管理作業なしにアクティブなコンテキストを要約して小さく保つ仕組みと、要約を経ても残す必要がある情報を外部に保持するメモリの仕組みは役割が異なります。長時間実行されるエージェントでは、これらを併用することが推奨されています。",
+      "termIds": [
+        "memory-tool"
+      ],
+      "sourceArticleIds": [
+        "a-memory-tool"
+      ],
+      "generatedBy": "gemini-3.8-flash"
+    },
+    {
+      "id": "q-jit-retrieval-size-limit",
+      "type": "relationship",
+      "fieldId": "llm-techniques",
+      "patternType": "select-incorrect",
+      "body": "{{term:just-in-time-retrieval}}の恩恵と{{term:storage-size-limit}}の設計の関係性について説明したものとして、誤っているものはどれか？",
+      "choices": [
+        "全ての情報を前もって読み込まずに必要に応じて取得するアプローチは、現在実行中の作業に直接関係する情報だけに意識を向けさせる効果をもたらす。",
+        "情報を保存する上限だけでなく、一度の要求で読み込める量にも制限を設けることは、結果的にアクティブな作業領域が不要な情報で溢れるのを防ぐ。",
+        "必要な情報だけをその都度取得するアプローチは処理効率を悪化させるため、ファイルの上限サイズを撤廃してすべてのデータを常時展開しておく必要がある。"
+      ],
+      "answerIndex": 2,
+      "revealAnswer": false,
+      "explanation": "前もってすべてを読み込むのではなく、必要になったタイミングで情報を引き出すアプローチは、実行中のタスクへの集中を促します。そして、これを安全に運用するためには、保存する総量だけでなく一度に引き出せる量にも制限を設け、作業領域を圧迫しないよう制御する設計が求められます。",
+      "termIds": [
+        "just-in-time-retrieval",
+        "storage-size-limit"
+      ],
+      "sourceArticleIds": [
+        "a-memory-tool"
+      ],
+      "generatedBy": "gemini-3.8-flash"
+    },
+    {
+      "id": "q-multisession-progress-log",
+      "type": "relationship",
+      "fieldId": "llm-reasoning",
+      "patternType": "select-best",
+      "body": "{{term:multisession-pattern}}における設計思想と、その中で利用される{{term:progress-log}}の役割について、最も適切なものはどれか？",
+      "choices": [
+        "前者はシステムが予期せず終了した際に全ての履歴を自動で消去する仕組みを指し、後者はエラー発生時のスタックトレースを専門に記録するデータを指す。",
+        "前者は作業を始める前に記憶の土台を意図的に用意して後続の処理に備える進め方を指し、後者は完了した作業と次に行うべき作業を追跡する記録を指す。",
+        "前者は通信の遅延を防ぐために複数の接続を並行して確立するネットワーク技術を指し、後者は通信ごとの応答速度の平均値を算出するレポートを指す。"
+      ],
+      "answerIndex": 1,
+      "revealAnswer": false,
+      "explanation": "複数のセッションにまたがる作業では、行き当たりばったりで記録を残すのではなく、実質的な作業を始める前に情報を格納する場所を意図的に用意し、後続の処理がそこから再開できるようにする進め方が重要です。その中で用いられる記録は、どこまで完了し次に何をすべきかを正確に引き継ぐための道標となります。",
+      "termIds": [
+        "multisession-pattern",
+        "progress-log"
+      ],
+      "sourceArticleIds": [
+        "a-memory-tool"
+      ],
+      "generatedBy": "gemini-3.8-flash"
+    },
+    {
+      "id": "q-path-traversal-validation",
+      "type": "relationship",
+      "fieldId": "security",
+      "patternType": "select-correct",
+      "body": "{{term:path-traversal}}の手口と、それを防ぐための{{term:path-validation}}の対応方針について、正しいものはどれか？",
+      "choices": [
+        "システムのメモリ容量を意図的に枯渇させる手口に対し、入力された文字列の長さを特定の文字数未満に制限するだけで完全に防御できる。",
+        "特定の文字列パターンを完全に一致させて弾く手口に対し、入力されたデータを特殊な文字コードに変換してシステムを通過させることで対処する。",
+        "親ディレクトリを指す記号などを悪用して範囲外へ到達する手口に対し、入力を正規形に解決して最終的な位置が所定の範囲内にあるかを確認する。"
+      ],
+      "answerIndex": 2,
+      "revealAnswer": false,
+      "explanation": "外部からの入力でパスを受け取るシステムでは、相対パスの記法などを悪用して許可されていないファイルへ到達しようとする古典的な攻撃が存在します。これを防ぐには、単に特定の文字列を拒否リストで弾くだけでは不十分であり、入力を本来の形に解決した上で、指定された安全な範囲内に留まっているかを検証する手続きが必要になります。",
+      "termIds": [
+        "path-traversal",
+        "path-validation"
+      ],
+      "sourceArticleIds": [
+        "a-memory-tool"
+      ],
+      "generatedBy": "gemini-3.8-flash"
+    },
+    {
+      "id": "q-scrubbing-storage-ownership",
+      "type": "relationship",
+      "fieldId": "security",
+      "patternType": "select-best",
+      "body": "{{term:sensitive-data-scrubbing}}が推奨される理由と、その背景にある{{term:storage-ownership}}の実態について、最も適切なものはどれか？",
+      "choices": [
+        "データの保存処理を実際に実行するのはアプリケーション側であるため、モデルの自主的な判断のみに依存せず実装側でも機密情報を検証する層を設ける。",
+        "データの保存処理を実際に実行するのはモデル側のインフラであるため、アプリケーション側では一切の検証を行わずにシステムの自動機能に任せる。",
+        "データの保存処理は暗号化された安全なネットワーク内で完結するため、機密情報が含まれていてもモデルが自動で無害化して保存を完了させる。"
+      ],
+      "answerIndex": 0,
+      "revealAnswer": false,
+      "explanation": "この仕組みにおいて、モデルは操作を要求するだけであり、実際にデータをどこにどう保存するかを実行するのはアプリケーションのインフラです。そのため、モデルが機密情報の書き込みを自主的に拒否する傾向があるにせよ、より強固な安全性を確保するためには、実行責任を持つアプリケーション側で書き込み前にデータを検証するという多層防御の考え方が推奨されます。",
+      "termIds": [
+        "sensitive-data-scrubbing",
+        "storage-ownership"
+      ],
+      "sourceArticleIds": [
+        "a-memory-tool"
       ],
       "generatedBy": "gemini-3.8-flash"
     }
