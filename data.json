@@ -141,7 +141,9 @@
         "context-accounting",
         "token-accumulation",
         "context-awareness",
-        "state-artifact"
+        "state-artifact",
+        "prompt-engineering",
+        "tool-search-tool"
       ],
       "questionIds": [
         "q-context-window"
@@ -203,7 +205,10 @@
       "shortDefinition": "RAGを用いれば外部の情報を利用できるが、その有効性は外部ナレッジベースの品質や、実行時に取得される知識の関連性に大きく依存する。",
       "fieldId": "llm",
       "relatedTermIds": [
-        "context-window"
+        "context-window",
+        "search-result-block",
+        "dynamic-rag",
+        "knowledge-base"
       ],
       "questionIds": [
         "q-rag"
@@ -223,7 +228,8 @@
         "input-json-delta",
         "interleaved-thinking",
         "compaction-tool-conflict",
-        "clear-tool-results"
+        "clear-tool-results",
+        "dynamic-rag"
       ],
       "questionIds": [
         "q-tool-use"
@@ -288,7 +294,10 @@
       "relatedTermIds": [
         "sse-event-flow",
         "delta",
-        "message-accumulation"
+        "message-accumulation",
+        "overloaded-error",
+        "stream-error-recovery",
+        "batch-processing"
       ],
       "questionIds": [
         "q-streaming"
@@ -305,7 +314,8 @@
       "relatedTermIds": [
         "streaming",
         "delta",
-        "ping-event"
+        "ping-event",
+        "overloaded-error"
       ],
       "questionIds": [
         "q-sse-event-flow"
@@ -322,7 +332,8 @@
       "relatedTermIds": [
         "input-json-delta",
         "signature-delta",
-        "sse-event-flow"
+        "sse-event-flow",
+        "streaming"
       ],
       "questionIds": [
         "q-delta"
@@ -369,7 +380,8 @@
       "fieldId": "llm",
       "relatedTermIds": [
         "streaming",
-        "sse-event-flow"
+        "sse-event-flow",
+        "graceful-empty-result"
       ],
       "questionIds": [
         "q-overloaded-error"
@@ -435,7 +447,8 @@
         "custom-id",
         "polling",
         "batch-result-types",
-        "streaming"
+        "streaming",
+        "jsonl"
       ],
       "questionIds": [
         "q-batch-processing"
@@ -482,7 +495,8 @@
       "fieldId": "llm",
       "relatedTermIds": [
         "batch-processing",
-        "custom-id"
+        "custom-id",
+        "jsonl"
       ],
       "questionIds": [
         "q-batch-result-types"
@@ -517,7 +531,9 @@
         "thinking-cost",
         "thinking-display",
         "summarized-thinking",
-        "clear-thinking"
+        "clear-thinking",
+        "assistant-turn",
+        "thinking-sampling-limits"
       ],
       "questionIds": [
         "q-thinking"
@@ -534,7 +550,8 @@
       "relatedTermIds": [
         "thinking",
         "effort",
-        "summarized-thinking"
+        "summarized-thinking",
+        "context-window-exceeded"
       ],
       "questionIds": [
         "q-thinking-cost"
@@ -672,7 +689,8 @@
       "relatedTermIds": [
         "assistant-turn",
         "tool-use",
-        "progress-update"
+        "progress-update",
+        "adaptive-thinking"
       ],
       "questionIds": [
         "q-interleaved-thinking"
@@ -754,7 +772,10 @@
       "fieldId": "evaluation",
       "relatedTermIds": [
         "multidimensional-criteria",
-        "holdout-test-set"
+        "holdout-test-set",
+        "edge-case",
+        "rubric",
+        "classification-metrics"
       ],
       "questionIds": [
         "q-success-criteria"
@@ -801,7 +822,8 @@
       "fieldId": "evaluation",
       "relatedTermIds": [
         "holdout-test-set",
-        "success-criteria"
+        "success-criteria",
+        "classification-metrics"
       ],
       "questionIds": [
         "q-edge-case"
@@ -851,7 +873,8 @@
       "relatedTermIds": [
         "exact-match",
         "llm-as-judge",
-        "human-grading"
+        "human-grading",
+        "eval-design-principles"
       ],
       "questionIds": [
         "q-code-based-grading"
@@ -885,7 +908,10 @@
       "relatedTermIds": [
         "rubric",
         "separate-grader",
-        "likert-scale"
+        "likert-scale",
+        "eval-design-principles",
+        "code-based-grading",
+        "human-grading"
       ],
       "questionIds": [
         "q-llm-as-judge"
@@ -982,7 +1008,9 @@
       "relatedTermIds": [
         "context-window",
         "compaction",
-        "context-engineering"
+        "context-engineering",
+        "token-accumulation",
+        "clear-tool-results"
       ],
       "questionIds": [
         "q-context-rot"
@@ -998,7 +1026,8 @@
       "fieldId": "prompting",
       "relatedTermIds": [
         "context-rot",
-        "prompt-engineering"
+        "prompt-engineering",
+        "state-artifact"
       ],
       "questionIds": [
         "q-context-engineering"
@@ -1013,7 +1042,10 @@
       "shortDefinition": "システムプロンプト、ツール結果や画像を含むメッセージ、ツール定義、生成される出力など、リクエスト内のすべてがコンテキストウィンドウに数えられる。キャッシュされたプレフィックスも占有し続ける。",
       "fieldId": "llm-basics",
       "relatedTermIds": [
-        "context-window"
+        "context-window",
+        "token-counting",
+        "prompt-too-long",
+        "usage-reporting"
       ],
       "questionIds": [
         "q-context-accounting"
@@ -1030,7 +1062,8 @@
       "relatedTermIds": [
         "context-window",
         "compaction",
-        "context-rot"
+        "context-rot",
+        "context-awareness"
       ],
       "questionIds": [
         "q-token-accumulation"
@@ -1096,7 +1129,9 @@
       "relatedTermIds": [
         "context-rot",
         "context-editing",
-        "token-accumulation"
+        "token-accumulation",
+        "compaction-tool-conflict",
+        "state-artifact"
       ],
       "questionIds": [
         "q-compaction"
@@ -1130,7 +1165,8 @@
       "relatedTermIds": [
         "compaction",
         "clear-tool-results",
-        "clear-thinking"
+        "clear-thinking",
+        "editing-cache-conflict"
       ],
       "questionIds": [
         "q-context-editing"
@@ -1245,7 +1281,10 @@
       "relatedTermIds": [
         "rag",
         "source-attribution",
-        "citation-enabled"
+        "citation-enabled",
+        "citation-granularity",
+        "search-result-placement",
+        "text-only-results"
       ],
       "questionIds": [
         "q-search-result-block"
@@ -1260,7 +1299,8 @@
       "shortDefinition": "回答のどの部分がどの資料に基づくかを明示すること。検索結果のソースとタイトルが帰属の情報になり、ソースは安定した文字列であれば何でもよい。引用が有効なら特別なプロンプトなしに付く。",
       "fieldId": "ai-safety",
       "relatedTermIds": [
-        "search-result-block"
+        "search-result-block",
+        "citation-enabled"
       ],
       "questionIds": [
         "q-source-attribution"
@@ -1360,7 +1400,11 @@
       "relatedTermIds": [
         "prefetched-content",
         "tool-use",
-        "rag"
+        "rag",
+        "search-result-index",
+        "knowledge-base",
+        "tool-result-homogeneity",
+        "graceful-empty-result"
       ],
       "questionIds": [
         "q-dynamic-rag"
@@ -1407,7 +1451,9 @@
       "shortDefinition": "検索結果ブロックはユーザーメッセージ内(ツール結果内を含む)にのみ置け、検索結果を含むアシスタントメッセージは拒否される。外から与えられた資料であり、モデル自身の発言ではないため。",
       "fieldId": "data-formats",
       "relatedTermIds": [
-        "search-result-block"
+        "search-result-block",
+        "tool-result-homogeneity",
+        "text-only-results"
       ],
       "questionIds": [
         "q-search-result-placement"
@@ -3170,7 +3216,7 @@
       "type": "term",
       "fieldId": "data-formats",
       "patternType": "select-correct",
-      "body": "{{term:rag}} アプリケーションなどで用いられる「検索結果ブロック」の役割として、正しいものはどれか？",
+      "body": "{{term:rag}}アプリケーションなどで用いられる「検索結果ブロック」の役割として、正しいものはどれか？",
       "choices": [
         "モデル自身の出力を圧縮して保存することで、後のターンでの処理速度を上げる仕組みである。",
         "インターネット上の最新ニュースを自動で巡回して取得し、出力結果として返す仕組みである。",
@@ -3192,7 +3238,7 @@
       "type": "term",
       "fieldId": "ai-safety",
       "patternType": "select-incorrect",
-      "body": "{{term:tool-use}} などで得た回答の根拠を示す「ソース帰属」の仕様として、誤っているものはどれか？",
+      "body": "{{term:tool-use}}などで得た回答の根拠を示す「ソース帰属」の仕様として、誤っているものはどれか？",
       "choices": [
         "帰属を示すソース文字列は、URLや内部識別子など安定した形式であれば何でも利用できる。",
         "帰属を示すために、モデルに対して引用を付加するよう特別なプロンプトで指示する必要がある。",
@@ -3214,7 +3260,7 @@
       "type": "term",
       "fieldId": "llm-parameters",
       "patternType": "select-best",
-      "body": "{{term:rag}} などで用いる「引用の有効化」の設定方法として、最も適切なものはどれか？",
+      "body": "{{term:rag}}などで用いる「引用の有効化」の設定方法として、最も適切なものはどれか？",
       "choices": [
         "リクエスト内のすべての検索結果に対して、一律に有効にするか無効にするかしか選べない。",
         "リクエスト内の特定の検索結果だけを個別に有効にし、他を無効にするような混在が可能である。",
@@ -3236,7 +3282,7 @@
       "type": "term",
       "fieldId": "data-formats",
       "patternType": "select-correct",
-      "body": "{{term:search-result-block}} を用いた「引用可能な最小単位」の仕様として、正しいものはどれか？",
+      "body": "{{term:search-result-block}}を用いた「引用可能な最小単位」の仕様として、正しいものはどれか？",
       "choices": [
         "テキストブロック内の任意の部分文字列が引用可能な単位となるため、分割は不要である。",
         "単語単位での引用が可能となるため、コンテンツをより細かく分割するほど正確性が下がる。",
@@ -3258,7 +3304,7 @@
       "type": "term",
       "fieldId": "data-formats",
       "patternType": "select-incorrect",
-      "body": "{{term:context-window}} にも関係する「引用テキスト」の仕様として、誤っているものはどれか？",
+      "body": "{{term:context-window}}にも関係する「引用テキスト」の仕様として、誤っているものはどれか？",
       "choices": [
         "引用テキストを返却した分だけ出力のコストが増加するため、長文での根拠提示は控えるべきである。",
         "引用テキストは出力トークンとしてカウントされないため、コストを気にせずに元の文章を返却できる。",
@@ -3280,7 +3326,7 @@
       "type": "term",
       "fieldId": "data-formats",
       "patternType": "select-best",
-      "body": "{{term:cited-text}} に対応する「ブロックインデックス」の仕様として、最も適切なものはどれか？",
+      "body": "{{term:cited-text}}に対応する「ブロックインデックス」の仕様として、最も適切なものはどれか？",
       "choices": [
         "開始位置を示す一つのインデックスのみで構成され、後続するすべてのコンテンツを引用対象として指定する。",
         "開始位置と終了位置のインデックスで構成され、終了位置のインデックスは常に開始位置より小さい値となる。",
@@ -3302,7 +3348,7 @@
       "type": "term",
       "fieldId": "data-formats",
       "patternType": "select-correct",
-      "body": "{{term:rag}} での会話における「検索結果インデックス」のカウント方法として、正しいものはどれか？",
+      "body": "{{term:rag}}での会話における「検索結果インデックス」のカウント方法として、正しいものはどれか？",
       "choices": [
         "検索結果がツール経由か事前取得かで区別し、それぞれに別々の通し番号を付与してカウントする。",
         "検索結果の提供方法に関係なく、会話内で出現した順序に沿って単一の通し番号でカウントする。",
@@ -3324,7 +3370,7 @@
       "type": "term",
       "fieldId": "llm-techniques",
       "patternType": "select-incorrect",
-      "body": "{{term:tool-use}} の仕組みを用いた「動的RAG」の特徴として、誤っているものはどれか？",
+      "body": "{{term:tool-use}}の仕組みを用いた「動的RAG」の特徴として、誤っているものはどれか？",
       "choices": [
         "カスタムツールが実行時にコンテンツを取得するため、リアルタイムな情報を扱う検索用途に適している。",
         "情報のオーバーフローを防ぐため、すべての結果ではなく関連性の高い結果のみを返すのが望ましい。",
@@ -3346,7 +3392,7 @@
       "type": "term",
       "fieldId": "llm-techniques",
       "patternType": "select-best",
-      "body": "{{term:rag}} などにおける「事前取得コンテンツ」の用途として、最も適切なものはどれか？",
+      "body": "{{term:rag}}などにおける「事前取得コンテンツ」の用途として、最も適切なものはどれか？",
       "choices": [
         "検索インフラから事前に取得した結果を利用できるため、引用動作のテストや開発用途に適している。",
         "ツールが実行時に最新の情報を外部から取得するため、リアルタイムなニュース検索用途に適している。",
@@ -3368,7 +3414,7 @@
       "type": "term",
       "fieldId": "llm-techniques",
       "patternType": "select-correct",
-      "body": "{{term:dynamic-rag}} の検索対象となる「ナレッジベース」の役割として、正しいものはどれか？",
+      "body": "{{term:dynamic-rag}}の検索対象となる「ナレッジベース」の役割として、正しいものはどれか？",
       "choices": [
         "モデルが自己学習を行うためにインターネットから無作為に収集し続ける巨大なデータセットのこと。",
         "モデルの訓練データには含まれていない、組織固有の情報や製品に関する資料を集めた検索対象のこと。",
@@ -3390,7 +3436,7 @@
       "type": "term",
       "fieldId": "data-formats",
       "patternType": "select-incorrect",
-      "body": "{{term:search-result-block}} の配置に関する制約として、誤っているものはどれか？",
+      "body": "{{term:search-result-block}}の配置に関する制約として、誤っているものはどれか？",
       "choices": [
         "検索結果は外部から与えられた資料として扱われるため、アシスタントメッセージ内に配置すると拒否される。",
         "検索結果は外部から与えられた資料として扱われるため、ユーザーメッセージ内にのみ配置することが許可される。",
@@ -3412,7 +3458,7 @@
       "type": "term",
       "fieldId": "data-formats",
       "patternType": "select-best",
-      "body": "{{term:search-result-placement}} に関連する「ツール結果の同質性制約」の仕様として、最も適切なものはどれか？",
+      "body": "{{term:search-result-placement}}に関連する「ツール結果の同質性制約」の仕様として、最も適切なものはどれか？",
       "choices": [
         "同じツール結果内であれば、検索結果と他の任意のブロックタイプを自由に混在させることが許可される。",
         "ツール結果内の一部が検索結果である場合、その中のすべてのブロックが検索結果でなければならない。",
@@ -3434,7 +3480,7 @@
       "type": "term",
       "fieldId": "data-formats",
       "patternType": "select-correct",
-      "body": "{{term:search-result-block}} における「テキストのみの制約」の仕様として、正しいものはどれか？",
+      "body": "{{term:search-result-block}}における「テキストのみの制約」の仕様として、正しいものはどれか？",
       "choices": [
         "検索結果のコンテンツ配列内では画像がサポートされていないため、空でない文字列のテキストブロックで構成する。",
         "検索結果のコンテンツ配列内ではメディアが必須となるため、各項目には必ず画像を含んだテキストブロックを指定する。",
@@ -3456,7 +3502,7 @@
       "type": "term",
       "fieldId": "llm-techniques",
       "patternType": "select-incorrect",
-      "body": "{{term:dynamic-rag}} などで推奨される「空の結果の扱い」として、誤っているものはどれか？",
+      "body": "{{term:dynamic-rag}}などで推奨される「空の結果の扱い」として、誤っているものはどれか？",
       "choices": [
         "検索が何も返さなかった場合、直ちにエラーを発生させて会話のプロセス全体を強制的に停止させるべきである。",
         "検索が何も返さなかった場合、見つからなかった旨を説明するプレーンテキストブロックをエラーの代わりに返す。",
@@ -3478,7 +3524,7 @@
       "type": "relationship",
       "fieldId": "llm-techniques",
       "patternType": "select-correct",
-      "body": "{{term:dynamic-rag}} と {{term:prefetched-content}} の関係性を示す説明として、正しいものはどれか？",
+      "body": "{{term:dynamic-rag}}と{{term:prefetched-content}}の関係性を示す説明として、正しいものはどれか？",
       "choices": [
         "実行時に必要な情報を取得する手法と、事前のクエリや外部インフラなどからあらかじめ用意された情報を渡す手法。",
         "あらかじめ用意された固定の情報を渡す手法と、ユーザーが手動で画面上に入力したテキストのみを抽出する手法。",
@@ -3501,7 +3547,7 @@
       "type": "relationship",
       "fieldId": "data-formats",
       "patternType": "select-incorrect",
-      "body": "{{term:citation-granularity}} の分割単位が {{term:cited-text}} に与える影響について、誤っているものはどれか？",
+      "body": "{{term:citation-granularity}}の分割単位が{{term:cited-text}}に与える影響について、誤っているものはどれか？",
       "choices": [
         "コンテンツを一つの大きな塊としてまとめた場合、どのような指定が行われても結果的にその全文がそのまま返却される。",
         "モデルは任意の部分的な文字列ではなく設定された枠組み全体を対象とするため、より細かく返却させるには事前の分割が必要となる。",
@@ -3524,7 +3570,7 @@
       "type": "relationship",
       "fieldId": "data-formats",
       "patternType": "select-best",
-      "body": "{{term:search-result-placement}} と {{term:tool-result-homogeneity}} の制約の違いについて、最も適切なものはどれか？",
+      "body": "{{term:search-result-placement}}と{{term:tool-result-homogeneity}}の制約の違いについて、最も適切なものはどれか？",
       "choices": [
         "通常のメッセージ内では検索結果と画像を自由に並べられるが、ツールの応答内では検索結果を含める場合すべての要素を検索結果で統一しなければならない。",
         "通常のメッセージ内では検索結果と画像を自由に並べられるが、ツールの応答内では検索結果を含めること自体が完全に禁止されている。",
@@ -3547,7 +3593,7 @@
       "type": "relationship",
       "fieldId": "llm-techniques",
       "patternType": "select-best",
-      "body": "{{term:graceful-empty-result}} を導入することによる、{{term:dynamic-rag}} での処理への影響として、最も適切なものはどれか？",
+      "body": "{{term:graceful-empty-result}}を導入することによる、{{term:dynamic-rag}}での処理への影響として、最も適切なものはどれか？",
       "choices": [
         "検索インフラが何も情報を返さなかった場合、エラーで処理を止めるのではなく状況を説明するテキストに置き換えることで対話の継続性を優先する。",
         "検索インフラが何も情報を返さなかった場合、意図的にネットワークを切断してユーザーに再試行を促すことでシステムの処理負荷を削減する。",
